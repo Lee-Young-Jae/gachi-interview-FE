@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getToken } from "firebase/messaging";
+import { getToken, deleteToken } from "firebase/messaging";
 import { messaging } from "@/firebase";
 import { useSetRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState, userIdState } from "@/store/auth";
@@ -10,7 +10,6 @@ import { setCookie } from "cookies-next";
 
 export default function GoogleAuth2Redirect() {
   const [code, setCode] = useState<string | null>(null);
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
   const setAccessToken = useSetRecoilState(accessTokenState);
   const setRefreshToken = useSetRecoilState(refreshTokenState);
   const setUserId = useSetRecoilState(userIdState);
@@ -21,28 +20,13 @@ export default function GoogleAuth2Redirect() {
       const urlParams = new URL(window.location.href);
       const receivedCode = urlParams.searchParams.get("code");
       if (receivedCode) {
-        console.log("receivedCode", receivedCode);
         setCode(receivedCode);
       }
-
-      const fetchFcmToken = async () => {
-        try {
-          const token = await getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY });
-          console.log("FCM 토큰 가져옴:", token);
-          setFcmToken(token);
-        } catch (error) {
-          console.error("FCM 토큰을 가져오는 중 오류 발생:", error);
-        }
-      };
-
-      fetchFcmToken();
     }
   }, []);
 
   useEffect(() => {
-    console.log("코드 설정:", code);
-    console.log("fcmToken 설정:", fcmToken);
-    if (code && fcmToken) {
+    if (code) {
       const googleLogin = async () => {
         try {
           const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -62,28 +46,46 @@ export default function GoogleAuth2Redirect() {
             setRefreshToken(data.refreshToken);
             setUserId(data.userId);
 
-            if (fcmToken) {
-              console.log("googleLogin 안의 fcmToken:", fcmToken);
+            const fetchFcmToken = async () => {
               try {
-                const tokenRes = await fetch(`${BASE_URL}/user/fcm/token`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${data.accessToken}`,
-                  },
-                  body: JSON.stringify({ fcmToken }),
+                const currentToken = await getToken(messaging, {
+                  vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
                 });
-
-                if (tokenRes.status === 200 || 201) {
-                  console.log("FCM 토큰 전송 성공");
-                  router.replace("/my?tab=videos");
-                } else {
-                  console.error("FCM 토큰 전송 실패:", tokenRes.status);
+                if (currentToken) {
+                  await deleteToken(messaging);
+                  console.log("기존 FCM 토큰 삭제:", currentToken);
                 }
-              } catch (tokenError) {
-                console.error("FCM 토큰 전송 중 오류 발생:", tokenError);
+
+                const newToken = await getToken(messaging, {
+                  vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+                });
+                console.log("새로운 FCM 토큰 가져옴:", newToken);
+
+                try {
+                  const tokenRes = await fetch(`${BASE_URL}/user/fcm/token`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${data.accessToken}`,
+                    },
+                    body: JSON.stringify({ fcmToken: newToken }),
+                  });
+
+                  if (tokenRes.status === 200 || tokenRes.status === 201) {
+                    console.log("FCM 토큰 전송 성공");
+                    router.replace("/my?tab=videos");
+                  } else {
+                    console.error("FCM 토큰 전송 실패:", tokenRes.status);
+                  }
+                } catch (tokenError) {
+                  console.error("FCM 토큰 전송 중 오류 발생:", tokenError);
+                }
+              } catch (error) {
+                console.error("FCM 토큰을 가져오는 중 오류 발생:", error);
               }
-            }
+            };
+
+            fetchFcmToken();
           } else {
             console.error("예상치 못한 응답 상태:", res.status);
           }
@@ -94,7 +96,7 @@ export default function GoogleAuth2Redirect() {
 
       googleLogin();
     }
-  }, [code, fcmToken, router, setAccessToken, setRefreshToken, setUserId]);
+  }, [code, router, setAccessToken, setRefreshToken, setUserId]);
 
   return null;
 }
