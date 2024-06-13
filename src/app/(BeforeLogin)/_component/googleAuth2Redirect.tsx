@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getToken, deleteToken } from "firebase/messaging";
+import { getToken } from "firebase/messaging";
 import { messaging } from "@/firebase";
 import { useSetRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState, userIdState } from "@/store/auth";
@@ -48,18 +48,10 @@ export default function GoogleAuth2Redirect() {
 
             const fetchFcmToken = async () => {
               try {
-                const currentToken = await getToken(messaging, {
-                  vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-                });
-                if (currentToken) {
-                  await deleteToken(messaging);
-                  console.log("기존 FCM 토큰 삭제:", currentToken);
-                }
-
                 const newToken = await getToken(messaging, {
                   vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
                 });
-                console.log("새로운 FCM 토큰 가져옴:", newToken);
+                console.log("FCM 토큰 가져옴:", newToken);
 
                 try {
                   const tokenRes = await fetch(`${BASE_URL}/user/fcm/token`, {

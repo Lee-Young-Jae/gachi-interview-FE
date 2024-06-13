@@ -22,6 +22,7 @@ export default function MyContainer() {
   const handleLogout = () => {
     localStorage.clear();
     deleteCookie("accessToken");
+
     router.push("/");
   };
 

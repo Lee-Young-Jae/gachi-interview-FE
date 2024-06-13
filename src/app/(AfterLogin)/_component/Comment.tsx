@@ -127,7 +127,7 @@ export default function Comment({ comment, postId }: { comment: IComment; postId
           <textarea
             value={editedComment}
             onChange={(e) => setEditedComment(e.target.value)}
-            className="w-full h-20 p-4 rounded-md border border-gray-300 focus:outline-none"
+            className="w-full h-20 p-4 rounded-md border border-gray-300 resize-none focus:outline-none"
           />
           <div className="flex justify-end gap-2 mt-2">
             <Button onClick={() => setIsEditing(false)} variant="outline">

@@ -1,3 +1,4 @@
+import { deleteCookie } from "cookies-next";
 import { toast } from "react-toastify";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -40,6 +41,7 @@ const showLoginToast = () => {
   });
 
   localStorage.clear();
+  deleteCookie("accessToken");
   setTimeout(() => {
     window.location.href = "/";
   }, 8000);
