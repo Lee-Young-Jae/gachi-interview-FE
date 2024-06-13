@@ -10,12 +10,8 @@ import { MdLogout } from "react-icons/md";
 import MyComments from "./MyComments";
 import MyFeedbacks from "./MyFeedbacks";
 import { deleteCookie } from "cookies-next";
-import logout from "../_lib/logout";
-import { useRecoilValue } from "recoil";
-import { accessTokenState } from "@/store/auth";
 
 export default function MyContainer() {
-  const accessToken = useRecoilValue(accessTokenState);
   const tabParams = useSearchParams().get("tab") || undefined;
   const router = useRouter();
 
@@ -23,10 +19,9 @@ export default function MyContainer() {
     router.replace(`/my?tab=${value}`);
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     localStorage.clear();
     deleteCookie("accessToken");
-    await logout({ accessToken });
     router.push("/");
   };
 
