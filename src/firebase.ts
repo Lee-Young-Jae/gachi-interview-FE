@@ -14,18 +14,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export let messaging: Messaging;
+export const isSupportedBrowser = isSupported();
+export const isSupportedIOS =
+  "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
 
 if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
   // messaging = getMessaging(app);
 
-  isSupported().then((supported) => {
-    if (supported) {
-      messaging = getMessaging(app);
-    }
-  });
+  isSupportedIOS &&
+    isSupported().then((supported) => {
+      if (supported) {
+        messaging = getMessaging(app);
+      }
+    });
 }
-
-export const isSupportedBrowser = isSupported();
 
 // export const requestPermission = async () => {
 //   console.log("Requesting permission...");
