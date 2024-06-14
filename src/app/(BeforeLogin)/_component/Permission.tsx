@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getToken } from "firebase/messaging";
-import { messaging } from "@/firebase";
+import { messaging, isSupportedBrowser } from "@/firebase";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { KAKAO_AUTH_URL } from "../_lib/kakao";
 import { GOOGLE_AUTH_URL } from "../_lib/google";
@@ -29,8 +29,6 @@ const Permission = () => {
 
   useEffect(() => {
     // 권한 확인
-    console.log("브라우저 지원 여부:", Notification.permission);
-
     if (Notification.permission === "granted") {
       console.log("알림 권한 허용됨");
       setPermission("granted");
@@ -49,6 +47,15 @@ const Permission = () => {
 
   // FCM 서비스 워커 등록
   useEffect(() => {
+    async function browserCheck() {
+      if (!isSupportedBrowser) {
+        console.log("브라우저가 알림을 지원하지 않습니다.");
+        return;
+      }
+    }
+
+    browserCheck();
+
     // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
     navigator.serviceWorker
       .register("firebase-messaging-sw.js")

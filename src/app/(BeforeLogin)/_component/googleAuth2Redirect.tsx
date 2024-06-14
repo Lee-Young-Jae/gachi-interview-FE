@@ -49,7 +49,11 @@ export default function GoogleAuth2Redirect() {
             const fetchFcmToken = async () => {
               try {
                 // 06.04 임시로 작성했습니다. 사용자가 브라우저에서 알림을 허용했는지 확인하는 코드
-                console.log("브라우저 지원 여부:", await isSupportedBrowser);
+                console.log("브라우저 지원 여부:", isSupportedBrowser);
+                if (!(await isSupportedBrowser)) {
+                  router.replace("/my?tab=videos");
+                  return;
+                }
 
                 // 토큰 삭제 문제 해결을 위해 임시로 작성한 코드 (Permission 컴포넌트에서 로컬스토리지에 저장한 토큰을 가져옵니다.
                 const token = localStorage.getItem("fcmToken");
