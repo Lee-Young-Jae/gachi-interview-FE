@@ -21,9 +21,9 @@ const Permission = ({ link }: PermissionProps) => {
 
     if (permission === "granted") {
       console.log("Notification permission granted.");
+      setPermission("granted");
     } else {
       console.log("No registration token available. Request permission to generate one.");
-      alert("알림 권한을 허용해주세요.");
     }
   };
 
@@ -45,16 +45,30 @@ const Permission = ({ link }: PermissionProps) => {
       console.log("알림 권한 기본값");
       setPermission("default");
     }
-  }, []);
+  }, [permission]);
 
   // FCM 서비스 워커 등록
   useEffect(() => {
+    navigator.serviceWorker
+      .register("firebase-messaging-sw.js")
+      .then(() => navigator.serviceWorker.ready);
+
+    navigator.serviceWorker
+      .register("firebase-messaging-sw.js", { scope: "/" })
+      .then(() => navigator.serviceWorker.ready);
+
+    navigator.serviceWorker
+      .register("firebase-messaging-sw.js")
+      .then((registration) => registration.update())
+      .then(() => navigator.serviceWorker.ready);
+
     if (permission === "granted") {
       // FCM 서비스 워커 등록
-
       getToken(messaging, {
         vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
       });
+
+      console.log("FCM 서비스 워커 등록");
     }
   }, [permission]);
 
@@ -72,11 +86,9 @@ const Permission = ({ link }: PermissionProps) => {
         알림 허용하기
       </Button>
 
-      {permission === "granted" && (
-        <Link href={link}>
-          <Button>로그인</Button>
-        </Link>
-      )}
+      <Link href={link}>
+        <Button disabled={permission !== "granted"}>로그인</Button>
+      </Link>
     </div>
   );
 };
