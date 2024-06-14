@@ -10,13 +10,23 @@ import { KAKAO_AUTH_URL } from "../_lib/kakao";
 import { GOOGLE_AUTH_URL } from "../_lib/google";
 import { FcGoogle } from "react-icons/fc";
 
-// 임시로 만들었습니다.
+// 임시로 만들었습니다. 승학님과 논의 후 수정 혹은 삭제가 필요합니다.
+// 알림 권한을 받기 위한 컴포넌트입니다.
+// 기존 login 로직(googleAuth2Redirect/kakaoAuth2Redirect) 에서 서비스 워커가 등록되지 않아서 발생하는 문제를 해결하기 위해 만들었습니다.
+// 관련 에러
+// DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
+// 서비스 워커를 등록하는 시점을 로그인 이전 단계에서 브라우저에 등록하고, 로그인이 끝나면 서비스 워커를 등록하는 방식으로 해결하고자 Permission 컴포넌트를 만들었습니다.
 
 const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
 
+  // 예외처리 하는이유: Notification이 지원되지 않는 브라우저에서는 Application error: a client-side exception has occurred (see the browser console for more information). 에러가 발생함
+  // Can't find variable: Notification 에러가 발생하며 웹이 죽음
+  // https://caniuse.com/?search=Notification Can I Use를 참고해봤을 때 특히 safari는 홈 화면에 추가한(중요) 웹앱에서만 지원한다고 나와있음
+  // PWA로 만들어야만 지원이 가능하다는 것 같음 (https://developer.mozilla.org/ko/docs/Web/API/Notification/requestPermission)
+  // (https://firebase.blog/posts/2023/08/fcm-for-safari/)
   const permissionNotification = async () => {
-    if (!isSupportedBrowser || !isSupportedIOS) {
+    if (!isSupportedBrowser || !isSupportedIOS()) {
       console.log("브라우저가 알림을 지원하지 않습니다.");
       return;
     }
@@ -34,7 +44,7 @@ const Permission = () => {
 
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser || !isSupportedIOS) {
+      if (!isSupportedBrowser || !isSupportedIOS()) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
@@ -61,7 +71,7 @@ const Permission = () => {
   // FCM 서비스 워커 등록
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser || !isSupportedIOS) {
+      if (!isSupportedBrowser || !isSupportedIOS()) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
@@ -79,6 +89,7 @@ const Permission = () => {
         .register("firebase-messaging-sw.js")
         .then((registration) => registration.update())
         .then(() => navigator.serviceWorker.ready);
+
       // 일단 여러번 호출하는 방식으로 해결
       // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
       // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
@@ -91,6 +102,7 @@ const Permission = () => {
 
         tokenPromise.then((token) => {
           console.log("FCM 토큰:", token);
+          // 일단 로컬 스토리지에 저장 (테스트용)
           localStorage.setItem("fcmToken", token);
         });
 

@@ -151,7 +151,7 @@ const VideoDetail = ({ videoId }: VideoDetailProps) => {
           <p>{videoData.userName}</p>
 
           <div className="flex mt-4">
-            {videoData.tags.map((tag, index) => (
+            {videoData?.tags?.map((tag, index) => (
               <Badge
                 key={index}
                 className={`px-3 py-1 text-sm ${index === 0 ? "ml-0" : "mx-1"}`}
