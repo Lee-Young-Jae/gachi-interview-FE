@@ -198,6 +198,11 @@ export const getThumbnailImages = async (blobs: Blob, videoDuration: number): Pr
 
 export const EncodingWebmToMp4 = async (blob: Blob) => {
   console.time("EncodingWebmToMp4");
+  // 유저 에이전트가 IOS 혹은 Android인 경우에는 Blob을 그대로 반환
+  if (navigator.userAgent.includes("iPhone") || navigator.userAgent.includes("Android")) {
+    console.timeEnd("EncodingWebmToMp4");
+    return blob;
+  }
 
   const ffmpeg = await initializeFFmpegInstance();
 
