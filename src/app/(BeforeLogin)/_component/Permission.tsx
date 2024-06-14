@@ -16,6 +16,11 @@ const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
 
   const permissionNotification = async () => {
+    if (!isSupportedBrowser) {
+      console.log("브라우저가 알림을 지원하지 않습니다.");
+      return;
+    }
+
     console.log("Requesting permission...");
     const permission = await Notification.requestPermission();
 
