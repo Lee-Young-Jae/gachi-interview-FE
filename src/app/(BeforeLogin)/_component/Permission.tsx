@@ -64,8 +64,13 @@ const Permission = ({ link }: PermissionProps) => {
 
     if (permission === "granted") {
       // FCM 서비스 워커 등록
-      getToken(messaging, {
+      const tokenPromise = getToken(messaging, {
         vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+      });
+
+      tokenPromise.then((token) => {
+        console.log("FCM 토큰:", token);
+        localStorage.setItem("fcmToken", token);
       });
 
       console.log("FCM 서비스 워커 등록");
