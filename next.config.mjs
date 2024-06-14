@@ -42,6 +42,10 @@ const nextConfig = {
             key: "Cross-Origin-Opener-Policy",
             value: "same-origin",
           },
+          // {
+          //   key: "Content-Security-Policy",
+          //   value: "upgrade-insecure-requests",
+          // },
         ],
       },
       // {

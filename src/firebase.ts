@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { Messaging, getMessaging, getToken, onMessage } from "firebase/messaging";
+import { Messaging, getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -17,6 +17,8 @@ export let messaging: Messaging;
 if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
   messaging = getMessaging(app);
 }
+
+export const isSupportedBrowser = isSupported();
 
 // export const requestPermission = async () => {
 //   console.log("Requesting permission...");
