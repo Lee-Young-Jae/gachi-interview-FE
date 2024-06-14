@@ -60,8 +60,18 @@ export default function KakaoAuth2Redirect() {
                 }
                 // 여기까지
 
+                // 06.04 임시로 작성했습니다. 서비스 워커의 활성화 상태를 기다리는 코드
+                let serviceWorkerRegistration = await navigator.serviceWorker.ready;
+                console.log("서비스 워커 활성화됨:", serviceWorkerRegistration);
+
+                if (serviceWorkerRegistration.active) {
+                  console.log("서비스 워커 활성화됨");
+                }
+                // 여기까지
+
                 const newToken = await getToken(messaging, {
                   vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+                  serviceWorkerRegistration, // 06.04 임시로 작성했습니다. 서비스 워커의 활성화 상태를 전달하는 코드
                 });
                 console.log("FCM 토큰 가져옴:", newToken);
 

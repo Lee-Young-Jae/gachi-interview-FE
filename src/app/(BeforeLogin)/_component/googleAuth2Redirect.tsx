@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getToken } from "firebase/messaging";
-import { messaging } from "@/firebase";
+import { isSupportedBrowser, messaging } from "@/firebase";
 import { useSetRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState, userIdState } from "@/store/auth";
 import { setCookie } from "cookies-next";
@@ -48,8 +48,30 @@ export default function GoogleAuth2Redirect() {
 
             const fetchFcmToken = async () => {
               try {
+                // 06.04 임시로 작성했습니다. 사용자가 브라우저에서 알림을 허용했는지 확인하는 코드
+                console.log("브라우저 지원 여부:", await isSupportedBrowser);
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                  console.log("알림 권한 허용됨");
+                } else {
+                  alert("알림 권한을 허용해주세요.");
+
+                  router.replace("/");
+                }
+                // 여기까지
+
+                // 06.04 임시로 작성했습니다. 서비스 워커의 활성화 상태를 기다리는 코드
+                let serviceWorkerRegistration = await navigator.serviceWorker.ready;
+                console.log("서비스 워커 활성화됨:", serviceWorkerRegistration);
+
+                if (serviceWorkerRegistration.active) {
+                  console.log("서비스 워커 활성화됨");
+                }
+                // 여기까지
+
                 const newToken = await getToken(messaging, {
                   vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+                  serviceWorkerRegistration, // 06.04 임시로 작성했습니다. 서비스 워커의 활성화 상태를 전달하는 코드
                 });
                 console.log("FCM 토큰 가져옴:", newToken);
 
