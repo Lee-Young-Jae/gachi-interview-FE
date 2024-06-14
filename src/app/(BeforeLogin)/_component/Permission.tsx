@@ -65,40 +65,40 @@ const Permission = () => {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
+
+      // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js")
+        .then(() => navigator.serviceWorker.ready);
+
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js", { scope: "/" })
+        .then(() => navigator.serviceWorker.ready);
+
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js")
+        .then((registration) => registration.update())
+        .then(() => navigator.serviceWorker.ready);
+      // 일단 여러번 호출하는 방식으로 해결
+      // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
+      // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
+
+      if (permission === "granted") {
+        // FCM 서비스 워커 등록
+        const tokenPromise = getToken(messaging, {
+          vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+        });
+
+        tokenPromise.then((token) => {
+          console.log("FCM 토큰:", token);
+          localStorage.setItem("fcmToken", token);
+        });
+
+        console.log("FCM 서비스 워커 등록");
+      }
     }
 
     browserCheck();
-
-    // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
-    navigator.serviceWorker
-      .register("firebase-messaging-sw.js")
-      .then(() => navigator.serviceWorker.ready);
-
-    navigator.serviceWorker
-      .register("firebase-messaging-sw.js", { scope: "/" })
-      .then(() => navigator.serviceWorker.ready);
-
-    navigator.serviceWorker
-      .register("firebase-messaging-sw.js")
-      .then((registration) => registration.update())
-      .then(() => navigator.serviceWorker.ready);
-    // 일단 여러번 호출하는 방식으로 해결
-    // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
-    // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
-
-    if (permission === "granted") {
-      // FCM 서비스 워커 등록
-      const tokenPromise = getToken(messaging, {
-        vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-      });
-
-      tokenPromise.then((token) => {
-        console.log("FCM 토큰:", token);
-        localStorage.setItem("fcmToken", token);
-      });
-
-      console.log("FCM 서비스 워커 등록");
-    }
   }, [permission]);
 
   return (

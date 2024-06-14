@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getToken } from "firebase/messaging";
-import { isSupportedBrowser, messaging } from "@/firebase";
+import { isSupportedBrowser, isSupportedIOS, messaging } from "@/firebase";
 import { useSetRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState, userIdState } from "@/store/auth";
 import { setCookie } from "cookies-next";
@@ -50,7 +50,7 @@ export default function GoogleAuth2Redirect() {
               try {
                 // 06.04 임시로 작성했습니다. 사용자가 브라우저에서 알림을 허용했는지 확인하는 코드
                 console.log("브라우저 지원 여부:", isSupportedBrowser);
-                if (!(await isSupportedBrowser)) {
+                if (!(await isSupportedBrowser) || !isSupportedIOS()) {
                   router.replace("/my?tab=videos");
                   return;
                 }
