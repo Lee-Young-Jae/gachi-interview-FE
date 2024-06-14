@@ -38,26 +38,25 @@ const Permission = () => {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
-    }
 
+      // 권한 확인
+      if (Notification.permission === "granted") {
+        console.log("알림 권한 허용됨");
+        setPermission("granted");
+      }
+
+      if (Notification.permission === "denied") {
+        console.log("알림 권한 거부됨");
+        setPermission("denied");
+      }
+
+      if (Notification.permission === "default") {
+        console.log("알림 권한 기본값");
+        setPermission("default");
+      }
+    }
     browserCheck();
-
-    // 권한 확인
-    if (Notification.permission === "granted") {
-      console.log("알림 권한 허용됨");
-      setPermission("granted");
-    }
-
-    if (Notification.permission === "denied") {
-      console.log("알림 권한 거부됨");
-      setPermission("denied");
-    }
-
-    if (Notification.permission === "default") {
-      console.log("알림 권한 기본값");
-      setPermission("default");
-    }
-  }, [permission]);
+  }, []);
 
   // FCM 서비스 워커 등록
   useEffect(() => {
