@@ -16,7 +16,7 @@ const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
 
   const permissionNotification = async () => {
-    if (!isSupportedBrowser && !isSupportedIOS) {
+    if (!isSupportedBrowser || !isSupportedIOS) {
       console.log("브라우저가 알림을 지원하지 않습니다.");
       return;
     }
@@ -34,7 +34,7 @@ const Permission = () => {
 
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser && !isSupportedIOS) {
+      if (!isSupportedBrowser || !isSupportedIOS) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
@@ -62,7 +62,7 @@ const Permission = () => {
   // FCM 서비스 워커 등록
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser && !isSupportedIOS) {
+      if (!isSupportedBrowser || !isSupportedIOS) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
