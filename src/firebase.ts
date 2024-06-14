@@ -12,10 +12,17 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 export let messaging: Messaging;
 
 if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
-  messaging = getMessaging(app);
+  // messaging = getMessaging(app);
+
+  isSupported().then((supported) => {
+    if (supported) {
+      messaging = getMessaging(app);
+    }
+  });
 }
 
 export const isSupportedBrowser = isSupported();
