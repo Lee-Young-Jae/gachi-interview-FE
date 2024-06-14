@@ -27,14 +27,14 @@ const Permission = () => {
     }
   };
 
-  async function browserCheck() {
-    if (!isSupportedBrowser) {
-      console.log("브라우저가 알림을 지원하지 않습니다.");
-      return;
-    }
-  }
-
   useEffect(() => {
+    async function browserCheck() {
+      if (!isSupportedBrowser) {
+        console.log("브라우저가 알림을 지원하지 않습니다.");
+        return;
+      }
+    }
+
     browserCheck();
 
     // 권한 확인
@@ -56,6 +56,13 @@ const Permission = () => {
 
   // FCM 서비스 워커 등록
   useEffect(() => {
+    async function browserCheck() {
+      if (!isSupportedBrowser) {
+        console.log("브라우저가 알림을 지원하지 않습니다.");
+        return;
+      }
+    }
+
     browserCheck();
 
     // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
