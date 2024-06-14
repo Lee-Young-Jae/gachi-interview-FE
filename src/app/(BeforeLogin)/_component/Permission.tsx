@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getToken } from "firebase/messaging";
 import { messaging } from "@/firebase";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import { KAKAO_AUTH_URL } from "../_lib/kakao";
+import { GOOGLE_AUTH_URL } from "../_lib/google";
+import { FcGoogle } from "react-icons/fc";
 
 // 임시로 만들었습니다.
 
-interface PermissionProps {
-  link: string;
-}
-
-const Permission = ({ link }: PermissionProps) => {
+const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
 
   const permissionNotification = async () => {
@@ -49,6 +49,7 @@ const Permission = ({ link }: PermissionProps) => {
 
   // FCM 서비스 워커 등록
   useEffect(() => {
+    // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
     navigator.serviceWorker
       .register("firebase-messaging-sw.js")
       .then(() => navigator.serviceWorker.ready);
@@ -61,6 +62,9 @@ const Permission = ({ link }: PermissionProps) => {
       .register("firebase-messaging-sw.js")
       .then((registration) => registration.update())
       .then(() => navigator.serviceWorker.ready);
+    // 일단 여러번 호출하는 방식으로 해결
+    // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
+    // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
 
     if (permission === "granted") {
       // FCM 서비스 워커 등록
@@ -84,15 +88,35 @@ const Permission = ({ link }: PermissionProps) => {
       <p>
         서비스를 이용하기 위해 <u>알림 권한</u>이 필요합니다.
       </p>
+
       <Button
-        className="w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4"
+        className="w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl my-4"
         onClick={permissionNotification}
       >
         알림 허용하기
       </Button>
-
-      <Link href={link}>
-        <Button disabled={permission !== "granted"}>로그인</Button>
+      <span>알림 권한: {permission}, 버튼은 알림이 허용되어야 활성화</span>
+      <Link href={KAKAO_AUTH_URL} passHref>
+        <Button
+          disabled={permission !== "granted"}
+          className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
+            permission !== "granted" ? "cursor-not-allowed" : ""
+          }`}
+        >
+          <RiKakaoTalkFill className="mr-2" />
+          Kakao로 시작하기
+        </Button>
+      </Link>
+      <Link href={GOOGLE_AUTH_URL} passHref>
+        <Button
+          disabled={permission !== "granted"}
+          className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
+            permission !== "granted" ? "cursor-not-allowed" : ""
+          }`}
+        >
+          <FcGoogle className="mr-2" />
+          Google로 시작하기
+        </Button>
       </Link>
     </div>
   );

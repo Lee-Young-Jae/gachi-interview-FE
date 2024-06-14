@@ -33,7 +33,7 @@ export default function Login() {
           </Button>
         </Link> */}
 
-        <Permission link={KAKAO_AUTH_URL} />
+        <Permission />
         {/* <Permission link={GOOGLE_AUTH_URL} /> */}
       </div>
       <Lottie play animationData={interviewImage} className="m-20 w-1/3 h-1/3" />
