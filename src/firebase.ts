@@ -15,19 +15,14 @@ const app = initializeApp(firebaseConfig);
 
 export let messaging: Messaging;
 export const isSupportedBrowser = isSupported();
-export const isSupportedIOS =
-  "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
+export const isSupportedIOS = /iPad|iPhone|iPod/.test(navigator.userAgent); // Can I Use를 보니 최신버전부터 부분지원인데 사용자수는 0%대임
 
-if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
-  // messaging = getMessaging(app);
-
-  isSupportedIOS &&
-    isSupported().then((supported) => {
-      if (supported) {
-        messaging = getMessaging(app);
-      }
-    });
-}
+isSupportedIOS &&
+  isSupported().then((supported) => {
+    if (supported) {
+      messaging = getMessaging(app);
+    }
+  });
 
 // export const requestPermission = async () => {
 //   console.log("Requesting permission...");
