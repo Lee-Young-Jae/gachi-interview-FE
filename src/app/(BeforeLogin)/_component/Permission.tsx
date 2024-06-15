@@ -26,7 +26,7 @@ const Permission = () => {
   // PWA로 만들어야만 지원이 가능하다는 것 같음 (https://developer.mozilla.org/ko/docs/Web/API/Notification/requestPermission)
   // (https://firebase.blog/posts/2023/08/fcm-for-safari/)
   const permissionNotification = async () => {
-    if (!isSupportedBrowser || !isSupportedIOS()) {
+    if (!(await isSupportedBrowser) || !isSupportedIOS()) {
       console.log("브라우저가 알림을 지원하지 않습니다.");
       return;
     }
@@ -42,9 +42,11 @@ const Permission = () => {
     }
   };
 
+  const isPermissionGranted = permission === "granted";
+
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser || !isSupportedIOS()) {
+      if (!(await isSupportedBrowser) || !isSupportedIOS()) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
@@ -71,7 +73,7 @@ const Permission = () => {
   // FCM 서비스 워커 등록
   useEffect(() => {
     async function browserCheck() {
-      if (!isSupportedBrowser || !isSupportedIOS()) {
+      if (!(await isSupportedBrowser) || !isSupportedIOS()) {
         console.log("브라우저가 알림을 지원하지 않습니다.");
         return;
       }
@@ -115,22 +117,24 @@ const Permission = () => {
 
   return (
     <div>
-      <p>테스트를 위한 임시 컴포넌트입니다.</p>
-      <h1>알림 권한 요청</h1>
-      <p>
-        서비스를 이용하기 위해 <u>알림 권한</u>이 필요합니다.
-      </p>
+      {/* <p>테스트를 위한 임시 컴포넌트입니다.</p>
+      <h1>알림 권한 요청</h1> */}
+      <>
+        <p>
+          원활한 서비스 이용을 위해{" "}
+          <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
+            알림 허용
+          </u>
+          을 해주세요.
+        </p>
+        {isPermissionGranted && (
+          <p className="text-green-500 text-sm">알림 권한이 허용되었습니다. 계속 진행해주세요.</p>
+        )}
+      </>
 
-      <Button
-        className="w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl my-4"
-        onClick={permissionNotification}
-      >
-        알림 허용하기
-      </Button>
-      <span>알림 권한: {permission}, 버튼은 알림이 허용되어야 활성화</span>
       <Link href={KAKAO_AUTH_URL} passHref>
         <Button
-          disabled={permission !== "granted"}
+          disabled={!isPermissionGranted || !isSupportedIOS()}
           className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
             permission !== "granted" ? "cursor-not-allowed" : ""
           }`}
@@ -141,7 +145,7 @@ const Permission = () => {
       </Link>
       <Link href={GOOGLE_AUTH_URL} passHref>
         <Button
-          disabled={permission !== "granted"}
+          disabled={!isPermissionGranted || !isSupportedIOS()}
           className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
             permission !== "granted" ? "cursor-not-allowed" : ""
           }`}

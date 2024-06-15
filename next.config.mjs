@@ -2,6 +2,14 @@
 
 const nextConfig = {
   // rewrites: [{ source: "/(.*)", destination: "/" }],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "inf-video.s3.ap-northeast-2.amazonaws.com",
+      },
+    ],
+  },
   async headers() {
     return [
       // {
@@ -48,19 +56,6 @@ const nextConfig = {
           // },
         ],
       },
-      // {
-      //   source: "/(.*)", // 모든 경로에 대해 적용
-      //   headers: [
-      //     {
-      //       key: "Cross-Origin-Embedder-Policy",
-      //       value: "require-corp",
-      //     },
-      //     {
-      //       key: "Cross-Origin-Opener-Policy",
-      //       value: "same-origin",
-      //     },
-      //   ],
-      // },
     ];
   },
 };

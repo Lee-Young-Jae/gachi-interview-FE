@@ -29,6 +29,8 @@ type ResponseGetInterview = {
   tags: string[];
   exposure: boolean;
   liked: boolean;
+  image: string;
+  thumbnailLink: string;
 };
 
 export const useGetInterview = (videoId: RequestGetInterview) => {

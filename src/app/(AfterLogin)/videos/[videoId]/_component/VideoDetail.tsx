@@ -141,7 +141,12 @@ const VideoDetail = ({ videoId }: VideoDetailProps) => {
     <>
       <div className="flex flex-col w-full bg-gray-200 text-white rounded-lg">
         <div className="flex justify-center w-full max-w-4xl mx-auto max-h-[400px]">
-          <video className="w-full object-cover" src={videoData.videoLink} controls />
+          <video
+            poster={videoData.thumbnailLink}
+            className="w-full object-cover"
+            src={videoData.videoLink}
+            controls
+          />
         </div>
       </div>
       <div>

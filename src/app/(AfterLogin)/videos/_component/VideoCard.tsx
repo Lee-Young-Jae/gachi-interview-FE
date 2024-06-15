@@ -25,18 +25,11 @@ const VideoCard = ({ video }: { video: Video }) => {
       key={video.videoId}
       className="flex flex-col h-full cursor-pointer"
     >
-      <CardHeader className="flex flex-row justify-between">
-        <CardTitle className="text-lg font-semibold text-gray-800">{video.videoTitle}</CardTitle>
-        <div className="flex items-center gap-2" style={{ gap: "0.5rem" }}>
-          <img
-            src={video.image}
-            alt="프로필이미지"
-            className="rounded-full"
-            width={20}
-            height={20}
-          />
-          <div className="text-sm font-semibold">{video.userName}</div>
-        </div>
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold text-gray-800 truncate">
+          {video.videoTitle}
+        </CardTitle>
+        <hr />
       </CardHeader>
       <CardContent>
         <div className="flex justify-center rounded-lg overflow-hidden">
@@ -55,8 +48,20 @@ const VideoCard = ({ video }: { video: Video }) => {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex flex-row items-center justify-between mt-auto">
-        <div className="text-sm text-muted-foreground ml-2">{formatRelativeTime(video.time)}</div>
+      <CardFooter className="flex flex-row items-center justify-between mt-auto flex-wrap">
+        <div className="flex items-center gap-1">
+          <img
+            src={video.image}
+            alt="프로필이미지"
+            className="rounded-full"
+            width={20}
+            height={20}
+          />
+          <div className="text-sm font-semibold">{video.userName}</div>
+          <span> • </span>
+          <div className="text-sm text-muted-foreground">{formatRelativeTime(video.time)}</div>
+        </div>
+
         <div className="flex items-center">
           <AiOutlineLike className="text-muted-foreground mr-1" />
           <span className="text-muted-foreground text-xs">{video.numOfLike}</span>

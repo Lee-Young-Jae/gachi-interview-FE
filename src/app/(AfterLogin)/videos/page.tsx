@@ -46,7 +46,7 @@ const Videos = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center w-full mb-2" style={{ gap: "1rem" }}>
+      <div className="flex justify-between items-center w-full mb-2 gap-4">
         <FilterTag originalList={videoList.content} onFilterChange={handleFilterChange} />
         <div className="flex-grow w-32">
           <Select onValueChange={handleSortType}>
