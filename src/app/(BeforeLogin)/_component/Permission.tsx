@@ -22,10 +22,6 @@ const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const router = useRouter();
 
-  const handleKakao = () => {
-    router.replace(KAKAO_AUTH_URL);
-  };
-
   // 예외처리 하는이유: Notification이 지원되지 않는 브라우저에서는 Application error: a client-side exception has occurred (see the browser console for more information). 에러가 발생함
   // Can't find variable: Notification 에러가 발생하며 웹이 죽음
   // https://caniuse.com/?search=Notification Can I Use를 참고해봤을 때 특히 safari는 홈 화면에 추가한(중요) 웹앱에서만 지원한다고 나와있음
@@ -121,12 +117,20 @@ const Permission = () => {
     browserCheck();
   }, [permission]);
 
+  const kakaoLogin = () => {
+    router.replace(KAKAO_AUTH_URL);
+  };
+
+  const googleLogin = () => {
+    router.replace(GOOGLE_AUTH_URL);
+  };
+
   return (
     <div>
       {/* <p>테스트를 위한 임시 컴포넌트입니다.</p>
       <h1>알림 권한 요청</h1> */}
       <>
-        <p className="pl-4">
+        <p className="pl-2">
           원활한 서비스 이용을 위해{" "}
           <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
             알림 허용
@@ -134,35 +138,31 @@ const Permission = () => {
           을 해주세요.
         </p>
         {isPermissionGranted && (
-          <p className="text-green-500 text-sm pl-4 py-2">
+          <p className="text-green-500 text-sm pl-2 py-2">
             알림 권한이 허용되었습니다. 계속 진행해주세요.
           </p>
         )}
       </>
-
-      {/* <Link href={KAKAO_AUTH_URL} passHref> */}
       <Button
         disabled={!isPermissionGranted || !isSupportedIOS()}
         className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
           permission !== "granted" ? "cursor-not-allowed" : ""
         }`}
-        onClick={handleKakao}
+        onClick={kakaoLogin}
       >
         <RiKakaoTalkFill className="mr-2" />
         Kakao로 시작하기
       </Button>
-      {/* </Link> */}
-      <Link href={GOOGLE_AUTH_URL} passHref>
-        <Button
-          disabled={!isPermissionGranted || !isSupportedIOS()}
-          className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
-            permission !== "granted" ? "cursor-not-allowed" : ""
-          }`}
-        >
-          <FcGoogle className="mr-2" />
-          Google로 시작하기
-        </Button>
-      </Link>
+      <Button
+        disabled={!isPermissionGranted || !isSupportedIOS()}
+        className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
+          permission !== "granted" ? "cursor-not-allowed" : ""
+        }`}
+        onClick={googleLogin}
+      >
+        <FcGoogle className="mr-2" />
+        Google로 시작하기
+      </Button>
     </div>
   );
 };

@@ -15,8 +15,8 @@ const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 export default function Login() {
   return (
     <div className="flex justify-center items-center flex-wrap">
-      <div className="flex-col p-8">
-        <p className="font-bold text-3xl my-10 pl-4">
+      <div className="flex-col p-4">
+        <p className="font-bold text-3xl my-10 pl-2">
           <span className="text-[#9EEAEA]">같이</span> 면접 준비하는 서비스 <br />
           같이 <span className="text-[#9EEAEA]">면접</span> <br />
         </p>
