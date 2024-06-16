@@ -49,6 +49,7 @@ export default function KakaoAuth2Redirect() {
             const fetchFcmToken = async () => {
               try {
                 // 06.04 임시로 작성했습니다. 사용자가 브라우저에서 알림을 허용했는지 확인하는 코드
+                // 지원하지 않는다면 알림 등록없이 마이페이지로 이동합니다.
                 console.log("브라우저 지원 여부:", isSupportedBrowser);
                 if (!(await isSupportedBrowser) || !isSupportedIOS()) {
                   router.replace("/my?tab=videos");

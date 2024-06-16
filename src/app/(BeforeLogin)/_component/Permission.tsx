@@ -21,16 +21,26 @@ import { toast } from "react-toastify";
 
 const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
+  const [isSupported, setIsSupported] = useState(false);
   const router = useRouter();
+
+  // 브라우저와 iOS 지원 여부를 확인하는 함수
+  const checkSupport = async () => {
+    const supportedBrowser = await isSupportedBrowser;
+    const supportedIOS = isSupportedIOS();
+    return supportedBrowser && supportedIOS;
+  };
 
   // 예외처리 하는이유: Notification이 지원되지 않는 브라우저에서는 Application error: a client-side exception has occurred (see the browser console for more information). 에러가 발생함
   // Can't find variable: Notification 에러가 발생하며 웹이 죽음
   // https://caniuse.com/?search=Notification Can I Use를 참고해봤을 때 특히 safari는 홈 화면에 추가한(중요) 웹앱에서만 지원한다고 나와있음
   // PWA로 만들어야만 지원이 가능하다는 것 같음 (https://developer.mozilla.org/ko/docs/Web/API/Notification/requestPermission)
   // (https://firebase.blog/posts/2023/08/fcm-for-safari/)
+
+  // 알림 권한 요청을 위한 함수
   const permissionNotification = async () => {
-    if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-      // console.log("브라우저가 알림을 지원하지 않습니다.");
+    const supported = await checkSupport();
+    if (!supported) {
       toast.info(
         "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
         {
@@ -56,9 +66,11 @@ const Permission = () => {
   const isPermissionGranted = permission === "granted";
 
   useEffect(() => {
-    async function browserCheck() {
-      if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        // console.log("브라우저가 알림을 지원하지 않습니다.");
+    const initialize = async () => {
+      const supported = await checkSupport();
+      setIsSupported(supported);
+
+      if (!supported) {
         toast.info(
           "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
           {
@@ -74,73 +86,59 @@ const Permission = () => {
       if (Notification.permission === "granted") {
         console.log("알림 권한 허용됨");
         setPermission("granted");
-      }
-
-      if (Notification.permission === "denied") {
+      } else if (Notification.permission === "denied") {
         console.log("알림 권한 거부됨");
         setPermission("denied");
-      }
-
-      if (Notification.permission === "default") {
+      } else {
         console.log("알림 권한 기본값");
         setPermission("default");
       }
-    }
-    browserCheck();
+    };
+
+    initialize();
   }, []);
 
   // FCM 서비스 워커 등록
   useEffect(() => {
-    async function browserCheck() {
-      if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        // console.log("브라우저가 알림을 지원하지 않습니다.");
-        toast.info(
-          "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
-          {
-            position: "top-center",
-            autoClose: 6000,
-            className: "toast-message",
-          },
-        );
-        return;
-      }
+    if (!isSupported || permission !== "granted") {
+      return;
+    }
 
-      // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
-      navigator.serviceWorker
-        .register("firebase-messaging-sw.js")
-        .then(() => navigator.serviceWorker.ready);
+    // FCM 서비스 워커 등록
+    const registerServiceWorker = async () => {
+      try {
+        // ISSUE: DOMException: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker
+        navigator.serviceWorker
+          .register("firebase-messaging-sw.js")
+          .then(() => navigator.serviceWorker.ready);
 
-      navigator.serviceWorker
-        .register("firebase-messaging-sw.js", { scope: "/" })
-        .then(() => navigator.serviceWorker.ready);
+        navigator.serviceWorker
+          .register("firebase-messaging-sw.js", { scope: "/" })
+          .then(() => navigator.serviceWorker.ready);
 
-      navigator.serviceWorker
-        .register("firebase-messaging-sw.js")
-        .then((registration) => registration.update())
-        .then(() => navigator.serviceWorker.ready);
+        navigator.serviceWorker
+          .register("firebase-messaging-sw.js")
+          .then((registration) => registration.update())
+          .then(() => navigator.serviceWorker.ready);
 
-      // 일단 여러번 호출하는 방식으로 해결
-      // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
-      // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
+        // 일단 여러번 호출하는 방식으로 해결
+        // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575
+        // 출처 https://github.com/firebase/firebase-js-sdk/issues/7693
 
-      if (permission === "granted") {
-        // FCM 서비스 워커 등록
-        const tokenPromise = getToken(messaging, {
+        const token = await getToken(messaging, {
           vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
         });
 
-        tokenPromise.then((token) => {
-          console.log("FCM 토큰:", token);
-          // 일단 로컬 스토리지에 저장 (테스트용)
-          localStorage.setItem("fcmToken", token);
-        });
-
+        console.log("FCM 토큰:", token);
+        // 일단 로컬 스토리지에 저장 (테스트용)
+        localStorage.setItem("fcmToken", token);
         console.log("FCM 서비스 워커 등록");
+      } catch (error) {
+        console.error("FCM 서비스 워커 등록 실패:", error);
       }
-    }
-
-    browserCheck();
-  }, [permission]);
+    };
+    registerServiceWorker();
+  }, [isSupported, permission]);
 
   const kakaoLogin = () => {
     router.replace(KAKAO_AUTH_URL);
@@ -168,26 +166,49 @@ const Permission = () => {
           </p>
         )}
       </>
-      <Button
-        disabled={!isPermissionGranted || !isSupportedIOS()}
-        className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
-          permission !== "granted" ? "cursor-not-allowed" : ""
-        }`}
-        onClick={kakaoLogin}
-      >
-        <RiKakaoTalkFill className="mr-2" />
-        Kakao로 시작하기
-      </Button>
-      <Button
-        disabled={!isPermissionGranted || !isSupportedIOS()}
-        className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
-          permission !== "granted" ? "cursor-not-allowed" : ""
-        }`}
-        onClick={googleLogin}
-      >
-        <FcGoogle className="mr-2" />
-        Google로 시작하기
-      </Button>
+      {isSupported ? (
+        <>
+          {/* 알림기능을 지원한다면 권한이 허용되지 않으면 로그인 버튼을 비활성화한다 */}
+          <Button
+            disabled={!isSupported || permission !== "granted"}
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
+              permission !== "granted" ? "cursor-not-allowed" : ""
+            }`}
+            onClick={kakaoLogin}
+          >
+            <RiKakaoTalkFill className="mr-2" />
+            Kakao로 시작하기
+          </Button>
+          <Button
+            disabled={!isSupported || permission !== "granted"}
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
+              permission !== "granted" ? "cursor-not-allowed" : ""
+            }`}
+            onClick={googleLogin}
+          >
+            <FcGoogle className="mr-2" />
+            Google로 시작하기
+          </Button>
+        </>
+      ) : (
+        <>
+          {/* 알림을 지원하지 않으면 바로 로그인을 지원한다 */}
+          <Button
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl`}
+            onClick={kakaoLogin}
+          >
+            <RiKakaoTalkFill className="mr-2" />
+            Kakao로 시작하기
+          </Button>
+          <Button
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4`}
+            onClick={googleLogin}
+          >
+            <FcGoogle className="mr-2" />
+            Google로 시작하기
+          </Button>
+        </>
+      )}
     </div>
   );
 };
