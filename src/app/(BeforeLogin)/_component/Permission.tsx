@@ -9,6 +9,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { KAKAO_AUTH_URL } from "../_lib/kakao";
 import { GOOGLE_AUTH_URL } from "../_lib/google";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 
 // 임시로 만들었습니다. 승학님과 논의 후 수정 혹은 삭제가 필요합니다.
 // 알림 권한을 받기 위한 컴포넌트입니다.
@@ -19,6 +20,11 @@ import { FcGoogle } from "react-icons/fc";
 
 const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
+  const router = useRouter();
+
+  const handleKakao = () => {
+    router.replace(KAKAO_AUTH_URL);
+  };
 
   // 예외처리 하는이유: Notification이 지원되지 않는 브라우저에서는 Application error: a client-side exception has occurred (see the browser console for more information). 에러가 발생함
   // Can't find variable: Notification 에러가 발생하며 웹이 죽음
@@ -120,7 +126,7 @@ const Permission = () => {
       {/* <p>테스트를 위한 임시 컴포넌트입니다.</p>
       <h1>알림 권한 요청</h1> */}
       <>
-        <p>
+        <p className="pl-4">
           원활한 서비스 이용을 위해{" "}
           <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
             알림 허용
@@ -128,21 +134,24 @@ const Permission = () => {
           을 해주세요.
         </p>
         {isPermissionGranted && (
-          <p className="text-green-500 text-sm">알림 권한이 허용되었습니다. 계속 진행해주세요.</p>
+          <p className="text-green-500 text-sm pl-4 py-2">
+            알림 권한이 허용되었습니다. 계속 진행해주세요.
+          </p>
         )}
       </>
 
-      <Link href={KAKAO_AUTH_URL} passHref>
-        <Button
-          disabled={!isPermissionGranted || !isSupportedIOS()}
-          className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
-            permission !== "granted" ? "cursor-not-allowed" : ""
-          }`}
-        >
-          <RiKakaoTalkFill className="mr-2" />
-          Kakao로 시작하기
-        </Button>
-      </Link>
+      {/* <Link href={KAKAO_AUTH_URL} passHref> */}
+      <Button
+        disabled={!isPermissionGranted || !isSupportedIOS()}
+        className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
+          permission !== "granted" ? "cursor-not-allowed" : ""
+        }`}
+        onClick={handleKakao}
+      >
+        <RiKakaoTalkFill className="mr-2" />
+        Kakao로 시작하기
+      </Button>
+      {/* </Link> */}
       <Link href={GOOGLE_AUTH_URL} passHref>
         <Button
           disabled={!isPermissionGranted || !isSupportedIOS()}

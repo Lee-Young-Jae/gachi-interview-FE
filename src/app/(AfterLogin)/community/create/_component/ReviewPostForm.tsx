@@ -105,7 +105,7 @@ export default function ReviewPostForm() {
   // };
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
     if (
-      (e.key === "Enter" || e.key === "NumpadEnter") &&
+      (e.key === "Enter" || e.key === "NumpadEnter" || e.key === " ") &&
       e.nativeEvent.isComposing === false &&
       newTag.trim() !== ""
     ) {
@@ -115,8 +115,12 @@ export default function ReviewPostForm() {
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
     } else if (e.key === ",") {
       e.preventDefault();
-      if (newTag.trim() !== "") {
-        setTags([...tags, newTag.trim()]);
+      let trimmedTag = newTag.trim();
+      if (trimmedTag.endsWith(",")) {
+        trimmedTag = trimmedTag.slice(0, -1).trim();
+      }
+      if (trimmedTag !== "") {
+        setTags([...tags, trimmedTag]);
         setNewTag("");
         if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
       }
