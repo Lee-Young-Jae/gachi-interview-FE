@@ -152,22 +152,20 @@ const Permission = () => {
     <div>
       {/* <p>테스트를 위한 임시 컴포넌트입니다.</p>
       <h1>알림 권한 요청</h1> */}
-      <>
-        <p className="pl-2 pb-2">
-          원활한 서비스 이용을 위해{" "}
-          <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
-            알림 허용
-          </u>
-          을 해주세요.
-        </p>
-        {isPermissionGranted && (
-          <p className="text-green-500 text-sm pl-2 pb-2">
-            알림 권한이 허용되었습니다. 계속 진행해주세요.
-          </p>
-        )}
-      </>
       {isSupported ? (
         <>
+          <p className="pl-2 pb-2">
+            원활한 서비스 이용을 위해{" "}
+            <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
+              알림 허용
+            </u>
+            을 해주세요.
+          </p>
+          {isPermissionGranted && (
+            <p className="text-green-500 text-sm pl-2 pb-2">
+              알림 권한이 허용되었습니다. 계속 진행해주세요.
+            </p>
+          )}
           {/* 알림기능을 지원한다면 권한이 허용되지 않으면 로그인 버튼을 비활성화한다 */}
           <Button
             disabled={!isSupported || permission !== "granted"}
