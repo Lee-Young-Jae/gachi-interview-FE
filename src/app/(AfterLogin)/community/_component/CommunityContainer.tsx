@@ -80,7 +80,7 @@ export default function CommunityContainer({ category }: { category: string }) {
             <div className="flex-grow">
               <FilterTag originalList={boardList?.content} onFilterChange={handleFilterChange} />
             </div>
-            <div className="w-30 md:w-32 mr-0 ml-2 md:mr-4 md:ml-4">
+            <div className="w-32 mr-0 ml-2 md:mr-4 md:ml-4">
               <Select onValueChange={handleSortType}>
                 <SelectTrigger>
                   <SelectValue placeholder="최신순" />

@@ -10,6 +10,7 @@ import { KAKAO_AUTH_URL } from "../_lib/kakao";
 import { GOOGLE_AUTH_URL } from "../_lib/google";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 // 임시로 만들었습니다. 승학님과 논의 후 수정 혹은 삭제가 필요합니다.
 // 알림 권한을 받기 위한 컴포넌트입니다.
@@ -29,7 +30,15 @@ const Permission = () => {
   // (https://firebase.blog/posts/2023/08/fcm-for-safari/)
   const permissionNotification = async () => {
     if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-      console.log("브라우저가 알림을 지원하지 않습니다.");
+      // console.log("브라우저가 알림을 지원하지 않습니다.");
+      toast.info(
+        "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
+        {
+          position: "top-center",
+          autoClose: 6000,
+          className: "toast-message",
+        },
+      );
       return;
     }
 
@@ -49,7 +58,15 @@ const Permission = () => {
   useEffect(() => {
     async function browserCheck() {
       if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        console.log("브라우저가 알림을 지원하지 않습니다.");
+        // console.log("브라우저가 알림을 지원하지 않습니다.");
+        toast.info(
+          "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
+          {
+            position: "top-center",
+            autoClose: 6000,
+            className: "toast-message",
+          },
+        );
         return;
       }
 
@@ -76,7 +93,15 @@ const Permission = () => {
   useEffect(() => {
     async function browserCheck() {
       if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        console.log("브라우저가 알림을 지원하지 않습니다.");
+        // console.log("브라우저가 알림을 지원하지 않습니다.");
+        toast.info(
+          "현재 브라우저에서는 알림 기능을 사용할 수 없습니다.\n다른 브라우저를 이용해 주세요.",
+          {
+            position: "top-center",
+            autoClose: 6000,
+            className: "toast-message",
+          },
+        );
         return;
       }
 
@@ -130,7 +155,7 @@ const Permission = () => {
       {/* <p>테스트를 위한 임시 컴포넌트입니다.</p>
       <h1>알림 권한 요청</h1> */}
       <>
-        <p className="pl-2">
+        <p className="pl-2 pb-2">
           원활한 서비스 이용을 위해{" "}
           <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
             알림 허용
@@ -138,7 +163,7 @@ const Permission = () => {
           을 해주세요.
         </p>
         {isPermissionGranted && (
-          <p className="text-green-500 text-sm pl-2 py-2">
+          <p className="text-green-500 text-sm pl-2 pb-2">
             알림 권한이 허용되었습니다. 계속 진행해주세요.
           </p>
         )}
