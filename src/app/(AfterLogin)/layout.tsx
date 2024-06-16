@@ -115,13 +115,13 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
         {getCurrentLabel() && (
           <h1 className="text-2xl font-bold mt-5 ml-16">{getCurrentLabel()}</h1>
         )}
-        <div className="w-full mt-4 pl-6 pr-8 pb-8">
+        <div className="w-full mt-4 pl-6 pr-8 pb-20">
           <RQProvider>{children}</RQProvider>
         </div>
       </div>
 
       {/* 모바일 네비게이션 */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white shadow-lg z-10 flex justify-around">
+      <div className="md:hidden fixed bottom-0 left-0 w-full h-20 bg-white shadow-lg z-10 flex justify-around items-center">
         {navItems.map((item) => {
           const basePath = item.href.split("?")[0].split("/")[1];
           const isActive = pathname.startsWith(`/${basePath}`);
@@ -133,7 +133,7 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
                 isActive ? "text-blue-500" : "text-gray-500"
               }`}
             >
-              <item.icon className="text-2xl" />
+              <item.icon className="text-3xl" />
             </Link>
           );
         })}

@@ -80,12 +80,46 @@ export default function ReviewPostForm() {
     setNewTag(e.target.value);
   };
 
+  // const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
+  //   if (e.key === "Enter" || e.key === "NumpadEnter") {
+  //     e.preventDefault();
+
+  //     if (newTag.trim() !== "") {
+  //       setTags([...tags, newTag.trim()]);
+  //       setNewTag("");
+  //       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+  //     }
+  //   } else if (e.key === ",") {
+  //     e.preventDefault();
+
+  //     let trimmedTag = newTag.trim();
+  //     if (trimmedTag.endsWith(",")) {
+  //       trimmedTag = trimmedTag.slice(0, -1).trim();
+  //     }
+  //     if (trimmedTag !== "") {
+  //       setTags([...tags, trimmedTag]);
+  //       setNewTag("");
+  //       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+  //     }
+  //   }
+  // };
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.nativeEvent.isComposing === false && newTag.trim() !== "") {
+    if (
+      (e.key === "Enter" || e.key === "NumpadEnter") &&
+      e.nativeEvent.isComposing === false &&
+      newTag.trim() !== ""
+    ) {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+    } else if (e.key === ",") {
+      e.preventDefault();
+      if (newTag.trim() !== "") {
+        setTags([...tags, newTag.trim()]);
+        setNewTag("");
+        if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+      }
     }
   };
 
@@ -118,8 +152,9 @@ export default function ReviewPostForm() {
             type="text"
             value={newTag}
             onChange={handleNewTagChange}
+            // onKeyUp={handleNewTagKeyDown}
             onKeyDown={handleNewTagKeyDown}
-            placeholder="태그 작성 후 엔터키를 눌러주세요 (태그 클릭 시 삭제)"
+            placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
         </div>

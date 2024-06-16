@@ -139,7 +139,7 @@ export default function Comment({ comment, postId }: { comment: IComment; postId
           </div>
         </form>
       ) : (
-        <p className="mt-2">{comment.content}</p>
+        <p className="mt-6 ml-1">{comment.content}</p>
       )}
     </div>
   );

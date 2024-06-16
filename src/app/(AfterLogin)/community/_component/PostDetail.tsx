@@ -190,9 +190,13 @@ export default function PostDetail({ post }: { post: Post }) {
               width={20}
               height={20}
             />
-            <p className="text-gray-600 text-sm ml-2">
+            <p className="text-gray-600 text-sm ml-2 hidden md:block">
               <span className="font-semibold">{post.userName}</span> •{" "}
               {formatRelativeTime(post.time.toLocaleString())}
+            </p>
+            <p className="flex-col text-gray-600 text-sm ml-2 md:hidden">
+              <p className="font-semibold">{post.userName}</p>
+              <p>{formatRelativeTime(post.time.toLocaleString())}</p>
             </p>
           </div>
           <div className="flex">
