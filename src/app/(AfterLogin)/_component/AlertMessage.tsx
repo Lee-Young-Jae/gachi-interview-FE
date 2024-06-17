@@ -50,9 +50,5 @@ export default function AlertMessage() {
     //   }
     // });
   }, [userId]);
-  return (
-    <Link href="/alerts">
-      <ToastContainer position="top-right" autoClose={8000} />
-    </Link>
-  );
+  return <ToastContainer position="top-right" autoClose={8000} />;
 }
