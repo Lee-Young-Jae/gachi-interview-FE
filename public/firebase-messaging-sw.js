@@ -1,32 +1,27 @@
-self.addEventListener("install", function (e) {
-  console.log("fcm sw install..");
-  self.skipWaiting();
-});
+importScripts("https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.8.0/firebase-messaging.js");
 
-self.addEventListener("activate", function (e) {
-  console.log("fcm sw activate..");
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyDbw15pdmae6rnpwYkCXlTuIq1AJahmsyg",
+  authDomain: "gachi-myeonjeob.firebaseapp.com",
+  projectId: "gachi-myeonjeob",
+  storageBucket: "gachi-myeonjeob.appspot.com",
+  messagingSenderId: "1013024533440",
+  appId: "1:1013024533440:web:e5a6157dcf86451c4cb625",
+  measurementId: "G-8529WYLE5Y",
+};
 
-self.addEventListener("push", function (e) {
-  console.log("push: ", e.data.json());
-  if (!e.data.json()) return;
+firebase.initializeApp(firebaseConfig);
 
-  const resultData = e.data.json().notification;
-  const notificationTitle = resultData.title;
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  console.log("[firebase-messaging-sw.js] Received background message ", payload);
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: resultData.body,
-    icon: resultData.image,
-    tag: resultData.tag,
-    ...resultData,
+    body: payload.notification.body,
+    icon: payload.notification.image,
   };
-  console.log("push: ", { resultData, notificationTitle, notificationOptions });
 
   self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
-self.addEventListener("notificationclick", function (event) {
-  console.log("notification click");
-  const url = "/";
-  event.notification.close();
-  event.waitUntil(clients.openWindow(url));
 });
