@@ -21,7 +21,8 @@ export default function AlertMessage() {
         // return;
       }
       if (!messaging) {
-        return;
+        console.log("messaging is not initialized", messaging);
+        // return;
       }
 
       onMessage(messaging, (payload) => {

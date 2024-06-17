@@ -33,6 +33,7 @@ isSupportedIOS() &&
   isSupported().then((supported) => {
     if (supported) {
       messaging = getMessaging(app);
+      console.log("messaging is initialized", messaging);
     }
   });
 
