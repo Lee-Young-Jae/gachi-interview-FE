@@ -116,10 +116,10 @@ const Permission = () => {
           .register("firebase-messaging-sw.js", { scope: "/" })
           .then(() => navigator.serviceWorker.ready);
 
-        navigator.serviceWorker
-          .register("firebase-messaging-sw.js")
-          .then((registration) => registration.update())
-          .then(() => navigator.serviceWorker.ready);
+        // navigator.serviceWorker
+        //   .register("firebase-messaging-sw.js")
+        //   .then((registration) => registration.update())
+        //   .then(() => navigator.serviceWorker.ready);
 
         // 일단 여러번 호출하는 방식으로 해결
         // 출처 https://github.com/firebase/firebase-js-sdk/issues/7575

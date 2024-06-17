@@ -17,12 +17,12 @@ export default function AlertMessage() {
     // 브라우저 지원 여부 확인 후 알림 메시지를 받아옵니다. 모바일 환경에서 에러가 발생하는 것을 방지합니다.
     // 에러 메세지: Application error: a client-side exception has occurred (see the browser console for more information).
     const browserCheck = async () => {
-      if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        // return;
-      }
+      // if (!(await isSupportedBrowser) || !isSupportedIOS()) {
+      //   // return;
+      // }
       if (!messaging) {
         console.log("messaging is not initialized", messaging);
-        // return;
+        return;
       }
 
       onMessage(messaging, (payload) => {
