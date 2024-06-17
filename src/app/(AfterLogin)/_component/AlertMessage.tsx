@@ -18,7 +18,7 @@ export default function AlertMessage() {
     // 에러 메세지: Application error: a client-side exception has occurred (see the browser console for more information).
     const browserCheck = async () => {
       if (!(await isSupportedBrowser) || !isSupportedIOS()) {
-        return;
+        // return;
       }
       if (!messaging) {
         return;
