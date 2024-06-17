@@ -48,30 +48,19 @@ export default function KakaoAuth2Redirect() {
 
             const fetchFcmToken = async () => {
               try {
-                // 06.04 임시로 작성했습니다. 사용자가 브라우저에서 알림을 허용했는지 확인하는 코드
-                // 지원하지 않는다면 알림 등록없이 마이페이지로 이동합니다.
                 console.log("브라우저 지원 여부:", isSupportedBrowser);
                 if (!(await isSupportedBrowser) || !isSupportedIOS()) {
                   router.replace("/my?tab=videos");
                   return;
                 }
 
-                // 토큰 삭제 문제 해결을 위해 임시로 작성한 코드 (Permission 컴포넌트에서 로컬스토리지에 저장한 토큰을 가져옵니다.
                 const token = localStorage.getItem("fcmToken");
-                // 토큰이 없다면 새로운 토큰 발행
+
                 const newToken = token
                   ? token
                   : await getToken(messaging, {
                       vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
                     });
-                // 여기까지
-
-                // 이전 코드
-                // const newToken = await getToken(messaging, {
-                //   vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-                // });
-                // console.log("FCM 토큰 가져옴:", newToken);
-
                 try {
                   const tokenRes = await fetch(`${BASE_URL}/user/fcm/token`, {
                     method: "POST",

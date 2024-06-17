@@ -14,8 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export let messaging: Messaging;
-// 이전 코드
-// messaging = getMessaging(app);
 
 // 브라우저 지원 여부를 확인합니다.
 export const isSupportedBrowser = isSupported();
@@ -36,17 +34,3 @@ isSupportedIOS() &&
       console.log("messaging is initialized", messaging);
     }
   });
-
-// 원래부터 주석처리되어있던 코드
-// export const requestPermission = async () => {
-//   console.log("Requesting permission...");
-//   const permission = await Notification.requestPermission();
-//   if (permission === "granted") {
-//     console.log("Notification permission granted.");
-//     await getToken(messaging, {
-//       vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-//     });
-//   } else {
-//     console.log("No registration token available. Request permission to generate one.");
-//   }
-// };
