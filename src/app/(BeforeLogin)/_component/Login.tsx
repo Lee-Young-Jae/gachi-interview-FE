@@ -1,3 +1,5 @@
+"use client";
+
 import interviewImage from "../../../../public/interview.json";
 import dynamic from "next/dynamic";
 import Permission from "./Permission";
