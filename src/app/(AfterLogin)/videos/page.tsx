@@ -38,8 +38,8 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   };
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    setInputValue(keyword);
+  }, [keyword]);
 
   return (
     <div className="relative flex items-center w-full">
