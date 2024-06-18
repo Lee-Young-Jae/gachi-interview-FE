@@ -157,11 +157,11 @@ const VideoDetail = ({ videoId }: VideoDetailProps) => {
           </div>
           <p>{videoData.userName}</p>
 
-          <div className="flex mt-4">
+          <div className="flex mt-4 flex-wrap gap-2">
             {videoData?.tags?.map((tag, index) => (
               <Badge
                 key={index}
-                className={`px-3 py-1 text-sm ${index === 0 ? "ml-0" : "mx-1"}`}
+                className="px-3 py-1 text-sm max-w-[300px] overflow-hidden whitespace-nowrap tracking-tight"
                 variant="secondary"
               >
                 #{tag}

@@ -36,9 +36,13 @@ const VideoCard = ({ video }: { video: Video }) => {
         <div className="flex justify-center rounded-lg overflow-hidden">
           <img src={video.thumbnailLink} alt="thumbnail" className="w-full h-40 object-cover" />
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex-wrap flex">
           {(showAllTags ? video.tags : video.tags.slice(0, MAX_TAGS_TO_SHOW)).map((tag, index) => (
-            <Badge key={index} className="px-3 py-1 text-sm mt-2 mx-1" variant="secondary">
+            <Badge
+              key={index}
+              className="px-3 py-1 text-sm mt-2 mx-1 max-w-[190px] truncate tracking-tight"
+              variant="secondary"
+            >
               #{tag}
             </Badge>
           ))}
