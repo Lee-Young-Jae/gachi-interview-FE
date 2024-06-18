@@ -15,28 +15,28 @@ import { useRouter } from "next/navigation";
 import InterviewReview from "./InterviewReview";
 import GetStudy from "./GetStudy";
 import { useEffect, useState } from "react";
-import FilterTag from "../../_component/FilterTag";
 import { useQuery } from "@tanstack/react-query";
 import { Post, PostContent } from "@/model/Post";
 import getBoards from "../_lib/getBoards";
 import { useRecoilValue } from "recoil";
 import { accessTokenState } from "@/store/auth";
 import Loading from "../../_component/Loading";
-import { Video } from "@/model/Video";
+import Search from "../../_component/Search";
 
 export default function CommunityContainer({ category }: { category: string }) {
   const router = useRouter();
   const accessToken = useRecoilValue(accessTokenState);
   const page = 1;
   const [sortType, setSortType] = useState<"new" | "like">("new");
+  const [keyword, setKeyword] = useState<string>("");
 
   const {
     data: boardList,
     error,
     isLoading,
-  } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: number]>({
-    queryKey: ["community", category, sortType, page],
-    queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken }),
+  } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: string]>({
+    queryKey: ["community", category, sortType, keyword],
+    queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken, keyword }),
   });
 
   const [filteredBoardList, setFilteredBoardList] = useState<Post[]>(boardList?.content || []);
@@ -53,10 +53,6 @@ export default function CommunityContainer({ category }: { category: string }) {
 
   const handleSortType = (value: string) => {
     setSortType(value as "new" | "like");
-  };
-
-  const handleFilterChange = (filteredList: (Video | Post)[]) => {
-    setFilteredBoardList(filteredList as Post[]);
   };
 
   if (isLoading) return <Loading />;
@@ -78,7 +74,7 @@ export default function CommunityContainer({ category }: { category: string }) {
           </div>
           <div className="flex flex-grow mt-2 md:mt-0">
             <div className="flex-grow">
-              <FilterTag originalList={boardList?.content} onFilterChange={handleFilterChange} />
+              <Search keyword={keyword} setKeyword={setKeyword} />
             </div>
             <div className="w-32 mr-0 ml-2 md:mr-4 md:ml-4">
               <Select onValueChange={handleSortType}>
