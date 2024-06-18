@@ -4,7 +4,7 @@ import { formatRelativeTime } from "@/lib/utils/days";
 import { Video } from "@/model/Video";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 
 const VideoCard = ({ video }: { video: Video }) => {
   const router = useRouter();
@@ -19,6 +19,7 @@ const VideoCard = ({ video }: { video: Video }) => {
     event.stopPropagation();
     setShowAllTags(!showAllTags);
   };
+
   return (
     <Card
       onClick={handleCardClick}
@@ -63,7 +64,11 @@ const VideoCard = ({ video }: { video: Video }) => {
         </div>
 
         <div className="flex items-center">
-          <AiOutlineLike className="text-muted-foreground mr-1" />
+          {video.liked ? (
+            <AiFillLike className="text-blue-500 mr-1" />
+          ) : (
+            <AiOutlineLike className="text-muted-foreground mr-1" />
+          )}
           <span className="text-muted-foreground text-xs">{video.numOfLike}</span>
         </div>
       </CardFooter>

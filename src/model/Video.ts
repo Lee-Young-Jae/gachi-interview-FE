@@ -10,4 +10,5 @@ export interface Video {
   exposure: boolean;
   time: string;
   tags: string[];
+  liked: boolean;
 }

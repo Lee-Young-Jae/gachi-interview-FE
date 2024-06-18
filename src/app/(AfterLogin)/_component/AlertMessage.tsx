@@ -22,7 +22,8 @@ export default function AlertMessage() {
       const number = match ? parseInt(match[1], 10) : null;
 
       if (number && number === userId) {
-        toast.info(payload.notification?.body);
+        const messageWithoutUserId = message?.replace(`(${number})`, "");
+        toast.info(messageWithoutUserId);
       }
     });
   }, [userId]);
