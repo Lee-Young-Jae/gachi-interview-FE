@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import InterviewReview from "./InterviewReview";
 import GetStudy from "./GetStudy";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PostContent } from "@/model/Post";
 import getBoards from "../_lib/getBoards";
@@ -26,14 +26,15 @@ import Search from "../../_component/Search";
 export default function CommunityContainer({ category }: { category: string }) {
   const router = useRouter();
   const accessToken = useRecoilValue(accessTokenState);
-  const page = 1;
   const [sortType, setSortType] = useState<"new" | "like">("new");
+  const [page, setPage] = useState<number>(1);
   const [keyword, setKeyword] = useState<string>("");
 
   const {
     data: boardList,
     error,
     isLoading,
+    refetch,
   } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: string]>({
     queryKey: ["community", category, sortType, keyword],
     queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken, keyword }),
@@ -47,8 +48,70 @@ export default function CommunityContainer({ category }: { category: string }) {
     setSortType(value as "new" | "like");
   };
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  useEffect(() => {
+    refetch();
+  }, [sortType, keyword, page]);
+
   if (isLoading) return <Loading />;
   if (error) return <div>Error</div>;
+
+  const Pagination = ({
+    currentPage,
+    totalPages,
+    onPageChange,
+  }: {
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  }) => {
+    const handlePrevious = () => {
+      if (currentPage > 1) onPageChange(currentPage - 1);
+    };
+
+    const handleNext = () => {
+      if (currentPage < totalPages) onPageChange(currentPage + 1);
+    };
+
+    const renderPageNumbers = () => {
+      const pageNumbers = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => onPageChange(i)}
+            className={`p-2 mx-1 border rounded ${i === currentPage ? "bg-gray-200" : ""}`}
+          >
+            {i}
+          </button>,
+        );
+      }
+      return pageNumbers;
+    };
+
+    return (
+      <div className="flex justify-center items-center mt-4">
+        <button
+          onClick={handlePrevious}
+          disabled={currentPage === 1}
+          className="p-2 mx-2 border rounded disabled:opacity-50"
+        >
+          이전
+        </button>
+        {renderPageNumbers()}
+        <button
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+          className="p-2 mx-2 border rounded disabled:opacity-50"
+        >
+          다음
+        </button>
+      </div>
+    );
+  };
 
   return (
     <Tabs defaultValue={category}>
@@ -104,6 +167,13 @@ export default function CommunityContainer({ category }: { category: string }) {
           <GetStudy tabParams={category} boardList={boardList} />
         </div>
       </TabsContent>
+      {boardList?.totalPages && (
+        <Pagination
+          currentPage={page}
+          totalPages={boardList.totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </Tabs>
   );
 }

@@ -6,7 +6,6 @@ import { Post } from "@/model/Post";
 import { formatRelativeTime } from "@/lib/utils/days";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function PostCard({
   post,

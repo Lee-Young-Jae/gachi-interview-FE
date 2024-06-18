@@ -15,4 +15,5 @@ export interface Post {
 }
 export interface PostContent {
   content: Post[];
+  totalPages: number;
 }
