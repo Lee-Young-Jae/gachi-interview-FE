@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import VideoCard from "./_component/VideoCard";
 import { useGetInterviews } from "./_lib/queries/useInterviewQuery";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import NoData from "../_component/NoData";
 import Loading from "../_component/Loading";
 import { CiSearch } from "react-icons/ci";
@@ -20,8 +20,9 @@ interface SearchProps {
   keyword: string;
 }
 
-const Search = ({ setKeyword, keyword }: SearchProps) => {
+const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   const [inputValue, setInputValue] = useState<string>(keyword);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const debouncedSetKeyword = useCallback(
     debounce((value: string) => {
@@ -36,10 +37,15 @@ const Search = ({ setKeyword, keyword }: SearchProps) => {
     debouncedSetKeyword(value);
   };
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
     <div className="relative flex items-center w-full">
       <CiSearch className="absolute left-3 text-muted-foreground" />
       <input
+        ref={inputRef}
         type="text"
         placeholder="검색어를 입력하세요"
         className="h-10 w-full rounded-md border border-input bg-background px-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none"
@@ -48,7 +54,7 @@ const Search = ({ setKeyword, keyword }: SearchProps) => {
       />
     </div>
   );
-};
+});
 
 const Pagination = ({
   currentPage,
@@ -104,7 +110,6 @@ const Pagination = ({
   );
 };
 const Videos = () => {
-  const PAGE_SIZE = 12;
   const [sortType, setSortType] = useState<"new" | "like">("new");
   const [keyword, setKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -128,7 +133,7 @@ const Videos = () => {
 
   useEffect(() => {
     refetch();
-  }, [sortType, keyword]);
+  }, [sortType, keyword, page]);
 
   if (isLoading || !videoList) {
     return <Loading />;
