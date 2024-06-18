@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import getInterviews, { getInterviewsProps as RequestGetInterviews } from "../api/getInterviews";
 import getInterview, { getInterviewProps as RequestGetInterview } from "../api/getInterview";
 import patchInterview, { PatchInterviewProps } from "../api/patchInterview";
@@ -34,6 +34,9 @@ export const useGetInterviews = ({ sortType, page, keyword }: RequestGetIntervie
   >({
     queryKey: ["interviews", sortType, page, keyword],
     queryFn: () => getInterviews({ sortType, page, keyword }),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 60,
+    placeholderData: keepPreviousData, // 이전 데이터 유지
   });
 };
 

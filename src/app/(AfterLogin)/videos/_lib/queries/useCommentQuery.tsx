@@ -28,13 +28,11 @@ export const usePostCommentMutation = (videoId: string) => {
     onMutate: async (data) => {
       const previousData = queryClient.getQueryData(["interview", "comments", data.videoId]);
       const previousDataOrDefault = previousData ?? [];
-
       queryClient.setQueryData(
         ["interview", "comments", data.videoId],
         (old: ResponseGetComments | undefined) => {
           const oldData = old ?? [];
           return [
-            ...oldData,
             {
               commentId: Math.random(),
               userId: data.userId,
@@ -42,6 +40,7 @@ export const usePostCommentMutation = (videoId: string) => {
               content: data.content,
               createdAt: new Date().toISOString(),
             },
+            ...oldData,
           ];
         },
       );
