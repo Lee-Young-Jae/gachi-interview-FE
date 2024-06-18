@@ -135,6 +135,11 @@ const Videos = () => {
     refetch();
   }, [sortType, keyword, page]);
 
+  // 정렬이 바뀌거나 검색어가 바뀌면 첫 페이지로 이동
+  useEffect(() => {
+    setPage(1);
+  }, [sortType, keyword]);
+
   if (isLoading || !videoList) {
     return <Loading />;
   }
