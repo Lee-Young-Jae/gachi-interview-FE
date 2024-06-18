@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import InterviewReview from "./InterviewReview";
 import GetStudy from "./GetStudy";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { PostContent } from "@/model/Post";
 import getBoards from "../_lib/getBoards";
 import { useRecoilValue } from "recoil";
@@ -38,6 +38,9 @@ export default function CommunityContainer({ category }: { category: string }) {
   } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: string]>({
     queryKey: ["community", category, sortType, keyword],
     queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken, keyword }),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 60,
+    placeholderData: keepPreviousData,
   });
 
   const handleTabClick = (value: string) => {
@@ -158,22 +161,18 @@ export default function CommunityContainer({ category }: { category: string }) {
         </Link>
       </div>
       <TabsContent value="reviews">
-        <div>
-          <InterviewReview tabParams={category} boardList={boardList} />
-        </div>
+        <InterviewReview tabParams={category} boardList={boardList} />
       </TabsContent>
       <TabsContent value="studies">
-        <div>
-          <GetStudy tabParams={category} boardList={boardList} />
-        </div>
+        <GetStudy tabParams={category} boardList={boardList} />
       </TabsContent>
-      {boardList?.totalPages && (
+      {boardList?.totalPages ? (
         <Pagination
           currentPage={page}
           totalPages={boardList.totalPages}
           onPageChange={handlePageChange}
         />
-      )}
+      ) : null}
     </Tabs>
   );
 }
