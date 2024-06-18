@@ -14,9 +14,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import InterviewReview from "./InterviewReview";
 import GetStudy from "./GetStudy";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Post, PostContent } from "@/model/Post";
+import { PostContent } from "@/model/Post";
 import getBoards from "../_lib/getBoards";
 import { useRecoilValue } from "recoil";
 import { accessTokenState } from "@/store/auth";
@@ -38,14 +38,6 @@ export default function CommunityContainer({ category }: { category: string }) {
     queryKey: ["community", category, sortType, keyword],
     queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken, keyword }),
   });
-
-  const [filteredBoardList, setFilteredBoardList] = useState<Post[]>(boardList?.content || []);
-
-  useEffect(() => {
-    if (boardList?.content) {
-      setFilteredBoardList(boardList.content);
-    }
-  }, [boardList]);
 
   const handleTabClick = (value: string) => {
     router.replace(`/community?tab=${value}`);
@@ -104,20 +96,12 @@ export default function CommunityContainer({ category }: { category: string }) {
       </div>
       <TabsContent value="reviews">
         <div>
-          <InterviewReview
-            tabParams={category}
-            boardList={boardList}
-            filteredBoardList={filteredBoardList}
-          />
+          <InterviewReview tabParams={category} boardList={boardList} />
         </div>
       </TabsContent>
       <TabsContent value="studies">
         <div>
-          <GetStudy
-            tabParams={category}
-            boardList={boardList}
-            filteredBoardList={filteredBoardList}
-          />
+          <GetStudy tabParams={category} boardList={boardList} />
         </div>
       </TabsContent>
     </Tabs>

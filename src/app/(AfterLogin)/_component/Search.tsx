@@ -1,5 +1,5 @@
 import { CiSearch } from "react-icons/ci";
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import debounce from "../_lib/debounce";
 interface SearchProps {
   setKeyword: (keyword: string) => void;
@@ -22,6 +22,12 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
     setInputValue(value);
     debouncedSetKeyword(value);
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputValue]);
 
   return (
     <div className="relative flex items-center w-full">
