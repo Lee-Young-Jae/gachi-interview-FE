@@ -3,15 +3,19 @@ import customFetcher from "@/lib/utils/customFetcher";
 export interface getInterviewsProps {
   sortType: "new" | "like";
   page: number;
+  keyword: string;
 }
-const getInterviews = async ({ sortType, page }: getInterviewsProps) => {
+const getInterviews = async ({ sortType, page, keyword }: getInterviewsProps) => {
   try {
-    const { data } = await customFetcher(`/video/list?page=${page}&sortType=${sortType}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const { data } = await customFetcher(
+      `/video/list?page=${page}&sortType=${sortType}&keyword=${keyword}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     return data;
   } catch (error) {

@@ -8,12 +8,27 @@ import { Video } from "@/model/Video";
 
 type ResponseGetInterviews = {
   content: Video[];
+  totalPages: number;
+  size: number;
+  totalElements: number;
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
 };
 
-export const useGetInterviews = ({ sortType, page }: RequestGetInterviews) => {
+export const useGetInterviews = ({ sortType, page, keyword }: RequestGetInterviews) => {
   return useQuery<ResponseGetInterviews, Error, ResponseGetInterviews, [string, string, number]>({
     queryKey: ["interviews", sortType, page],
-    queryFn: () => getInterviews({ sortType, page }),
+    queryFn: () => getInterviews({ sortType, page, keyword }),
   });
 };
 
