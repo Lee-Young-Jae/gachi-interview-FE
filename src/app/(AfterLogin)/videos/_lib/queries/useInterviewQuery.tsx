@@ -26,8 +26,13 @@ type ResponseGetInterviews = {
 };
 
 export const useGetInterviews = ({ sortType, page, keyword }: RequestGetInterviews) => {
-  return useQuery<ResponseGetInterviews, Error, ResponseGetInterviews, [string, string, number]>({
-    queryKey: ["interviews", sortType, page],
+  return useQuery<
+    ResponseGetInterviews,
+    Error,
+    ResponseGetInterviews,
+    [string, string, number, string]
+  >({
+    queryKey: ["interviews", sortType, page, keyword],
     queryFn: () => getInterviews({ sortType, page, keyword }),
   });
 };
