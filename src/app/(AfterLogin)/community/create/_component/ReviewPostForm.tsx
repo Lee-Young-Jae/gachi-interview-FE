@@ -9,6 +9,7 @@ import { useModal } from "@/components/Modal/useModal";
 import { useRecoilValue } from "recoil";
 import { accessTokenState, userIdState } from "@/store/auth";
 
+const isAndroid = navigator.userAgent.match(/Android/i);
 export default function ReviewPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -107,10 +108,6 @@ export default function ReviewPostForm() {
   //   }
   // };
 
-  useEffect(() => {
-    setNewTag("");
-  }, [tags]);
-
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
     console.log("handleNewTagKeyDown(e) called");
     console.log("e :", e);
@@ -118,6 +115,7 @@ export default function ReviewPostForm() {
     console.log("e.target: ", e?.target);
     console.log("newTag: ", newTag);
     console.log("tags: ", tags);
+    console.log(navigator.userAgent);
 
     const targetKey = e.target as HTMLInputElement;
 
@@ -131,21 +129,10 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (targetKey.value.at(-1) === " ") {
+    } else if (isAndroid && targetKey.value.at(-1) === " ") {
       console.log("before e.nativeEvent.isComposing");
       if (e.nativeEvent.isComposing) return;
       console.log(`targetKey.value.at(-1) === " "`);
-      e.preventDefault();
-      let trimmedTag = newTag.trim();
-      if (trimmedTag.endsWith(" ")) {
-        trimmedTag = trimmedTag.slice(0, -1).trim();
-      }
-      if (trimmedTag !== "") {
-        setTags([...tags, trimmedTag]);
-        setNewTag("");
-        if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-      }
-    } else if (e.key === " ") {
       e.preventDefault();
       let trimmedTag = newTag.trim();
       if (trimmedTag.endsWith(" ")) {
@@ -193,6 +180,11 @@ export default function ReviewPostForm() {
             placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
+          {isAndroid ? (
+            <span>스페이스 두번을 눌러 태그 추가</span>
+          ) : (
+            <span>Enter를 눌러 태그 추가</span>
+          )}
         </div>
         <textarea
           placeholder={`[면접 후기 내용 작성 가이드]\n\n - 면접 질문\n - 면접 답변 혹은 면접 느낌\n - 발표 시기`}
