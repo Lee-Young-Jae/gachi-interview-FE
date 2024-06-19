@@ -131,10 +131,10 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (targetKey.value.at(-1) === " " && newTag.trim() !== "") {
-      console.log("Before e.nativeEvent.isComposing");
+    } else if (targetKey.value.at(-1) === " ") {
+      console.log("before e.nativeEvent.isComposing");
       if (e.nativeEvent.isComposing) return;
-      console.log(`targetKey.value.at(-1) === " " && newTag.trim() !== ""`);
+      console.log(`targetKey.value.at(-1) === " "`);
       e.preventDefault();
       let trimmedTag = newTag.trim();
       if (trimmedTag.endsWith(" ")) {
