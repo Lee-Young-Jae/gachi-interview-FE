@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Key, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import postBoard from "../_lib/postBoard";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -106,6 +106,11 @@ export default function ReviewPostForm() {
   //     }
   //   }
   // };
+
+  useEffect(() => {
+    setNewTag("");
+  }, [tags]);
+
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
     console.log("handleNewTagKeyDown(e) called");
     console.log("e :", e);
@@ -127,7 +132,9 @@ export default function ReviewPostForm() {
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
     } else if (targetKey.value.at(-1) === " " && newTag.trim() !== "") {
+      console.log("Before e.nativeEvent.isComposing");
       if (e.nativeEvent.isComposing) return;
+      console.log(`targetKey.value.at(-1) === " " && newTag.trim() !== ""`);
       e.preventDefault();
       let trimmedTag = newTag.trim();
       if (trimmedTag.endsWith(" ")) {
