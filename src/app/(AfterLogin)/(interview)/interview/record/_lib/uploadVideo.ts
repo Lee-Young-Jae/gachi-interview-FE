@@ -16,7 +16,7 @@ export const getPutCommandObject = async (key: string, body: any, ContentType: s
   console.log(newKey);
 
   const command = new PutObjectCommand({
-    Bucket: "inf-video",
+    Bucket: "gachi-myeonjeob",
     Key: newKey,
     Body: body,
     ACL: "public-read",
@@ -25,7 +25,7 @@ export const getPutCommandObject = async (key: string, body: any, ContentType: s
 
   try {
     const response = await client.send(command);
-    const url = `https://inf-video.s3.ap-northeast-2.amazonaws.com/${newKey}`;
+    const url = `https://gachi-myeonjeob.s3.ap-northeast-2.amazonaws.com/${newKey}`;
 
     return url;
   } catch (err) {
