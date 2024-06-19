@@ -88,8 +88,8 @@ const useRecord = () => {
         const encodedBlob = await encodingPromise;
         const { videoUrl: presignedVideoUrl, thumbnailUrl: presignedThumbnailUrl } =
           await getPresignedUrl(fileNames + ".mp4", fileNames + "-thumbnail.png");
-        await upload(presignedVideoUrl, encodedBlob);
-        await upload(presignedThumbnailUrl, metadata.thumbnail);
+        await upload(presignedVideoUrl, encodedBlob, "video/mp4");
+        await upload(presignedThumbnailUrl, metadata.thumbnail, "image/png");
 
         const BASE_URL = process.env.NEXT_PUBLIC_AMAZON_S3_BASE_URL;
         const videoUrl = BASE_URL + fileNames + ".mp4";

@@ -15,13 +15,13 @@ export const getPresignedUrl = async (videoName: string, thumbnailName: string) 
   return data;
 };
 
-export const upload = async (presignedUrl: string, blob: Blob) => {
+export const upload = async (presignedUrl: string, blob: Blob, type: string) => {
   try {
     const response = await fetch(presignedUrl, {
       method: "PUT",
       body: blob,
       headers: {
-        "Content-Type": "video/mp4",
+        "Content-Type": type,
       },
     });
 
