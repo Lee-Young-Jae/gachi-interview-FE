@@ -108,6 +108,8 @@ export default function ReviewPostForm() {
     console.log("e :", e);
     console.log("e.key :", e.key);
     console.log("e.target: ", e?.target);
+    console.log("newTag: ", newTag);
+    console.log("tags: ", tags);
 
     const targetKey = e.target as HTMLInputElement;
 
@@ -121,7 +123,7 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (targetKey.value === ",") {
+    } else if (targetKey.value.includes(",")) {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
