@@ -56,10 +56,12 @@ export default function ReviewPostForm() {
       return;
     }
 
+    const removedDotTags = tags.map((item) => item.replaceAll(".", ""));
+
     postData.mutate({
       title,
       content,
-      tags,
+      tags: removedDotTags,
       category,
       accessToken,
       userId,
@@ -123,7 +125,11 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (targetKey.value.includes(",")) {
+    } else if (
+      targetKey.value.includes(",") &&
+      e.nativeEvent.isComposing === false &&
+      newTag.trim() !== ""
+    ) {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
