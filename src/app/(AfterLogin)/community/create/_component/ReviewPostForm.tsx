@@ -9,7 +9,6 @@ import { useModal } from "@/components/Modal/useModal";
 import { useRecoilValue } from "recoil";
 import { accessTokenState, userIdState } from "@/store/auth";
 
-const isAndroid = navigator.userAgent.match(/Android/i);
 export default function ReviewPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -22,6 +21,8 @@ export default function ReviewPostForm() {
   const { openDialogWithBack, closeModal } = useModal();
   const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
+
+  const isAndroid = window?.navigator?.userAgent?.match(/Android/i);
 
   const postData = useMutation({
     mutationKey: ["community", category, "new", 1],
@@ -115,7 +116,7 @@ export default function ReviewPostForm() {
     console.log("e.target: ", e?.target);
     console.log("newTag: ", newTag);
     console.log("tags: ", tags);
-    console.log(navigator.userAgent);
+    console.log(window?.navigator?.userAgent);
 
     const targetKey = e.target as HTMLInputElement;
 
