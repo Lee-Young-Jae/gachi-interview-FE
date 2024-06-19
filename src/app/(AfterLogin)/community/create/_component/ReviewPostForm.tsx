@@ -107,12 +107,21 @@ export default function ReviewPostForm() {
     console.log("handleNewTagKeyDown(e) called");
     console.log("e :", e);
     console.log("e.key :", e.key);
+    console.log("e.target: ", e?.target);
+
+    const targetKey = e.target as HTMLInputElement;
+
 
     if (
-      (e.key === "Enter" || e.key === "NumpadEnter" || e.key === " ") &&
+      (e.key === "Enter" || e.key === "NumpadEnter") &&
       e.nativeEvent.isComposing === false &&
       newTag.trim() !== ""
     ) {
+      e.preventDefault();
+      setTags([...tags, newTag.trim()]);
+      setNewTag("");
+      if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+    } else if (targetKey.value === ",") {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
