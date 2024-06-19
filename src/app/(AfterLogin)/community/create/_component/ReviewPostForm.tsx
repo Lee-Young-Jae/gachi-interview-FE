@@ -126,18 +126,24 @@ export default function ReviewPostForm() {
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
     } else if (
-      targetKey.value.includes(",") &&
+      targetKey.value.includes(" ") &&
       e.nativeEvent.isComposing === false &&
       newTag.trim() !== ""
     ) {
       e.preventDefault();
-      setTags([...tags, newTag.trim()]);
-      setNewTag("");
-      if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (e.key === ",") {
+      let trimmedTag = newTag.trim();
+      if (trimmedTag.endsWith(" ")) {
+        trimmedTag = trimmedTag.slice(0, -1).trim();
+      }
+      if (trimmedTag !== "") {
+        setTags([...tags, trimmedTag]);
+        setNewTag("");
+        if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+      }
+    } else if (e.key === " ") {
       e.preventDefault();
       let trimmedTag = newTag.trim();
-      if (trimmedTag.endsWith(",")) {
+      if (trimmedTag.endsWith(" ")) {
         trimmedTag = trimmedTag.slice(0, -1).trim();
       }
       if (trimmedTag !== "") {
