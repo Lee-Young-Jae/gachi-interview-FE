@@ -22,7 +22,7 @@ export default function ReviewPostForm() {
   const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
-  const isAndroid = window?.navigator?.userAgent?.match(/Android/i);
+  const isLinux = window?.navigator?.userAgent?.match(/Linux/i);
 
   const postData = useMutation({
     mutationKey: ["community", category, "new", 1],
@@ -109,15 +109,11 @@ export default function ReviewPostForm() {
   //   }
   // };
 
-  const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
-    console.log("handleNewTagKeyDown(e) called");
-    console.log("e :", e);
-    console.log("e.key :", e.key);
-    console.log("e.target: ", e?.target);
-    console.log("newTag: ", newTag);
-    console.log("tags: ", tags);
-    console.log(window?.navigator?.userAgent);
+  useEffect(() => {
+    setNewTag("");
+  }, [tags]);
 
+  const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
     const targetKey = e.target as HTMLInputElement;
 
 
@@ -130,10 +126,8 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (isAndroid && targetKey.value.at(-1) === " ") {
-      console.log("before e.nativeEvent.isComposing");
+    } else if (isLinux && targetKey.value.at(-1) === " ") {
       if (e.nativeEvent.isComposing) return;
-      console.log(`targetKey.value.at(-1) === " "`);
       e.preventDefault();
       let trimmedTag = newTag.trim();
       if (trimmedTag.endsWith(" ")) {
@@ -153,6 +147,7 @@ export default function ReviewPostForm() {
 
   return (
     <>
+      {window?.navigator?.userAgent && <textarea value={window?.navigator?.userAgent} />}
       <p className="text-3xl font-bold mt-8">면접 후기 작성</p>
       <form onSubmit={onSubmit} className="flex flex-col w-full mt-2">
         <input
@@ -181,7 +176,7 @@ export default function ReviewPostForm() {
             placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
-          {isAndroid ? (
+          {isLinux ? (
             <span>스페이스 두번을 눌러 태그 추가</span>
           ) : (
             <span>Enter를 눌러 태그 추가</span>
