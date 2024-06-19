@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { Key, useState } from "react";
 import postBoard from "../_lib/postBoard";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -44,7 +44,6 @@ export default function ReviewPostForm() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const newErrors = {
       title: !title,
       content: !content,
@@ -56,7 +55,9 @@ export default function ReviewPostForm() {
       return;
     }
 
-    const removedDotTags = tags.map((item) => item.replaceAll(".", ""));
+    const removedDotTags = tags
+      .map((item) => item.replaceAll(".", ""))
+      .filter((item) => item !== "");
 
     postData.mutate({
       title,
@@ -125,11 +126,8 @@ export default function ReviewPostForm() {
       setTags([...tags, newTag.trim()]);
       setNewTag("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-    } else if (
-      targetKey.value.includes(" ") &&
-      e.nativeEvent.isComposing === false &&
-      newTag.trim() !== ""
-    ) {
+    } else if (targetKey.value.at(-1) === " " && newTag.trim() !== "") {
+      if (e.nativeEvent.isComposing) return;
       e.preventDefault();
       let trimmedTag = newTag.trim();
       if (trimmedTag.endsWith(" ")) {
