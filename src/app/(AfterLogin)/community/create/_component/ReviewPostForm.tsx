@@ -147,7 +147,6 @@ export default function ReviewPostForm() {
 
   return (
     <>
-      {window?.navigator?.userAgent && <textarea value={window?.navigator?.userAgent} />}
       <p className="text-3xl font-bold mt-8">면접 후기 작성</p>
       <form onSubmit={onSubmit} className="flex flex-col w-full mt-2">
         <input
