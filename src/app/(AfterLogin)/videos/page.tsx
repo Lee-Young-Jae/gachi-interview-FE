@@ -56,6 +56,8 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   );
 });
 
+Search.displayName = "SearchComponent";
+
 const Pagination = ({
   currentPage,
   totalPages,

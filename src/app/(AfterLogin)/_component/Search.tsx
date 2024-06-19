@@ -40,4 +40,6 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   );
 });
 
+Search.displayName = "SearchComponent";
+
 export default Search;

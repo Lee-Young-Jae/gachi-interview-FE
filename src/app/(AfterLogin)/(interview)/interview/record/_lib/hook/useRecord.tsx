@@ -11,7 +11,7 @@ import {
 } from "@/lib/utils/record";
 import useSpeech from "./useSpeech";
 import { useModal } from "@/components/Modal/useModal";
-import { getPutCommandObject } from "../uploadVideo";
+import { getPresignedUrl, upload } from "../api/uploadS3";
 import { usePostInterviewMutation } from "../queries/useInterviewQuery";
 import { usePostFeedbackMutation } from "../queries/useFeedbackQuery";
 import UploadCompletionModal from "../../_component/UploadCompletionModal";
@@ -86,16 +86,14 @@ const useRecord = () => {
         exposure: boolean;
       }) => {
         const encodedBlob = await encodingPromise;
-        // S3 업로드 로직
-        const [videoUrl, thumbnailUrl] = await Promise.all([
-          getPutCommandObject(fileNames + ".mp4", encodedBlob, "video/mp4"),
-          getPutCommandObject(fileNames + "-thumbnail.png", metadata.thumbnail, "image/png"),
-        ]);
+        const { videoUrl: presignedVideoUrl, thumbnailUrl: presignedThumbnailUrl } =
+          await getPresignedUrl(fileNames + ".mp4", fileNames + "-thumbnail.png");
+        await upload(presignedVideoUrl, encodedBlob);
+        await upload(presignedThumbnailUrl, metadata.thumbnail);
 
-        if (!videoUrl || !thumbnailUrl) {
-          console.error("업로드 실패");
-          return;
-        }
+        const BASE_URL = process.env.NEXT_PUBLIC_AMAZON_S3_BASE_URL;
+        const videoUrl = BASE_URL + fileNames + ".mp4";
+        const thumbnailUrl = BASE_URL + fileNames + "-thumbnail.png";
 
         // 인터뷰 POST
         const data = await postInterviewMutate({
