@@ -104,6 +104,10 @@ export default function ReviewPostForm() {
   //   }
   // };
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
+    console.log("handleNewTagKeyDown(e) called");
+    console.log("e :", e);
+    console.log("e.key :", e.key);
+
     if (
       (e.key === "Enter" || e.key === "NumpadEnter" || e.key === " ") &&
       e.nativeEvent.isComposing === false &&
