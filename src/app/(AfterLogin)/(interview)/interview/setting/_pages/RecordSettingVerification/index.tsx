@@ -90,12 +90,12 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-full h-[80%] justify-center p-8">
+    <div className="flex flex-col items-center w-full justify-center p-8">
       <Suspense fallback={<span className="loader" />}>
         <Ready />
       </Suspense>
       <div
-        className={`text-xl font-semibold message h-16 ${
+        className={`text-xl font-semibold message h-16 mt-2 ${
           fadeIn ? "animate-fadeIn" : "animate-fadeOut"
         }`}
       >

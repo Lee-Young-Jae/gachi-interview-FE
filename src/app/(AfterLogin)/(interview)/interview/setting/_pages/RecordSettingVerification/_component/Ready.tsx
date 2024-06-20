@@ -5,8 +5,8 @@ const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
 const Ready = () => {
   return (
-    <div className="flex items-center justify-center my-16 w-full">
-      <Lottie play animationData={ready} className="w-full h-full" />
+    <div className="flex items-center justify-center w-full h-full overflow-hidden">
+      <Lottie play animationData={ready} className="object-scale-down max-h-96" />
     </div>
   );
 };
