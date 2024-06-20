@@ -7,9 +7,11 @@ import { messaging, isSupportedBrowser, isSupportedIOS } from "@/firebase";
 import { useSetRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState, userIdState } from "@/store/auth";
 import { setCookie } from "cookies-next";
+import SaveUserIdToIndexedDB from "./SaveUserIdToIndexedDB";
 
 export default function KakaoAuth2Redirect() {
   const [code, setCode] = useState<string | null>(null);
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const setAccessToken = useSetRecoilState(accessTokenState);
   const setRefreshToken = useSetRecoilState(refreshTokenState);
   const setUserId = useSetRecoilState(userIdState);
@@ -45,6 +47,7 @@ export default function KakaoAuth2Redirect() {
             setAccessToken(data.accessToken);
             setRefreshToken(data.refreshToken);
             setUserId(data.userId);
+            setLoginSuccess(true);
 
             const fetchFcmToken = async () => {
               try {
@@ -98,5 +101,5 @@ export default function KakaoAuth2Redirect() {
     }
   }, [code, router, setAccessToken, setRefreshToken, setUserId]);
 
-  return null;
+  return loginSuccess ? <SaveUserIdToIndexedDB /> : null;
 }
