@@ -114,7 +114,13 @@ const useRecord = () => {
           content: metadata.transcript,
         });
 
-        openModal(<UploadCompletionModal encodedBlob={encodedBlob} isPublic={metadata.exposure} />);
+        openModal(
+          <UploadCompletionModal
+            disableBackdropClick={true}
+            encodedBlob={encodedBlob}
+            isPublic={metadata.exposure}
+          />,
+        );
       };
 
       openModal(
