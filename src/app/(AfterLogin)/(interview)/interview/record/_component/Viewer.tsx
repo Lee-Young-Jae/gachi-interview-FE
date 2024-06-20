@@ -39,7 +39,7 @@ export const AnswerViewer = ({ questionId, questionList }: AnswerViewerProps) =>
   )?.answerContent;
 
   return (
-    <div className="fixed bottom-[15%] left-0 right-0 w-[85%] bg-black bg-opacity-70 p-4 rounded-lg text-white text-base z-10 m-auto">
+    <div className="fixed bottom-[20%] left-0 right-0 w-[85%] bg-black bg-opacity-70 p-4 rounded-lg text-white text-base z-10 m-auto">
       <div className="flex items-center w-full justify-between">
         <span className="bg-white text-black px-4 py-1 rounded-2xl text-base font-bold min-w-[50px] text-center">
           답변
