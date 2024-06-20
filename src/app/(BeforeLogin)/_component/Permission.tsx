@@ -114,7 +114,7 @@ const Permission = () => {
     <div>
       {isSupported ? (
         <>
-          <p className="pl-2 pb-2">
+          <p className="pb-2 text-center">
             원활한 서비스 이용을 위해{" "}
             <u className="cursor-pointer text-blue-500" onClick={permissionNotification}>
               알림 허용
@@ -122,7 +122,7 @@ const Permission = () => {
             을 해주세요.
           </p>
           {isPermissionGranted && (
-            <p className="text-green-500 text-sm pl-2 pb-2">
+            <p className="text-green-500 text-sm pl-2 pb-2 text-center">
               알림 권한이 허용되었습니다. 계속 진행해주세요.
             </p>
           )}
