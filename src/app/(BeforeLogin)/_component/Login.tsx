@@ -51,7 +51,7 @@ export default function Login() {
           <div className="w-full flex flex-col items-center">
             <span className="text-sm text-gray-800 w-full text-right">
               <a
-                href="https://www.notion.so/notion"
+                href="https://gachi-interview.notion.site/b445a6bbfa2142458be54beef487fecd?pvs=4"
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-500"
