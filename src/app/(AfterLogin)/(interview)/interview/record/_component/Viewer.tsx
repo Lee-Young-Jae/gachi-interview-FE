@@ -21,7 +21,9 @@ export const QuestionViewer = ({ questionId, questionList, timer }: QuestionList
           <span className="bg-white text-black px-4 py-1 rounded-2xl text-base font-bold min-w-[50px] text-center">
             {questionNumber}번 질문
           </span>
-          <span className="py-2 text-lg flex-1 text-center mx-2">{questionContent}</span>
+          <span className="py-2 text-lg flex-1 text-center mx-2 max-h-[15%] overflow-y-scroll">
+            {questionContent}
+          </span>
         </div>
         {timer}
       </div>

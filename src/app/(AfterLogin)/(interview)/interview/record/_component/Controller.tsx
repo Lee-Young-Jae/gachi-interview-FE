@@ -3,13 +3,12 @@ import { QuestionType } from "../../../_lib/atoms/interviewState";
 import { useModal } from "@/components/Modal/useModal";
 import { useRouter } from "next/navigation";
 import {
-  BsCardText,
   BsXLg,
   BsLayoutTextSidebarReverse,
   BsCameraVideo,
   BsCameraVideoOff,
-  BsFillCaretLeftFill,
-  BsFillCaretRightFill,
+  BsCaretRight,
+  BsCaretLeft,
 } from "react-icons/bs";
 
 interface ControllerProps {
@@ -90,7 +89,7 @@ const Controller = ({
         showAnswer: false,
       });
     } else {
-      router.push("/");
+      router.push("/interview/setting");
     }
   }, [questionList, setScript, router]);
 
@@ -104,7 +103,6 @@ const Controller = ({
         <BsLayoutTextSidebarReverse size="30" color="#fff" className="m-auto" />
         <span className="text-xs text-center mt-1">답변 보기</span>
       </div>
-
       {isRecording ? (
         <div className="flex flex-col">
           <div
@@ -131,11 +129,11 @@ const Controller = ({
         </>
       )}
       <div className="cursor-pointer flex flex-col" onClick={prevQuestionHandler}>
-        <BsFillCaretLeftFill size="30" color="#fff" className="m-auto" />
+        <BsCaretLeft size="30" color="#fff" className="m-auto" />
         <span className="text-xs text-center mt-1">이전 질문</span>
       </div>
       <div className="cursor-pointer flex flex-col" onClick={nextQuestionHandler}>
-        <BsFillCaretRightFill size="30" color="#fff" className="m-auto" />
+        <BsCaretRight size="30" color="#fff" className="m-auto" />
         <span className="text-xs text-center mt-1">다음 질문</span>
       </div>
     </div>

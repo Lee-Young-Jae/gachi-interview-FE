@@ -74,28 +74,24 @@ const useRecord = () => {
       await stopRecording(mediaRecorderRef);
       onStopListening(); // 음성인식 종료
       pause(); // 타이머 일시정지
-      // openDialog("인코딩 중...");
-      // TODO: 유니크한 파일명 지정
       const fileNames = "interview-" + new Date().getTime() + "-" + userId;
       if (recordedBlobs.length === 0) return;
       const blob = new Blob(recordedBlobs, { type: getSupportedMimeTypes() });
-      console.log("blob", blob);
       const thumbnails = await getThumbnailImages(blob, time);
-      console.log("thumbnails", thumbnails);
       const encodingPromise = EncodingWebmToMp4(blob);
-      console.log("encodingPromise", encodingPromise);
 
       const handleModalSubmit = async (metadata: {
         title: string;
         tags: string[];
         thumbnail: Blob;
         exposure: boolean;
+        transcript: string;
       }) => {
         const encodedBlob = await encodingPromise;
         const { videoUrl: presignedVideoUrl, thumbnailUrl: presignedThumbnailUrl } =
           await getPresignedUrl(fileNames + ".mp4", fileNames + "-thumbnail.png");
-        await upload(presignedVideoUrl, encodedBlob, "video/mp4");
-        await upload(presignedThumbnailUrl, metadata.thumbnail, "image/png");
+        // await upload(presignedVideoUrl, encodedBlob, "video/mp4");
+        // await upload(presignedThumbnailUrl, metadata.thumbnail, "image/png");
 
         const BASE_URL = process.env.NEXT_PUBLIC_AMAZON_S3_BASE_URL;
         const videoUrl = BASE_URL + fileNames + ".mp4";
@@ -115,7 +111,7 @@ const useRecord = () => {
         // 피드백 POST
         postFeedbackMutate({
           videoId: data?.videoId,
-          content: transcript,
+          content: metadata.transcript,
         });
 
         openModal(<UploadCompletionModal encodedBlob={encodedBlob} isPublic={metadata.exposure} />);
@@ -126,6 +122,7 @@ const useRecord = () => {
           onSubmit={handleModalSubmit}
           disableBackdropClick={true}
           thumbnails={thumbnails}
+          transcript={transcript}
         />,
       );
     } catch (error) {

@@ -8,15 +8,17 @@ type metadata = {
   tags: string[];
   thumbnail: Blob;
   exposure: boolean;
+  transcript: string;
 };
 
 interface VideoMetadataModalProps {
   thumbnails: Blob[];
   disableBackdropClick?: boolean;
   onSubmit: (metadata: metadata) => void;
+  transcript: string;
 }
 
-const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) => {
+const VideoMetadataModal = ({ thumbnails, onSubmit, transcript }: VideoMetadataModalProps) => {
   const [error, setError] = useState<string>("");
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const [metadata, setMetadata] = useState<metadata>({
@@ -24,6 +26,7 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
     tags: [],
     thumbnail: thumbnails[0],
     exposure: true,
+    transcript,
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +40,10 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
 
   const handleThumbnailChange = (thumbnail: Blob) => {
     setMetadata({ ...metadata, thumbnail });
+  };
+
+  const handleTranscriptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMetadata({ ...metadata, transcript: e.target.value });
   };
 
   const handlePublicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,8 +99,8 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
         </Button>
       }
     >
-      <div className="flex flex-col gap-4">
-        <span className="block text-basic text-muted-foreground mb-2">메타데이터 설정</span>
+      <div className="flex flex-col gap-2">
+        <span className="block text-basic text-muted-foreground">메타데이터 설정</span>
         <input
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
@@ -104,7 +111,7 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
         {error && <span className="block text-sm text-red-500 mt-2">{error}</span>}
 
         <input
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mt-2"
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
           placeholder="태그를 입력하세요. (쉼표로 구분)"
           value={metadata.tags.join(",")}
@@ -112,7 +119,7 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
           onChange={handleTagsChange}
         />
 
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-2 mt-2">
           <label>
             <span className="block text-basic text-muted-foreground">썸네일 선택</span>
           </label>
@@ -131,6 +138,18 @@ const VideoMetadataModal = ({ thumbnails, onSubmit }: VideoMetadataModalProps) =
               />
             ))}
           </div>
+
+          <span className="block text-basic text-muted-foreground mt-2">내 면접 답변</span>
+          <sub className="block text-muted-foreground mb-1">
+            같이면접 AI가 인식한 음성 결과입니다. 수정이 필요하다면 직접 입력해주세요.
+          </sub>
+
+          <textarea
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+            placeholder="음성인식 결과가 제대로 나오지 않았다면 직접 입력해주셔도 됩니다."
+            value={metadata.transcript}
+            onChange={handleTranscriptChange}
+          />
 
           <span className="block text-basic text-muted-foreground">공개 여부</span>
           <label
