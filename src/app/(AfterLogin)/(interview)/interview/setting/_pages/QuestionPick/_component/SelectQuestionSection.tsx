@@ -1,11 +1,9 @@
 import Loading from "@/app/(AfterLogin)/_component/Loading";
-import {
-  useInterviewOption,
-  QuestionType,
-} from "../../../../../_lib/contexts/InterviewOptionContext";
 import { useGetQuestionsQuery } from "../../../_lib/queries/useQuestions";
 import QuestionList from "./QuestionList";
 import QuestionListHeader from "./QuestionListHeader";
+import { useRecoilState } from "recoil";
+import { interviewOptionState, QuestionType } from "../../../../../_lib/atoms/interviewState";
 
 interface QuestionSelectionSectionProps {
   workbookId: number | null;
@@ -13,7 +11,7 @@ interface QuestionSelectionSectionProps {
 }
 
 const QuestionSelectionSection = ({ workbookId, questionTitle }: QuestionSelectionSectionProps) => {
-  const { setInterviewOption, interviewOption } = useInterviewOption();
+  const [interviewOption, setInterviewOption] = useRecoilState(interviewOptionState);
   const { data: questions, isLoading } = useGetQuestionsQuery({ workbookId: workbookId || 0 });
 
   const getPrevQuestionIds = () => interviewOption.questions.map((question) => question.questionId);

@@ -1,7 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useInterviewOption } from "../../../../_lib/contexts/InterviewOptionContext";
+import {
+  interviewOptionState,
+  mediaOptionState,
+} from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
 import { useErrorModal } from "@/components/Modal/useModal";
 
@@ -12,7 +16,8 @@ interface RecordSettingVerificationProps {
 const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) => {
   const errorModal = useErrorModal();
   const router = useRouter();
-  const { interviewOption, mediaOption } = useInterviewOption();
+  const interviewOption = useRecoilValue(interviewOptionState);
+  const mediaOption = useRecoilValue(mediaOptionState);
 
   const messages = [
     { message: "면접장을 정리하고 있어요.", icon: "🧹" },

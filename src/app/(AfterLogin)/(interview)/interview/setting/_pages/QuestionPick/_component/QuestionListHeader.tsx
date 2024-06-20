@@ -1,7 +1,7 @@
-import { useInterviewOption } from "@/app/(AfterLogin)/(interview)/_lib/contexts/InterviewOptionContext";
+import { interviewOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { useRecoilValue } from "recoil";
 import { ResponseQuestions } from "../../../_lib/queries/useQuestions";
 import { AiOutlineDelete } from "react-icons/ai";
-import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
 import { useDeleteWorkbookMutation } from "../../../_lib/queries/useWorkbookListQuery";
 import { useModal } from "@/components/Modal/useModal";
@@ -21,7 +21,7 @@ const QuestionListHeader = ({
   onSelect,
   workbookId,
 }: SelectQuestionHeaderProps) => {
-  const { interviewOption } = useInterviewOption();
+  const interviewOption = useRecoilValue(interviewOptionState);
   const { mutate } = useDeleteWorkbookMutation();
   const userId = useRecoilValue(userIdState);
   const { openModal, closeModal } = useModal();

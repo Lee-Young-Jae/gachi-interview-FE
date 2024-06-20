@@ -1,11 +1,12 @@
 import { AiOutlineReload } from "react-icons/ai";
-import { useInterviewOption } from "../../../../_lib/contexts/InterviewOptionContext";
+import { useRecoilValue } from "recoil";
+import { mediaOptionState } from "../../../../_lib/atoms/interviewState";
 import { useSelectedDevices } from "./_lib/hooks/useSelectedDevices";
 import { useMediaDevices } from "./_lib/hooks/useMediaDevices";
 import { useVideoRef } from "./_lib/hooks/useVideoRef";
 
 const RecordSetting = () => {
-  const { mediaOption } = useInterviewOption();
+  const mediaOption = useRecoilValue(mediaOptionState);
   const {
     handleAudioDeviceChange,
     handleCameraDeviceChange,

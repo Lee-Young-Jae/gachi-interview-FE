@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 interface TimerProps {
   seconds: number;
 }
@@ -14,10 +12,10 @@ const Timer = ({ seconds }: TimerProps) => {
   };
 
   return (
-    <div className="z-10 p-2 rounded-b-lg absolute right-[50%] transform translate-x-1/2 scale-x-[-1] bg-black">
-      <div className={`flex items-center justify-center gap-2`}>
+    <div className="z-10 p-2 rounded-xl transform border-2 border-gray-400 bg-black">
+      <div className="flex items-center justify-center gap-2">
         <div className="flex flex-col items-center gap-1">
-          <div className="w-full h-0.5 bg-gray-200 rounded-full">
+          <div className="w-full h-2 bg-gray-200 rounded-full">
             <div
               className={`h-full rounded-full ${
                 // 80% 이상이면 빨간색, 80% 미만이면 초록색
@@ -26,7 +24,7 @@ const Timer = ({ seconds }: TimerProps) => {
               style={{ width: `${(seconds / MAX_TIME) * 100}%` }}
             ></div>
           </div>
-          <span className="text-xs text-gray-400">{formatTime(seconds)}</span>
+          <span className="text-base text-gray-400">{formatTime(seconds)}</span>
         </div>
       </div>
     </div>

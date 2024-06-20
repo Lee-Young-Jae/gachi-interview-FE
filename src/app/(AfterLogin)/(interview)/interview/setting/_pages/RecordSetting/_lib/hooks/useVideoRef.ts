@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
-import { useInterviewOption } from "../../../../../../_lib/contexts/InterviewOptionContext";
+import { mediaOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { useRecoilState } from "recoil";
 
 export const useVideoRef = () => {
   const videoContainerRef = useRef<HTMLVideoElement>(null);
-  const { mediaOption } = useInterviewOption();
+  const [mediaOption] = useRecoilState(mediaOptionState);
 
   useEffect(() => {
     videoContainerRef.current!.srcObject = mediaOption.media;

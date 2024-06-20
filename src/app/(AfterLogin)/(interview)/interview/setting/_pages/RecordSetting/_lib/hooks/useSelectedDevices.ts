@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getMedia, getAudioOnlyMedia, closeMedia } from "@/lib/utils/media";
-import { useInterviewOption } from "../../../../../../_lib/contexts/InterviewOptionContext";
+import { mediaOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { useRecoilState } from "recoil";
 
 export const useSelectedDevices = () => {
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>("");
   const [selectedCameraDevice, setSelectedCameraDevice] = useState<string>("");
-  const { mediaOption, setMediaOption } = useInterviewOption();
+  const [mediaOption, setMediaOption] = useRecoilState(mediaOptionState);
 
   const handleAudioDeviceChange = (deviceId: string) => {
     closeMedia(mediaOption.media);

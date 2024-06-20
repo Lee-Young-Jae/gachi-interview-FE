@@ -1,4 +1,3 @@
-import { useInterviewOption } from "@/app/(AfterLogin)/(interview)/_lib/contexts/InterviewOptionContext";
 import { getSupportedMimeTypes } from "@/lib/utils/media";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useTimer from "./useTimer";
@@ -17,10 +16,16 @@ import { usePostFeedbackMutation } from "../queries/useFeedbackQuery";
 import UploadCompletionModal from "../../_component/UploadCompletionModal";
 import VideoMetadataModal from "../../_component/VideoMetadataModal";
 import { userIdState } from "@/store/auth";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import {
+  interviewOptionState,
+  mediaOptionState,
+} from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
 
 const useRecord = () => {
-  const { interviewOption, mediaOption, setMediaOption } = useInterviewOption();
+  const interviewOption = useRecoilValue(interviewOptionState);
+  const [mediaOption, setMediaOption] = useRecoilState(mediaOptionState);
+
   const { mutateAsync: postInterviewMutate } = usePostInterviewMutation(); // 비디오 업로드 후 videoId를 사용하기 위해 async-mutate 사용
   const { mutate: postFeedbackMutate } = usePostFeedbackMutation();
   const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
@@ -30,6 +35,7 @@ const useRecord = () => {
   const { onStartListening, onStopListening, transcript } = useSpeech();
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const questionList = interviewOption.questions;
 
   // 5분이 지나면 자동으로 녹화 종료 로직을 수행한다.
@@ -51,7 +57,7 @@ const useRecord = () => {
     const option = {
       media: mediaOption.media,
       selectedMimeType: getSupportedMimeTypes(),
-      mediaRecorderRef: mediaOption.mediaRecorderRef,
+      mediaRecorderRef,
       setRecordedBlobs,
     };
 
@@ -65,7 +71,7 @@ const useRecord = () => {
   const stopRecordHandler = useCallback(async () => {
     try {
       setIsRecording(false);
-      await stopRecording(mediaOption.mediaRecorderRef);
+      await stopRecording(mediaRecorderRef);
       onStopListening(); // 음성인식 종료
       pause(); // 타이머 일시정지
       // openDialog("인코딩 중...");
@@ -137,11 +143,11 @@ const useRecord = () => {
 
   useEffect(() => {
     return () => {
-      stopRecording(mediaOption.mediaRecorderRef);
+      stopRecording(mediaRecorderRef);
 
       // 미디어 스트림의 모든 트랙 중지
-      if (mediaOption.mediaRecorderRef.current) {
-        const stream = mediaOption.mediaRecorderRef.current.stream;
+      if (mediaRecorderRef.current) {
+        const stream = mediaRecorderRef.current.stream;
         if (stream) {
           const tracks = stream.getTracks();
           tracks.forEach((track) => {
@@ -163,6 +169,7 @@ const useRecord = () => {
     stopRecordHandler,
     downloadHandler,
     isRecording,
+    transcript,
   };
 };
 

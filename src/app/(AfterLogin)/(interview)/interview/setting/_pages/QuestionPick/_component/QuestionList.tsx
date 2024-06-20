@@ -1,4 +1,4 @@
-import { InterviewOptionType } from "@/app/(AfterLogin)/(interview)/_lib/contexts/InterviewOptionContext";
+import { InterviewOptionType } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
 import { useGetQuestionsQuery, usePostQuestionsMutation } from "../../../_lib/queries/useQuestions";
 import QuestionItem from "./QuestionItem";
 import { Button } from "@/components/ui/button";

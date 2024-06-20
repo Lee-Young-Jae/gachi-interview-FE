@@ -1,9 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { Dispatch, useEffect, useState } from "react";
-import { QuestionType } from "../../../_lib/contexts/InterviewOptionContext";
+import { Dispatch, useEffect } from "react";
+import { QuestionType } from "../../../_lib/atoms/interviewState";
 import { useModal } from "@/components/Modal/useModal";
 import { useRouter } from "next/navigation";
-import { BsCardText, BsCameraVideo, BsCameraVideoOff, BsFillCaretRightFill } from "react-icons/bs";
+import {
+  BsCardText,
+  BsXLg,
+  BsLayoutTextSidebarReverse,
+  BsCameraVideo,
+  BsCameraVideoOff,
+  BsFillCaretLeftFill,
+  BsFillCaretRightFill,
+} from "react-icons/bs";
 
 interface ControllerProps {
   setScript: Dispatch<
@@ -42,6 +49,23 @@ const Controller = ({
     setScript((prev) => ({ ...prev, showAnswer: !prev.showAnswer }));
   };
 
+  const prevQuestionHandler = () => {
+    if (!questionList) return;
+    if (questionList[0]?.questionId === currentQuestionId) {
+      openDialog("첫 번째 질문입니다.");
+      return;
+    }
+
+    const currentIdx = questionList.findIndex(
+      (question) => question.questionId === currentQuestionId,
+    );
+    const prevIdx = currentIdx - 1;
+    setScript({
+      questionId: questionList[prevIdx].questionId,
+      showAnswer: false,
+    });
+  };
+
   const nextQuestionHandler = () => {
     if (!questionList) return;
     if (questionList.at(-1)?.questionId === currentQuestionId) {
@@ -71,42 +95,49 @@ const Controller = ({
   }, [questionList, setScript, router]);
 
   return (
-    <div className="flex flex-row items-center mt-2">
-      <Button
-        className="w-full h-16 flex flex-col"
-        variant="outline"
-        onClick={toggleShowAnswerHandler}
-      >
-        <BsCardText />
+    <div className="fixed bottom-0 flex m-auto w-full justify-center gap-8 p-4 bg-opacity-70 text-white bg-black z-10 select-none">
+      <div className="cursor-pointer flex flex-col" onClick={() => router.push("/")}>
+        <BsXLg size="30" color="#fff" className="m-auto" />
+        <span className="text-xs text-center mt-1">나가기</span>
+      </div>
+      <div className="cursor-pointer flex flex-col" onClick={toggleShowAnswerHandler}>
+        <BsLayoutTextSidebarReverse size="30" color="#fff" className="m-auto" />
         <span className="text-xs text-center mt-1">답변 보기</span>
-      </Button>
+      </div>
+
       {isRecording ? (
-        <Button
-          className="w-full h-16 ml-2 flex flex-col"
-          variant="outline"
-          onClick={stopRecordHandler}
-        >
-          <BsCameraVideoOff className="text-red-500" />
-          <span className="text-xs text-center mt-1 text-red-500">녹화 종료</span>
-        </Button>
+        <div className="flex flex-col">
+          <div
+            className="cursor-pointer flex flex-col bg-red-700 rounded-full p-5 shadow-red-400 shadow-inner hover:bg-red-800 transition-all"
+            onClick={stopRecordHandler}
+          >
+            <BsCameraVideoOff size="30" color="#fff" className="m-auto" />
+            <span className="text-xs text-center mt-1 text-red-500">녹화 종료</span>
+          </div>
+        </div>
       ) : (
-        <Button
-          className="w-full h-16 ml-2 flex flex-col"
-          variant="outline"
-          onClick={startRecordHandler}
-        >
-          <BsCameraVideo />
-          <span className="text-xs text-center mt-1">녹화 시작</span>
-        </Button>
+        <>
+          <div>
+            <div className="flex flex-col">
+              <div
+                className="cursor-pointer flex flex-col bg-blue-700 rounded-full p-5 shadow-blue-400 shadow-inner hover:bg-blue-800 transition-all"
+                onClick={startRecordHandler}
+              >
+                <BsCameraVideo size="30" color="#fff" className="m-auto" />
+              </div>
+              <span className="text-xs text-center mt-1">시작</span>
+            </div>
+          </div>
+        </>
       )}
-      <Button
-        className="w-full h-16 ml-2 flex flex-col"
-        variant="outline"
-        onClick={nextQuestionHandler}
-      >
-        <BsFillCaretRightFill />
-        <span className="text-xs text-center mt-1 text-primary">다음 질문</span>
-      </Button>
+      <div className="cursor-pointer flex flex-col" onClick={prevQuestionHandler}>
+        <BsFillCaretLeftFill size="30" color="#fff" className="m-auto" />
+        <span className="text-xs text-center mt-1">이전 질문</span>
+      </div>
+      <div className="cursor-pointer flex flex-col" onClick={nextQuestionHandler}>
+        <BsFillCaretRightFill size="30" color="#fff" className="m-auto" />
+        <span className="text-xs text-center mt-1">다음 질문</span>
+      </div>
     </div>
   );
 };
