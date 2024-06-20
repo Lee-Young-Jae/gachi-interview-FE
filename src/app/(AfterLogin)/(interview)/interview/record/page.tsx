@@ -61,10 +61,10 @@ const RecordPage = () => {
             playsInline
           />
         </div>
-        {transcript && <Transcript transcript={transcript} />}
         {script.showAnswer && (
           <AnswerViewer questionId={script.questionId} questionList={questionList} />
         )}
+        {!script.showAnswer && transcript && <Transcript transcript={transcript} />}
         <Controller
           isRecording={isRecording}
           setScript={setScript}
