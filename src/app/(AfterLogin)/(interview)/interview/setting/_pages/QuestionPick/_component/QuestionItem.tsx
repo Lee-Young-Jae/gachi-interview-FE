@@ -79,22 +79,32 @@ const QuestionItem = ({
   };
 
   return (
-    <li className="px-4 py-4 flex items-center border-b transition-colors hover:bg-muted/50 group">
+    <li
+      onClick={() => onSelect(id)}
+      className="px-4 py-4 flex items-center border-b transition-colors hover:bg-muted/50 group cursor-pointer"
+    >
       <input
         id={id.toString()}
         className="cursor-pointer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         type="checkbox"
         checked={checked}
-        onChange={() => onSelect(id)}
         value={id}
       />
 
-      <label htmlFor={id.toString()} className="ml-12 cursor-pointer text-gray-700 line-clamp-1">
+      <label
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        htmlFor={id.toString()}
+        className="ml-12 cursor-pointer text-gray-700 line-clamp-1 select-none"
+      >
         {content}
       </label>
       <div
         className="ml-auto flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <AiOutlineDelete
           onClick={openDeleteModal}
