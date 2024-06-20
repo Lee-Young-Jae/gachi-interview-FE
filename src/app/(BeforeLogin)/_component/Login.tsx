@@ -59,12 +59,12 @@ export default function Login() {
                 같이 면접을 소개합니다 (notion)
               </a>
             </span>
-
-            <h1 className="font-bold text-6xl text-gray-800 mt-16">Gachi Interview</h1>
+            <h1 className="font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 mt-16">
+              Gachi Interview
+            </h1>
 
             <p className="font-bold text-4xl text-gray-800 my-6">
-              <span className="text-[#9EEAEA]">같이 </span>
-              <span>면접 에 오신걸 환영해요!</span>
+              <span>"같이 면접"에 오신걸 환영해요!</span>
             </p>
           </div>
           <Permission />
