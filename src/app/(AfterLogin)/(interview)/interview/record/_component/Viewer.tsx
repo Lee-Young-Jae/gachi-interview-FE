@@ -15,12 +15,14 @@ export const QuestionViewer = ({ questionId, questionList, timer }: QuestionList
     questionList.findIndex((question) => question.questionId === questionId) + 1;
 
   return (
-    <div className="fixed top-0 left-0 right-0 w-[80%] bg-black bg-opacity-70 p-4 rounded-b-lg text-white text-base z-10 m-auto">
-      <div className="flex items-center w-full justify-between">
-        <span className="bg-white text-black px-4 py-1 rounded-2xl text-base font-bold min-w-[50px] text-center">
-          {questionNumber}번 질문
-        </span>
-        <span className="py-2 text-lg flex-1 text-center mx-2">{questionContent}</span>
+    <div className="fixed top-0 left-0 right-0 w-[85%] bg-black bg-opacity-70 p-4 rounded-b-lg text-white text-base z-10 m-auto">
+      <div className="flex items-start w-full justify-between">
+        <div>
+          <span className="bg-white text-black px-4 py-1 rounded-2xl text-base font-bold min-w-[50px] text-center">
+            {questionNumber}번 질문
+          </span>
+          <span className="py-2 text-lg flex-1 text-center mx-2">{questionContent}</span>
+        </div>
         {timer}
       </div>
     </div>
@@ -37,7 +39,7 @@ export const AnswerViewer = ({ questionId, questionList }: AnswerViewerProps) =>
   )?.answerContent;
 
   return (
-    <div className="fixed bottom-[15%] left-0 right-0 w-[80%] bg-black bg-opacity-70 p-4 rounded-lg text-white text-base z-10 m-auto">
+    <div className="fixed bottom-[15%] left-0 right-0 w-[85%] bg-black bg-opacity-70 p-4 rounded-lg text-white text-base z-10 m-auto">
       <div className="flex items-center w-full justify-between">
         <span className="bg-white text-black px-4 py-1 rounded-2xl text-base font-bold min-w-[50px] text-center">
           답변

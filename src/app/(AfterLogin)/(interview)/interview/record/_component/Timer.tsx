@@ -12,9 +12,10 @@ const Timer = ({ seconds }: TimerProps) => {
   };
 
   return (
-    <div className="z-10 p-2 rounded-xl transform border-2 border-gray-400 bg-black">
+    // 고정 너비를 가지도록 한다
+    <div className="z-10 p-2 rounded-xl transform border-2 border-gray-400 bg-black bg-opacity-70 w-16">
       <div className="flex items-center justify-center gap-2">
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1 w-full">
           <div className="w-full h-2 bg-gray-200 rounded-full">
             <div
               className={`h-full rounded-full ${

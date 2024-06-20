@@ -18,7 +18,6 @@ const RecordSetting = () => {
   const { audioDevices, cameraDevices } = useMediaDevices();
   const videoRef = useVideoRef();
 
-  // TODO: 컴포넌트 분리
   return (
     <div className="flex flex-col items-center w-full">
       <div className="w-full h-96 rounded overflow-hidden relative">
@@ -33,6 +32,7 @@ const RecordSetting = () => {
           autoPlay
           playsInline
           ref={videoRef}
+          muted
         />
       </div>
       {!cameraDevices.length && (

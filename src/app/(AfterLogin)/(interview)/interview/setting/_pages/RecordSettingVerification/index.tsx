@@ -6,8 +6,9 @@ import {
   mediaOptionState,
 } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
 import { useRecoilValue } from "recoil";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { useErrorModal } from "@/components/Modal/useModal";
+import Ready from "./_component/Ready";
 
 interface RecordSettingVerificationProps {
   setStep: (step: number) => void;
@@ -54,7 +55,7 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
   };
 
   useEffect(() => {
-    const LOADING_TIME = 700;
+    const LOADING_TIME = 2500;
 
     if (!validateInterviewOption()) {
       return;
@@ -70,11 +71,11 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-full h-96 justify-center">
-      <span className="loader" />
-      <div className="text-xl font-semibold mt-32 message h-16">
-        {messages[randomIndex].message}
-      </div>
+    <div className="flex flex-col items-center w-full h-full justify-center p-8">
+      <Suspense fallback={<span className="loader" />}>
+        <Ready />
+      </Suspense>
+      <div className="text-xl font-semibold message h-16">{messages[randomIndex].message}</div>
     </div>
   );
 };

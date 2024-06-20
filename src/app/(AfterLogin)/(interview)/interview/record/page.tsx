@@ -6,7 +6,7 @@ import Timer from "./_component/Timer";
 import Controller from "./_component/Controller";
 import useRecord from "./_lib/hook/useRecord";
 import { useRecoilValue } from "recoil";
-import { interviewOptionState, mediaOptionState } from "../../_lib/atoms/interviewState";
+import { mediaOptionState } from "../../_lib/atoms/interviewState";
 import Transcript from "./_component/Transcript";
 
 const RecordPage = () => {
@@ -26,9 +26,6 @@ const RecordPage = () => {
   } = useRecord();
 
   const mediaOption = useRecoilValue(mediaOptionState);
-
-  // TODO: 녹화 컨트롤러 커스텀 훅으로 분리
-  // 타이머, 녹화 시작, 녹화 종료, 다운로드, 현재 질문, 썸네일 캡쳐, AWS에 업로드
 
   useEffect(() => {
     if (videoRef.current) {

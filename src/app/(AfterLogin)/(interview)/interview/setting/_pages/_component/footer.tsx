@@ -19,7 +19,12 @@ const Footer = ({ setStep, step }: FooterProps) => {
       <Button disabled={step === 1} onClick={() => handlePrevStep()} variant="outline">
         이전
       </Button>
-      <Button onClick={() => handleNextStep()} className="ml-2" variant="outline">
+      <Button
+        disabled={step === 3}
+        onClick={() => handleNextStep()}
+        className="ml-2"
+        variant="outline"
+      >
         다음
       </Button>
     </div>
