@@ -119,7 +119,7 @@ const VideoCard = ({ video }: { video: Video }) => {
                 key={index}
                 className="py-1 text-sm mt-1 mr-2 max-w-[190px] truncate tracking-tight"
               >
-                #{tag}
+                {tag}
               </span>
             ),
         )}

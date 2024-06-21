@@ -1,42 +1,44 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import getInterviews, { getInterviewsProps as RequestGetInterviews } from "../api/getInterviews";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import getInterviews, {
+  getInterviewsProps as RequestGetInterviews,
+  ResponseGetInterviews,
+  getInterviewsProps,
+} from "../api/getInterviews";
 import getInterview, { getInterviewProps as RequestGetInterview } from "../api/getInterview";
 import patchInterview, { PatchInterviewProps } from "../api/patchInterview";
 import postLike, { postLikeProps } from "../api/postLike";
 import deletePost, { DeletePostProps } from "../api/deletePost";
-import { Video } from "@/model/Video";
 
-type ResponseGetInterviews = {
-  content: Video[];
-  totalPages: number;
-  size: number;
-  totalElements: number;
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-};
-
-export const useGetInterviews = ({ sortType, page, keyword }: RequestGetInterviews) => {
+export const useGetInterviews = ({ sortType, pageParam, keyword }: RequestGetInterviews) => {
   return useQuery<
     ResponseGetInterviews,
     Error,
     ResponseGetInterviews,
     [string, string, number, string]
   >({
-    queryKey: ["interviews", sortType, page, keyword],
-    queryFn: () => getInterviews({ sortType, page, keyword }),
+    queryKey: ["interviews", sortType, pageParam, keyword],
+    queryFn: () => getInterviews({ sortType, pageParam, keyword }),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 60,
     placeholderData: keepPreviousData, // 이전 데이터 유지
+  });
+};
+
+export const useGetInfinityInterviews = ({ sortType, keyword }: getInterviewsProps) => {
+  return useInfiniteQuery({
+    queryKey: ["interviews", sortType, keyword],
+    queryFn: ({ pageParam }) => getInterviews({ sortType, pageParam, keyword }),
+    getNextPageParam: (lastPage: ResponseGetInterviews) => {
+      return lastPage.last ? undefined : lastPage.number + 2;
+    },
+    initialPageParam: 1,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
