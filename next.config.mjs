@@ -8,6 +8,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "inf-video.s3.ap-northeast-2.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "gachi-myeonjeob.s3.ap-northeast-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.notion.so",
+      },
     ],
   },
   async headers() {

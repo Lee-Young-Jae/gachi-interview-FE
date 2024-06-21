@@ -87,7 +87,7 @@ const VideoCard = ({ video }: { video: Video }) => {
             alt="프로필이미지"
             onError={(e) => {
               e.currentTarget.src =
-                "https://resources.biginterview.com/wp-content/uploads/2020/10/interview-anxiety.png";
+                "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbde7a0f1-b659-4891-8b8a-1bc69cf523b7%2Fb080e8c6-4c88-466f-af9c-22c87d5babbf%2FUntitled.png?table=block&id=da12736f-b123-465e-aa98-4694c25e0533&spaceId=bde7a0f1-b659-4891-8b8a-1bc69cf523b7&width=1600&userId=f2df590b-e1ce-4346-a37d-0e7b25babdda&cache=v2";
             }}
             className="rounded-full"
             width={20}
@@ -100,7 +100,7 @@ const VideoCard = ({ video }: { video: Video }) => {
           onError={(e) => {
             console.log(e);
             e.currentTarget.src =
-              "https://resources.biginterview.com/wp-content/uploads/2020/10/interview-anxiety.png";
+              "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbde7a0f1-b659-4891-8b8a-1bc69cf523b7%2Fb080e8c6-4c88-466f-af9c-22c87d5babbf%2FUntitled.png?table=block&id=da12736f-b123-465e-aa98-4694c25e0533&spaceId=bde7a0f1-b659-4891-8b8a-1bc69cf523b7&width=1600&userId=f2df590b-e1ce-4346-a37d-0e7b25babdda&cache=v2";
           }}
           alt="thumbnail"
           className="w-full h-40 object-cover"
