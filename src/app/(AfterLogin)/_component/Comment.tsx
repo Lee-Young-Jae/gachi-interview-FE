@@ -110,15 +110,19 @@ export default function Comment({ comment, postId }: { comment: IComment; postId
           </span>
         </div>
         {comment?.userId == userId && isEditing == false && (
-          <div className="flex justify-end mt-2 gap-2 ml-auto">
-            <Button onClick={() => setIsEditing(true)} variant="link" className="text-gray-600">
-              <PiPencil className="mr-1" />
-              수정
-            </Button>
-            <Button onClick={handleOpenDeleteModal} variant="link" className="text-red-500">
-              <RiDeleteBinLine className="mr-1" />
-              삭제
-            </Button>
+          <div className="flex justify-end mt-2 gap-4 md:gap-6 md:px-6 ml-auto">
+            <button onClick={() => setIsEditing(true)} className="text-gray-600 hover:underline">
+              <p className="flex items-center">
+                <PiPencil />
+                <p className="text-sm font-medium pl-1">수정</p>
+              </p>
+            </button>
+            <button onClick={handleOpenDeleteModal} className="text-red-500 hover:underline">
+              <p className="flex items-center">
+                <RiDeleteBinLine />
+                <p className="text-sm font-medium pl-1">삭제</p>
+              </p>
+            </button>
           </div>
         )}
       </div>

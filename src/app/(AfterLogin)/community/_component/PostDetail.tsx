@@ -7,7 +7,6 @@ import { FaRegComment } from "react-icons/fa";
 import { formatRelativeTime } from "@/lib/utils/days";
 import { Button } from "@/components/ui/button";
 import "./PostDetail.css";
-import Image from "next/image";
 import { useRecoilValue } from "recoil";
 import { accessTokenState, userIdState } from "@/store/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -34,18 +33,22 @@ export default function PostDetail({ post }: { post: Post }) {
   const postId = post.postId;
   const content = post.content;
 
+  // 게시글 내용을 변환하고 새로운 상태로 설정합니다.
   useEffect(() => {
     const sanitizedContent = DOMPurify.sanitize(convertLinks(content));
     setConvertedContent(sanitizedContent);
   }, [content]);
 
-  const { mutate } = useMutation({
+  // 좋아요 기능을 위한 useMutation 훅을 설정합니다.
+  const { mutate: likePost } = useMutation({
     mutationFn: (params: { userId: number; postId: string; accessToken: string }) =>
       postLike(params),
     onMutate: async () => {
+      // 좋아요 실행 전에 쿼리를 취소하고 이전 데이터를 백업합니다.
       const queryKey = ["community", postId.toString()];
       await queryClient.cancelQueries({ queryKey });
       const previousData = queryClient.getQueryData(queryKey);
+      // 데이터를 업데이트합니다.
       queryClient.setQueryData(queryKey, (old: { numOfLike: number; liked: boolean }) => {
         return {
           ...old,
@@ -56,6 +59,7 @@ export default function PostDetail({ post }: { post: Post }) {
       return { previousData };
     },
     onSuccess: (data) => {
+      // 성공 시 새로운 좋아요 데이터로 상태를 업데이트합니다.
       queryClient.setQueryData(
         ["community", postId.toString()],
         (old: { numOfLike: number; liked: boolean }) => ({
@@ -67,13 +71,16 @@ export default function PostDetail({ post }: { post: Post }) {
     },
   });
 
+  // 게시글 삭제 기능을 위한 useMutation 훅을 설정합니다.
   const removePost = useMutation({
     mutationKey: ["community", postId],
     mutationFn: (removedPost: { userId: number; postId: string }) => deletePost(removedPost),
     onMutate: async (removedPost) => {
+      // 삭제 전에 이전 데이터를 백업합니다.
       const previousData = queryClient.getQueryData(["community", postId]);
       if (!previousData) return;
 
+      // 삭제된 게시글을 쿼리 데이터에서 필터링하여 업데이트합니다.
       queryClient.setQueryData(["community", postId], (old: Post[]) => {
         return old.filter((post: { postId: string }) => post.postId !== removedPost.postId);
       });
@@ -81,9 +88,11 @@ export default function PostDetail({ post }: { post: Post }) {
     },
   });
 
+  // 좋아요 버튼 클릭 처리 함수입니다.
   const handleLike = () => {
     if (!isLiked) {
-      mutate({
+      // 좋아요 추가
+      likePost({
         userId,
         postId,
         accessToken,
@@ -92,7 +101,8 @@ export default function PostDetail({ post }: { post: Post }) {
       setAnimate(true);
       setTimeout(() => setAnimate(false), 300);
     } else {
-      mutate({
+      // 좋아요 취소
+      likePost({
         userId,
         postId,
         accessToken,
@@ -101,6 +111,7 @@ export default function PostDetail({ post }: { post: Post }) {
     }
   };
 
+  // 클립보드에 링크 복사 처리 함수입니다.
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -113,6 +124,7 @@ export default function PostDetail({ post }: { post: Post }) {
     }
   };
 
+  // 게시글 삭제 처리 함수입니다.
   const handleDeletePost = () => {
     removePost.mutate({
       userId,
@@ -122,6 +134,7 @@ export default function PostDetail({ post }: { post: Post }) {
     router.push(`/community?tab=${post.category}`);
   };
 
+  // 삭제 모달을 열기 위한 함수입니다.
   const handleOpenDeleteModal = () => {
     openModal(
       <Modal
@@ -143,46 +156,89 @@ export default function PostDetail({ post }: { post: Post }) {
     );
   };
 
-  return (
-    <div className="flex-col">
-      <div className="px-6 pt-4 pb-2 mb-5 border border-gray-300 rounded-md">
-        <span className="text-2xl font-bold">{post.postTitle}</span>
-        <hr className="mt-2" />
-        <div className="flex">
-          <div
-            className="my-5 pb-8 whitespace-pre-line"
-            dangerouslySetInnerHTML={{ __html: convertedContent }}
-          />
-          {post.userId == userId && (
-            <div className="flex justify-end mt-2 ml-auto">
-              <Button
-                onClick={() =>
-                  router.push(`/community/edit?tab=${post.category}&id=${post.postId}`)
-                }
-                variant="link"
-                className="text-gray-600"
-              >
-                <PiPencil />
-                수정
-              </Button>
-              <Button onClick={handleOpenDeleteModal} variant="link" className="text-red-500">
-                <RiDeleteBinLine />
-                삭제
-              </Button>
-            </div>
-          )}
-        </div>
-        {post.tag.map((tag, index) => (
-          <Badge
-            key={index}
-            className={`px-3 py-1 text-sm ${index === 0 ? "-ml-2" : "mx-1"}`}
-            variant="secondary"
+  // 좋아요 및 공유 버튼을 렌더링하는 함수입니다.
+  const renderButtons = () => (
+    <div className="flex items-center justify-center md:justify-start gap-4 hidden md:block">
+      <Button variant="outline" onClick={handleLike} className={`${animate ? "animate-ping" : ""}`}>
+        <AiOutlineLike className={`mr-1 ${isLiked ? "text-green-500" : "text-gray-500"}`} />
+        <span className={`text-sm ${isLiked ? "text-green-500 font-semibold" : "text-gray-700"}`}>
+          {post.numOfLike}
+        </span>
+      </Button>
+      <Button
+        variant="outline"
+        className="ml-2"
+        onClick={() => handleCopyClipBoard(window.location.href)}
+      >
+        <AiOutlineShareAlt className="mr-2" />
+        공유
+      </Button>
+    </div>
+  );
+
+  // 모바일에서 좋아요 및 공유 버튼을 렌더링하는 함수입니다.
+  const renderMobileButtons = () => (
+    <div className="flex items-center justify-center mt-5 mb-3 md:hidden">
+      <Button variant="outline" onClick={handleLike} className={`${animate ? "animate-ping" : ""}`}>
+        <AiOutlineLike className={`mr-1 ${isLiked ? "text-green-500" : "text-gray-500"}`} />
+        <span className={`text-sm ${isLiked ? "text-green-500 font-semibold" : "text-gray-700"}`}>
+          {post.numOfLike}
+        </span>
+      </Button>
+      <Button
+        variant="outline"
+        className="ml-2"
+        onClick={() => handleCopyClipBoard(window.location.href)}
+      >
+        <AiOutlineShareAlt className="mr-2" />
+        공유
+      </Button>
+    </div>
+  );
+
+  // 게시글 정보를 렌더링하는 함수입니다.
+  const renderPostInfo = () => (
+    <div className="px-6 pt-4 pb-2 mb-5 border border-gray-300 rounded-md">
+      <span className="text-2xl font-bold">{post.postTitle}</span>
+      <hr className="mt-2" />
+      <div className="flex-col">
+        <div
+          className="my-5 pb-8 whitespace-pre-line"
+          dangerouslySetInnerHTML={{ __html: convertedContent }}
+        />
+      </div>
+      {post.tag.map((tag, index) => (
+        <Badge
+          key={index}
+          className={`px-3 py-1 text-sm ${index === 0 ? "-ml-2" : "mx-1"}`}
+          variant="secondary"
+        >
+          #{tag}
+        </Badge>
+      ))}
+      {post.userId == userId && (
+        <div className="flex justify-start mt-4 mb-8 gap-4">
+          <button
+            onClick={() => router.push(`/community/edit?tab=${post.category}&id=${post.postId}`)}
+            className="text-gray-600
+            hover:underline"
           >
-            #{tag}
-          </Badge>
-        ))}
-        <div className="flex my-3">
-          <div className="flex items-center flex-1 mt-2">
+            <p className="flex items-center">
+              <PiPencil />
+              <p className="text-sm font-medium pl-1">수정</p>
+            </p>
+          </button>
+          <button onClick={handleOpenDeleteModal} className="text-red-500">
+            <p className="flex items-center hover:underline">
+              <RiDeleteBinLine />
+              <p className="text-sm font-medium pl-1">삭제</p>
+            </p>
+          </button>
+        </div>
+      )}
+      <div className="flex items-center mt-6 mb-3">
+        <div className="flex-1">
+          <div className="flex">
             <img
               src={post.image}
               alt="프로필이미지"
@@ -190,47 +246,27 @@ export default function PostDetail({ post }: { post: Post }) {
               width={20}
               height={20}
             />
-            <p className="text-gray-600 text-sm ml-2 hidden md:block">
+            <p className="text-gray-600 text-sm ml-2">
               <span className="font-semibold">{post.userName}</span> •{" "}
               {formatRelativeTime(post.time.toLocaleString())}
             </p>
-            <p className="flex-col text-gray-600 text-sm ml-2 md:hidden">
-              <p className="font-semibold">{post.userName}</p>
-              <p>{formatRelativeTime(post.time.toLocaleString())}</p>
-            </p>
           </div>
-          <div className="flex">
-            <div className="flex items-center w-full justify-center">
-              <Button
-                variant="outline"
-                onClick={handleLike}
-                className={`${animate ? "animate-ping" : ""}`}
-              >
-                <AiOutlineLike className={`mr-1 ${isLiked ? "text-green-500" : "text-gray-500"}`} />
-                <span
-                  className={`text-sm ${
-                    isLiked ? "text-green-500 font-semibold" : "text-gray-700"
-                  }`}
-                >
-                  {post.numOfLike}
-                </span>
-              </Button>
-              <Button
-                variant="outline"
-                className="ml-2"
-                onClick={() => handleCopyClipBoard(window.location.href)}
-              >
-                <AiOutlineShareAlt className="mr-2" />
-                공유
-              </Button>
-            </div>
-            <div className="flex items-center ml-3">
-              <FaRegComment className="text-gray-500 mr-1" />
-              <span className="text-gray-700 text-sm">{post.numOfComment}</span>
-            </div>
+        </div>
+        <div className="flex">
+          {renderButtons()}
+          <div className="flex items-center ml-3">
+            <FaRegComment className="text-gray-500 mr-1" />
+            <span className="text-gray-700 text-sm">{post.numOfComment}</span>
           </div>
         </div>
       </div>
+      {renderMobileButtons()}
+    </div>
+  );
+
+  return (
+    <div className="flex-col">
+      {renderPostInfo()}
       <CommentForm postId={post.postId} />
     </div>
   );
