@@ -15,7 +15,7 @@ export default async function patchPost({
   category: string;
   accessToken: string;
   userId: number;
-  postId: string;
+  postId?: string;
 }) {
   try {
     const { response, data } = await customFetcher(`/board/${postId}/edit`, {
