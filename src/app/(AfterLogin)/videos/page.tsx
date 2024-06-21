@@ -115,13 +115,12 @@ const Videos = () => {
 
       {videoList.length === 0 && <NoData />}
       {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 pt-4">
+      <div className="grid grid-cols-2 gap-4 lg:gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 pt-4">
         {videoList.map((video) => (
           <VideoCard key={video.videoId} video={video} />
         ))}
+        <div className="w-full h-20 bg-transparent" ref={(ref) => setTarget(ref)} />
       </div>
-
-      <div ref={(ref) => setTarget(ref)} />
     </div>
   );
 };
