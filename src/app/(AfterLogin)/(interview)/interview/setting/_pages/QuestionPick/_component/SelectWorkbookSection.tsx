@@ -6,6 +6,7 @@ import {
 import AddQuestionTitleModal from "./AddQuestionTitleModal";
 import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
+import { useEffect } from "react";
 
 interface SelectWorkbookSectionProps {
   selectedWorkbookId: number | null;
@@ -17,18 +18,23 @@ const SelectWorkbookSection = ({
   setSelectedWorkbookId,
 }: SelectWorkbookSectionProps) => {
   const { data: questionList } = useGetWorkbookListQuery();
-  const { mutate: createTitleMutate } = usePostWorkbookMutation();
+  const { mutate: createTitleMutate, isSuccess } = usePostWorkbookMutation();
   const { openModal, closeModal } = useModal();
   const userId = useRecoilValue(userIdState);
 
   const openAddTitleModalHandler = () => {
     const submitHandler = ({ title, job }: { title: string; job: string }) => {
       createTitleMutate({ userId, title, job });
-      closeModal();
     };
 
-    openModal(<AddQuestionTitleModal closeModal={closeModal} onSubmit={submitHandler} />);
+    openModal(<AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      closeModal();
+    }
+  }, [isSuccess]);
 
   //TODO: Popover로 워크북 삭제 기능 추가
   return (

@@ -15,7 +15,7 @@ import { userIdState } from "@/store/auth";
 const QuestionPick = () => {
   const { data: questionList } = useGetWorkbookListQuery();
   const [selectedWorkbookId, setSelectedWorkbookId] = useState<number | null>(
-    questionList?.[0]?.listId || null,
+    questionList?.at(-1)?.listId || null,
   );
   const userId = useRecoilValue(userIdState);
 
@@ -23,7 +23,8 @@ const QuestionPick = () => {
   const { closeModal } = useModal();
 
   useEffect(() => {
-    if (questionList?.[0]?.listId) setSelectedWorkbookId(questionList[0].listId);
+    if (questionList?.at(-1)?.listId)
+      setSelectedWorkbookId(questionList[questionList.length - 1].listId);
   }, [questionList]);
 
   // TODO: Loading 컴포넌트 추가
@@ -35,13 +36,7 @@ const QuestionPick = () => {
   };
 
   if (questionList.length === 0) {
-    return (
-      <AddQuestionTitleModal
-        disableBackdropClick
-        closeModal={closeModal}
-        onSubmit={submitHandler}
-      />
-    );
+    return <AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />;
   }
 
   return (
