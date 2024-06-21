@@ -119,8 +119,8 @@ export default function StudyPostForm() {
     }
   };
 
-  const handleBadgeClick = (clickedTag: string) => {
-    setTags(tags.filter((tag) => tag !== clickedTag));
+  const handleBadgeClick = (clickedTagIndex: number) => {
+    setTags(tags.filter((_, index) => index !== clickedTagIndex));
   };
 
   return (
@@ -139,7 +139,7 @@ export default function StudyPostForm() {
             <Badge
               key={index}
               className="mr-1 cursor-pointer bg-gray-200 text-gray-700 hover:bg-gray-300"
-              onClick={() => handleBadgeClick(tag)}
+              onClick={() => handleBadgeClick(index)}
             >
               #{tag}
             </Badge>
