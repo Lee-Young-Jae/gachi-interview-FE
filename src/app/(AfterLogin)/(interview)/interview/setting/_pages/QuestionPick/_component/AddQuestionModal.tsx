@@ -38,7 +38,7 @@ const AddQuestionModal = ({ closeModal, onSubmit }: AddQuestionModalProps) => {
 
   return (
     <Modal
-      header="질문 & 답변 추가"
+      header="질문 추가"
       footer={
         <>
           <Button
@@ -53,21 +53,25 @@ const AddQuestionModal = ({ closeModal, onSubmit }: AddQuestionModalProps) => {
         </>
       }
     >
-      <label className="text-sm">질문</label>
+      <label className="block text-basic text-muted-foreground">
+        질문 <br />
+        <sub>자세하게 작성할수록 피드백 AI가 더 똑똑해져요.</sub>
+      </label>
       <input
         type="text"
         value={questionContent}
         onChange={handleTitle}
         placeholder="질문을 입력해주세요."
-        className="w-full p-2 border border-gray-300 rounded-md mt-4"
+        className="w-full p-2 border border-gray-300 rounded-md mt-1"
         required
       />
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      <label className="block text-basic text-muted-foreground mt-4">답변</label>
       <textarea
-        placeholder="예시 답변을 입력해주세요."
+        placeholder="예시 답변을 입력해주세요. (선택)"
         value={answerContent}
         onChange={(e) => setAnswer(e.target.value)}
-        className="w-full resize-none p-2 border border-gray-300 rounded-md mt-4 h-80"
+        className="w-full resize-none p-2 border border-gray-300 rounded-md mt-1 h-80"
       />
     </Modal>
   );

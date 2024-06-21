@@ -113,9 +113,7 @@ const AddQuestionTitleModal = ({ onSubmit }: AddQuestionTitleModalProps) => {
       }
     >
       <div className="flex flex-col gap-2">
-        <label className="block text-basic text-muted-foreground">
-          질문지 제목 <br />
-        </label>
+        <label className="block text-basic text-muted-foreground">질문지 제목</label>
         <input
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
@@ -180,7 +178,7 @@ const AddQuestionTitleModal = ({ onSubmit }: AddQuestionTitleModalProps) => {
 
       {!isAIExample && (
         <button className="mt-4 text-sm text-blue-600" onClick={() => setIsAIExample(true)}>
-          AI 예시 질문/답변을 받아볼까요?
+          AI 예상 질문/답변을 받아볼까요?
         </button>
       )}
 
