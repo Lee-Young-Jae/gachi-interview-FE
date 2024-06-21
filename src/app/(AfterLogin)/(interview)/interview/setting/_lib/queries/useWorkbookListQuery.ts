@@ -24,7 +24,7 @@ export const useGetWorkbookListQuery = () => {
 
 export const usePostWorkbookMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation<Response, Error, { userId: number; title: string }>({
+  return useMutation<Response, Error, { userId: number; title: string; job: string }>({
     mutationKey: ["workbookList"],
     mutationFn: (data) => postWorkbook(data),
     onSuccess: () => {

@@ -22,8 +22,8 @@ const SelectWorkbookSection = ({
   const userId = useRecoilValue(userIdState);
 
   const openAddTitleModalHandler = () => {
-    const submitHandler = (title: string) => {
-      createTitleMutate({ userId, title });
+    const submitHandler = ({ title, job }: { title: string; job: string }) => {
+      createTitleMutate({ userId, title, job });
       closeModal();
     };
 
@@ -47,9 +47,9 @@ const SelectWorkbookSection = ({
         ))}
       <li
         onClick={openAddTitleModalHandler}
-        className="flex-col items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors h-9 px-4 py-2 justify-start cursor-pointer"
+        className="flex-col items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors h-9 px-4 py-2 justify-start cursor-pointer text-blue-600 hover:bg-muted hover:text-primary disabled:pointer-events-none disabled:opacity-50"
       >
-        + 질문 세트를 추가할래요.
+        + 새 질문지를 만들게요.
       </li>
     </ul>
   );

@@ -64,7 +64,7 @@ export default function Login() {
             </h1>
 
             <p className="font-bold text-4xl text-gray-800 my-6">
-              <span>"같이 면접"에 오신걸 환영해요!</span>
+              <span>같이 면접에 오신걸 환영해요!</span>
             </p>
           </div>
           <Permission />
@@ -76,7 +76,7 @@ export default function Login() {
           <SubSection title="왜 같이 면접인가요?" lottieSrc={landingL2}>
             실전에 대비한 면접 연습을 해보세요
             <br />
-            <sub>"같이 면접"은 함께 면접을 준비하는 공간입니다.</sub>
+            <sub>같이 면접은 함께 면접을 준비하는 공간입니다.</sub>
             <br />
             <sub>면접을 공유하고 피드백을 받아보세요.</sub>
           </SubSection>

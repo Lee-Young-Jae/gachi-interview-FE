@@ -53,6 +53,7 @@ const AddQuestionModal = ({ closeModal, onSubmit }: AddQuestionModalProps) => {
         </>
       }
     >
+      <label className="text-sm">질문</label>
       <input
         type="text"
         value={questionContent}

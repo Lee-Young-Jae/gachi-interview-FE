@@ -3,9 +3,10 @@ import customFetcher from "@/lib/utils/customFetcher";
 interface postWorkbookProps {
   userId: number;
   title: string;
+  job: string;
 }
 
-const postWorkbook = async ({ userId, title }: postWorkbookProps) => {
+const postWorkbook = async ({ userId, title, job }: postWorkbookProps) => {
   try {
     const { data } = await customFetcher(`/workbook`, {
       method: "POST",
@@ -15,6 +16,7 @@ const postWorkbook = async ({ userId, title }: postWorkbookProps) => {
       body: JSON.stringify({
         userId,
         title,
+        job,
       }),
     });
 

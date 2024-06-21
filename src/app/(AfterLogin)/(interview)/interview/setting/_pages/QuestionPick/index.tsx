@@ -29,8 +29,8 @@ const QuestionPick = () => {
   // TODO: Loading 컴포넌트 추가
   if (!questionList) return null;
 
-  const submitHandler = (title: string) => {
-    createTitleMutate({ userId, title });
+  const submitHandler = ({ title, job }: { title: string; job: string }) => {
+    createTitleMutate({ userId, title, job });
     isSuccess && closeModal();
   };
 
