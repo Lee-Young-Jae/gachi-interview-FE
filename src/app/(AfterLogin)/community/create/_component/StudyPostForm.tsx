@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import postBoard from "../_lib/postBoard";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,12 +15,20 @@ export default function StudyPostForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
   const [errors, setErrors] = useState({ title: false, content: false, tags: false });
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLinux, setIsLinux] = useState(false);
 
   const category = useSearchParams().get("tab");
   const queryClient = useQueryClient();
   const { openDialogWithBack } = useModal();
   const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLinux(!!window.navigator.userAgent.match(/Linux/i));
+    }
+  }, []);
 
   const postData = useMutation({
     mutationKey: ["community", category, "new", 1],
@@ -56,10 +64,14 @@ export default function StudyPostForm() {
       return;
     }
 
+    const removedDotTags = tags
+      .map((item) => item.replaceAll(".", ""))
+      .filter((item) => item !== "");
+
     postData.mutate({
       title,
       content,
-      tags,
+      tags: removedDotTags,
       category,
       accessToken,
       userId,
@@ -68,10 +80,12 @@ export default function StudyPostForm() {
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    if (errors.title) setErrors((prev) => ({ ...prev, title: false }));
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
+    if (errors.content) setErrors((prev) => ({ ...prev, content: false }));
   };
 
   const handleNewTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,10 +93,29 @@ export default function StudyPostForm() {
   };
 
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.nativeEvent.isComposing === false && newTag.trim() !== "") {
+    const targetKey = e.target as HTMLInputElement;
+
+    if (
+      (e.key === "Enter" || e.key === "NumpadEnter") &&
+      e.nativeEvent.isComposing === false &&
+      newTag.trim() !== ""
+    ) {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
+      if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+    } else if (isLinux && targetKey.value.at(-1) === " ") {
+      if (e.nativeEvent.isComposing) return;
+      e.preventDefault();
+      let trimmedTag = newTag.trim();
+      if (trimmedTag.endsWith(" ")) {
+        trimmedTag = trimmedTag.slice(0, -1).trim();
+      }
+      if (trimmedTag !== "") {
+        setTags([...tags, trimmedTag]);
+        setNewTag("");
+        if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+      }
     }
   };
 
@@ -115,10 +148,19 @@ export default function StudyPostForm() {
             type="text"
             value={newTag}
             onChange={handleNewTagChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={handleNewTagKeyDown}
-            placeholder="태그 작성 후 엔터키를 눌러주세요 (태그 클릭 시 삭제)"
+            placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
+          {isFocused && (
+            <div className="absolute bg-gray-700 text-slate-100 text-xs p-2.5 mt-2 z-10 whitespace-pre-line">
+              {isLinux
+                ? "스페이스바를 두 번 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."
+                : "엔터 키를 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."}
+            </div>
+          )}
         </div>
         <textarea
           placeholder={`[스터디 모집 글 내용 작성 가이드]\n\n - 구체적인 스터디 내용\n - 모집 인원\n - 스터디 진행 방식`}

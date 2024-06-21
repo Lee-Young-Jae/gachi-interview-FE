@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/Modal/useModal";
@@ -16,13 +16,20 @@ export default function EditPostForm({ post }: { post: Post }) {
   const [tags, setTags] = useState<string[]>(post.tag);
   const [newTag, setNewTag] = useState("");
   const [errors, setErrors] = useState({ title: false, content: false, tags: false });
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLinux, setIsLinux] = useState(false);
 
   const category = useSearchParams().get("tab");
   const queryClient = useQueryClient();
   const { openDialogWithBack, closeModal } = useModal();
   const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
-  const isSubmitDisabled = tags.length === 0;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLinux(!!window.navigator.userAgent.match(/Linux/i));
+    }
+  }, []);
 
   const postData = useMutation({
     mutationKey: ["community", post.postId.toString()],
@@ -59,10 +66,14 @@ export default function EditPostForm({ post }: { post: Post }) {
       return;
     }
 
+    const removedDotTags = tags
+      .map((item) => item.replaceAll(".", ""))
+      .filter((item) => item !== "");
+
     postData.mutate({
       title,
       content,
-      tags,
+      tags: removedDotTags,
       category,
       accessToken,
       userId,
@@ -72,10 +83,12 @@ export default function EditPostForm({ post }: { post: Post }) {
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    if (errors.title) setErrors((prev) => ({ ...prev, title: false }));
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
+    if (errors.content) setErrors((prev) => ({ ...prev, content: false }));
   };
 
   const handleNewTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,10 +96,29 @@ export default function EditPostForm({ post }: { post: Post }) {
   };
 
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.nativeEvent.isComposing === false && newTag.trim() !== "") {
+    const targetKey = e.target as HTMLInputElement;
+
+    if (
+      (e.key === "Enter" || e.key === "NumpadEnter") &&
+      e.nativeEvent.isComposing === false &&
+      newTag.trim() !== ""
+    ) {
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
+      if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+    } else if (isLinux && targetKey.value.at(-1) === " ") {
+      if (e.nativeEvent.isComposing) return;
+      e.preventDefault();
+      let trimmedTag = newTag.trim();
+      if (trimmedTag.endsWith(" ")) {
+        trimmedTag = trimmedTag.slice(0, -1).trim();
+      }
+      if (trimmedTag !== "") {
+        setTags([...tags, trimmedTag]);
+        setNewTag("");
+        if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
+      }
     }
   };
 
@@ -121,10 +153,19 @@ export default function EditPostForm({ post }: { post: Post }) {
             type="text"
             value={newTag}
             onChange={handleNewTagChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={handleNewTagKeyDown}
-            placeholder="태그 작성 후 엔터키를 눌러주세요 (태그 클릭 시 삭제)"
+            placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
+          {isFocused && (
+            <div className="absolute bg-gray-700 text-slate-100 text-xs p-2.5 mt-2 z-10 whitespace-pre-line">
+              {isLinux
+                ? "스페이스바를 두 번 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."
+                : "엔터 키를 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."}
+            </div>
+          )}
         </div>
         <textarea
           placeholder={

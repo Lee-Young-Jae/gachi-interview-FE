@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import postBoard from "../_lib/postBoard";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,8 @@ export default function ReviewPostForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
   const [errors, setErrors] = useState({ title: false, content: false, tags: false });
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLinux, setIsLinux] = useState(false);
 
   const category = useSearchParams().get("tab");
   const queryClient = useQueryClient();
@@ -22,7 +24,11 @@ export default function ReviewPostForm() {
   const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
-  const isLinux = window?.navigator?.userAgent?.match(/Linux/i);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLinux(!!window.navigator.userAgent.match(/Linux/i));
+    }
+  }, []);
 
   const postData = useMutation({
     mutationKey: ["community", category, "new", 1],
@@ -46,6 +52,7 @@ export default function ReviewPostForm() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const newErrors = {
       title: !title,
       content: !content,
@@ -85,37 +92,8 @@ export default function ReviewPostForm() {
     setNewTag(e.target.value);
   };
 
-  // const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
-  //   if (e.key === "Enter" || e.key === "NumpadEnter") {
-  //     e.preventDefault();
-
-  //     if (newTag.trim() !== "") {
-  //       setTags([...tags, newTag.trim()]);
-  //       setNewTag("");
-  //       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-  //     }
-  //   } else if (e.key === ",") {
-  //     e.preventDefault();
-
-  //     let trimmedTag = newTag.trim();
-  //     if (trimmedTag.endsWith(",")) {
-  //       trimmedTag = trimmedTag.slice(0, -1).trim();
-  //     }
-  //     if (trimmedTag !== "") {
-  //       setTags([...tags, trimmedTag]);
-  //       setNewTag("");
-  //       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
-  //     }
-  //   }
-  // };
-
-  useEffect(() => {
-    setNewTag("");
-  }, [tags]);
-
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
     const targetKey = e.target as HTMLInputElement;
-
 
     if (
       (e.key === "Enter" || e.key === "NumpadEnter") &&
@@ -156,7 +134,7 @@ export default function ReviewPostForm() {
           value={title}
           className="p-2 border border-gray-300 rounded-md mb-4 text-lg focus:outline-none"
         />
-        <div className="mb-4">
+        <div className="mb-4 relative">
           {tags.map((tag, index) => (
             <Badge
               key={index}
@@ -170,15 +148,18 @@ export default function ReviewPostForm() {
             type="text"
             value={newTag}
             onChange={handleNewTagChange}
-            // onKeyUp={handleNewTagKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={handleNewTagKeyDown}
             placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
-          {isLinux ? (
-            <span>스페이스 두번을 눌러 태그 추가</span>
-          ) : (
-            <span>Enter를 눌러 태그 추가</span>
+          {isFocused && (
+            <div className="absolute bg-gray-700 text-slate-100 text-xs p-2.5 mt-2 z-10 whitespace-pre-line">
+              {isLinux
+                ? "스페이스바를 두 번 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."
+                : "엔터 키를 눌러 태그를 추가하세요.\n등록된 태그를 클릭하면 삭제됩니다."}
+            </div>
           )}
         </div>
         <textarea
