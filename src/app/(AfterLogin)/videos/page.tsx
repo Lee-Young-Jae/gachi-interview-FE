@@ -48,7 +48,7 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
         ref={inputRef}
         type="text"
         placeholder="검색어를 입력하세요"
-        className="h-10 w-full rounded-md border border-input bg-background px-10 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none"
+        className="h-10 w-full rounded-md border border-input bg-background pl-10 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none"
         value={inputValue}
         onChange={handleChange}
       />
@@ -148,7 +148,7 @@ const Videos = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center w-full mb-2 gap-4">
+      <div className="flex justify-between items-center w-full mb-2 gap-2">
         <Search setKeyword={setKeyword} keyword={keyword} />
         <div className="flex-grow w-32">
           <Select onValueChange={handleSortType}>
@@ -164,7 +164,8 @@ const Videos = () => {
       </div>
 
       {videoList.content.length === 0 && <NoData />}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 pt-4">
         {videoList.content.map((video) => (
           <VideoCard key={video.videoId} video={video} />
         ))}

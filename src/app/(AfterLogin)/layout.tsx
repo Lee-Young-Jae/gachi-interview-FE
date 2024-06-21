@@ -22,7 +22,7 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
   const { openModal, closeModal } = useModal();
 
   const navItems = [
-    { href: "/interview/setting", icon: SlCamrecorder, label: "영상 녹화" },
+    { href: "/interview/setting", icon: SlCamrecorder, label: "인터뷰" },
     { href: "/videos", icon: MdOutlinePlaylistPlay, label: "면접 영상 목록" },
     { href: "/community?tab=reviews", icon: MdGroups, label: "커뮤니티" },
     { href: "/my?tab=videos", icon: CgProfile, label: "마이페이지" },
@@ -139,6 +139,7 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
                   }`}
                 >
                   <item.icon className="text-3xl" />
+                  <span className="text-xs">{item.label}</span>
                 </Link>
               );
             })}
