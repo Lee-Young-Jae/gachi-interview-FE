@@ -23,7 +23,7 @@ import {
 } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
 
 const useRecord = () => {
-  const interviewOption = useRecoilValue(interviewOptionState);
+  const [interviewOption, setInterviewOption] = useRecoilState(interviewOptionState);
   const [mediaOption, setMediaOption] = useRecoilState(mediaOptionState);
 
   const { mutateAsync: postInterviewMutate } = usePostInterviewMutation(); // 비디오 업로드 후 videoId를 사용하기 위해 async-mutate 사용
@@ -113,6 +113,10 @@ const useRecord = () => {
           videoId: data?.videoId,
           content: metadata.transcript,
         });
+
+        // 값 초기화
+        setInterviewOption({ ...interviewOption, questions: [] });
+        setMediaOption({ ...mediaOption, media: null });
 
         openModal(
           <UploadCompletionModal

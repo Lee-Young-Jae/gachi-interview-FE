@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import ready from "../../../../../../../../../public/CreateQuestionAIL.json";
 import { Suspense, useEffect, useState } from "react";
 import Modal from "@/components/Modal";
+import { useModal } from "@/components/Modal/useModal";
 
 const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
@@ -23,6 +24,8 @@ interface AIResponseModalProps {
 }
 
 const AIResponseModal = ({ job }: AIResponseModalProps) => {
+  const { openModal, closeModal } = useModal();
+
   const messages = [
     { message: "세상에 있는 모든 질문지를 살펴보는 중...", icon: "🔍" },
     { message: "곧 준비됩니다...!", icon: "🎥" },
@@ -49,7 +52,7 @@ const AIResponseModal = ({ job }: AIResponseModalProps) => {
 
     const changeMessage = () => {
       setFadeIn(false);
-      const nextMessageIndex = (currentMessageIndex + 1) % messages.length;
+      const nextMessageIndex = Math.floor(Math.random() * messages.length);
       setTimeout(() => {
         setCurrentMessageIndex(nextMessageIndex);
         setFadeIn(true);
@@ -57,8 +60,32 @@ const AIResponseModal = ({ job }: AIResponseModalProps) => {
     };
 
     const messageTimer = setInterval(changeMessage, LOADING_TIME);
+
+    const MAX_LOADING_TIME = 20000; // 20초
+    const timer = setTimeout(() => {
+      openModal(
+        <Modal
+          header="AI 준비 실패..."
+          disableBackdropClick
+          footer={
+            <button className="btn btn-primary" onClick={closeModal}>
+              확인
+            </button>
+          }
+        >
+          <div className="flex flex-col items-center w-full justify-center p-8">
+            <div className="text-xl font-semibold">AI 응답이 지연되고 있어요.</div>
+            <div className="text-sm text-muted-foreground mt-2">
+              인터넷 연결을 확인하고 다시 시도해주세요.
+            </div>
+          </div>
+        </Modal>,
+      );
+    }, MAX_LOADING_TIME);
+
     return () => {
       clearInterval(messageTimer);
+      clearTimeout(timer);
     };
   }, []);
 
