@@ -33,6 +33,7 @@ export default function PostUpdater({
   const [errors, setErrors] = useState({ title: false, content: false, tags: false });
   const [isFocused, setIsFocused] = useState(false);
   const [isLinux, setIsLinux] = useState(false);
+  const [tagWarning, setTagWarning] = useState("");
 
   const queryClient = useQueryClient();
   const { openDialogWithBack } = useModal();
@@ -107,7 +108,13 @@ export default function PostUpdater({
   };
 
   const handleNewTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTag(e.target.value);
+    const tagValue = e.target.value;
+    if (tagValue.length > 10) {
+      setTagWarning("태그는 최대 10자까지 입력 가능합니다!");
+    } else {
+      setTagWarning("");
+      setNewTag(tagValue);
+    }
   };
 
   const handleNewTagKeyDown = (e: React.KeyboardEvent) => {
@@ -121,6 +128,7 @@ export default function PostUpdater({
       e.preventDefault();
       setTags([...tags, newTag.trim()]);
       setNewTag("");
+      setTagWarning("");
       if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
     } else if (isLinux && targetKey.value.at(-1) === " ") {
       if (e.nativeEvent.isComposing) return;
@@ -132,6 +140,7 @@ export default function PostUpdater({
       if (trimmedTag !== "") {
         setTags([...tags, trimmedTag]);
         setNewTag("");
+        setTagWarning("");
         if (errors.tags) setErrors((prev) => ({ ...prev, tags: false }));
       }
     }
@@ -180,6 +189,7 @@ export default function PostUpdater({
             placeholder="태그를 입력하세요"
             className="w-2/3 border-none focus:outline-none"
           />
+          {tagWarning && <p className="text-sm text-red-500 mt-1">{tagWarning}</p>}
           {isFocused && (
             <div className="absolute bg-gray-700 text-slate-100 text-xs p-2.5 mt-2 z-10 whitespace-pre-line">
               {isLinux

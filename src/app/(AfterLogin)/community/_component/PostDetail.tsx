@@ -201,12 +201,10 @@ export default function PostDetail({ post }: { post: Post }) {
     <div className="px-6 pt-4 pb-2 mb-5 border border-gray-300 rounded-md">
       <span className="text-2xl font-bold">{post.postTitle}</span>
       <hr className="mt-2" />
-      <div className="flex-col">
-        <div
-          className="my-5 pb-8 whitespace-pre-line"
-          dangerouslySetInnerHTML={{ __html: convertedContent }}
-        />
-      </div>
+      <div
+        className="my-5 pb-8 whitespace-pre-line break-words"
+        dangerouslySetInnerHTML={{ __html: convertedContent }}
+      />
       {post.tag.map((tag, index) => (
         <Badge
           key={index}
