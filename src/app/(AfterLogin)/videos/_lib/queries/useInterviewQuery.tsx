@@ -39,6 +39,7 @@ export const useGetInfinityInterviews = ({ sortType, keyword }: getInterviewsPro
     },
     initialPageParam: 1,
     staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
   });
 };
 

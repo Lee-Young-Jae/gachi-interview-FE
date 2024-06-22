@@ -43,13 +43,13 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   }, [keyword]);
 
   return (
-    <div className="relative flex items-center w-full">
-      <CiSearch className="absolute left-3 text-muted-foreground" />
+    <div className="relative flex items-center w-48">
+      <CiSearch className="absolute text-muted-foreground left-2" />
       <input
         ref={inputRef}
         type="text"
         placeholder="무엇을 찾고 계신가요?"
-        className="h-10 w-full rounded-md border border-input bg-background pl-10 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none"
+        className="w-full pl-8 pr-2 py-1 rounded-md bg-background border-none border-input text-basic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         value={inputValue}
         onChange={handleChange}
       />
@@ -96,12 +96,14 @@ const Videos = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center w-full mb-2 gap-2">
+      <div className="flex justify-end items-center w-full mb-2 gap-2">
         <Search setKeyword={setKeyword} keyword={keyword} />
-        <div className="flex-grow w-32">
+        <div className="w-20">
           <Select onValueChange={handleSortType}>
-            <SelectTrigger>
-              <SelectValue placeholder="정렬" />
+            <SelectTrigger className="border-none pr-0">
+              <SelectValue placeholder="최신순" className="border-none">
+                최신순
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="new">최신순</SelectItem>
@@ -111,7 +113,7 @@ const Videos = () => {
         </div>
       </div>
 
-      <span className="text-base">전체 {totalElement}</span>
+      <span className="text-sm">전체 {totalElement}</span>
 
       {videoList.length === 0 && <NoData />}
       {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> */}
@@ -119,8 +121,8 @@ const Videos = () => {
         {videoList.map((video) => (
           <VideoCard key={video.videoId} video={video} />
         ))}
-        <div className="w-full h-20 bg-transparent" ref={(ref) => setTarget(ref)} />
       </div>
+      <div className="h-5 flex justify-center items-center" ref={(ref) => setTarget(ref)} />
     </div>
   );
 };
