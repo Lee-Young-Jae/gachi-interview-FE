@@ -131,12 +131,19 @@ const useRecord = () => {
         );
       };
 
+      const questionLength = interviewOption.questions.length;
+      const newTitle =
+        questionLength > 1
+          ? interviewOption.questions[0].questionContent + " 외 " + (questionLength - 1) + "개 질문"
+          : interviewOption.questions[0].questionContent;
+
       openModal(
         <VideoMetadataModal
           onSubmit={handleModalSubmit}
           disableBackdropClick={true}
           thumbnails={thumbnails}
           transcript={transcript}
+          title={newTitle}
         />,
       );
     } catch (error) {

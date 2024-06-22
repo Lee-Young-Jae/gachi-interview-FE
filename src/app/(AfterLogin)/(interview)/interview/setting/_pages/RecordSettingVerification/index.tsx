@@ -38,7 +38,7 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(
     Math.floor(Math.random() * messages.length),
   );
-  const [fadeIn, setFadeIn] = useState(true);
+  const [slideIn, setSlideIn] = useState(true);
 
   const validateInterviewOption = () => {
     if (!interviewOption) {
@@ -69,11 +69,11 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
     }
 
     const changeMessage = () => {
-      setFadeIn(false);
+      setSlideIn(false);
       const nextMessageIndex = (currentMessageIndex + 1) % messages.length;
       setTimeout(() => {
         setCurrentMessageIndex(nextMessageIndex);
-        setFadeIn(true);
+        setSlideIn(true);
       }, 1000);
     };
 
@@ -96,7 +96,7 @@ const RecordSettingVerification = ({ setStep }: RecordSettingVerificationProps) 
       </Suspense>
       <div
         className={`text-xl font-semibold message h-16 mt-2 ${
-          fadeIn ? "animate-fadeIn" : "animate-fadeOut"
+          slideIn ? "animate-slideIn" : "animate-slideOut"
         }`}
       >
         {messages[currentMessageIndex].message}

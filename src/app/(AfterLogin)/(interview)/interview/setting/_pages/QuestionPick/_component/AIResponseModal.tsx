@@ -45,17 +45,17 @@ const AIResponseModal = ({ job }: AIResponseModalProps) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(
     Math.floor(Math.random() * messages.length),
   );
-  const [fadeIn, setFadeIn] = useState(true);
+  const [slideIn, setSlideIn] = useState(true);
 
   useEffect(() => {
     const LOADING_TIME = 2000; // 1.5초
 
     const changeMessage = () => {
-      setFadeIn(false);
+      setSlideIn(false);
       const nextMessageIndex = Math.floor(Math.random() * messages.length);
       setTimeout(() => {
         setCurrentMessageIndex(nextMessageIndex);
-        setFadeIn(true);
+        setSlideIn(true);
       }, 1000);
     };
 
@@ -97,7 +97,7 @@ const AIResponseModal = ({ job }: AIResponseModalProps) => {
         </Suspense>
         <div
           className={`text-xl font-semibold message h-16 mt-2 ${
-            fadeIn ? "animate-fadeIn" : "animate-fadeOut"
+            slideIn ? "animate-slideIn" : "animate-slideOut"
           }`}
         >
           {messages[currentMessageIndex].message}

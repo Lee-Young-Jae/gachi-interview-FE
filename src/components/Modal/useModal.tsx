@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
 export const useModal = () => {
-  const { modal, setModal } = useContext(ModalContext);
+  const { modal, setModal, isAnimating, setIsAnimating } = useContext(ModalContext);
   const router = useRouter();
 
   const openModal = (modal: ReactNode) => {
@@ -17,12 +17,22 @@ export const useModal = () => {
   };
 
   const closeModal = () => {
-    setModal(null);
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setModal(null);
+      setIsAnimating(false);
+    }, 300);
   };
 
   const closeModalAndBack = () => {
     router.back();
-    setModal(null);
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setModal(null);
+      setIsAnimating(false);
+    }, 300);
   };
 
   const openDialog = (message: string) => {
@@ -45,7 +55,7 @@ export const useModal = () => {
     setModal(null);
   };
 
-  return { openModal, closeModal, modal, openDialog, closeDialog, openDialogWithBack };
+  return { openModal, closeModal, modal, openDialog, closeDialog, openDialogWithBack, isAnimating };
 };
 
 export const useErrorModal = () => {
@@ -66,7 +76,7 @@ export const useErrorModal = () => {
 };
 
 export const ModalContainer = () => {
-  const { modal, closeModal } = useModal();
+  const { modal, closeModal, isAnimating } = useModal();
 
   const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return;
@@ -76,7 +86,9 @@ export const ModalContainer = () => {
 
   return modal
     ? createPortal(
-        <Backdrop onClick={onBackdropClick}>{modal}</Backdrop>,
+        <Backdrop onClick={onBackdropClick} isAnimating={isAnimating}>
+          {modal}
+        </Backdrop>,
         document.getElementById("modal-root") as Element,
       )
     : null;

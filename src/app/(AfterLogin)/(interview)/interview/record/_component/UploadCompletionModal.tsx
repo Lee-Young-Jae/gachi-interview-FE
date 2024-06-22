@@ -45,11 +45,14 @@ const UploadCompletionModal = ({
   const renderMessage = () => {
     if (feedbackCurrentCount + 1 === feedbackLimitCount) {
       return (
-        <p>
-          면접은 잘 보셨나요? 😚
+        <>
+          <p>
+            면접은 잘 보셨나요? 😚
+            <br />
+            아쉽지만 현재 서비스 사용량이 많아 추가 피드백은 <b>1회</b> 더 받을 수 있어요!
+          </p>
           <br />
-          아쉽지만 현재 서비스 사용량이 많아 추가 피드백은 <b>1회</b> 더 받을 수 있어요! <br />
-        </p>
+        </>
       );
     }
 
@@ -59,11 +62,15 @@ const UploadCompletionModal = ({
 
     if (feedbackCurrentCount >= feedbackLimitCount) {
       return (
-        <p>
-          오늘 AI가 너무 많은 일을 처리하고 휴식 중이에요. <br />
-          아쉽지만 피드백은 내일 다시 도와드릴게요. 영상녹화와, 기기에 저장하기는 언제든지
-          가능해요!🎥
-        </p>
+        <>
+          <p>
+            <br />
+            오늘 AI가 너무 많은 일을 처리하고 휴식 중이에요. <br />
+            아쉽지만 피드백은 내일 다시 도와드릴게요. <br />
+            영상녹화와, 기기에 저장하기는 언제든지 가능해요!🎥
+          </p>
+          <br />
+        </>
       );
     }
 

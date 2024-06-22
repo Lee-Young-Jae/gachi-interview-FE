@@ -55,7 +55,7 @@ const VideoDetailEditModal = ({ video, onSubmit }: VideoDetailEditModalProps) =>
 
   return (
     <Modal
-      header={<h1 className="text-2xl font-bold">비디오 수정</h1>}
+      header={<h1 className="text-2xl font-bold">영상 정보 바꾸기</h1>}
       footer={
         <>
           <button
@@ -75,7 +75,9 @@ const VideoDetailEditModal = ({ video, onSubmit }: VideoDetailEditModalProps) =>
     >
       <div className="space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">제목</label>
+          <label>
+            <span className="block text-sm text-muted-foreground">제목</span>
+          </label>
           <input
             type="text"
             value={videoTitle}
@@ -84,7 +86,7 @@ const VideoDetailEditModal = ({ video, onSubmit }: VideoDetailEditModalProps) =>
           />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">태그</label>
+          <span className="block text-sm text-muted-foreground">태그</span>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, index) => (
               <span
@@ -120,13 +122,29 @@ const VideoDetailEditModal = ({ video, onSubmit }: VideoDetailEditModalProps) =>
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <label className="block text-sm font-medium text-gray-700">공개 여부</label>
-          <input
-            type="checkbox"
-            checked={exposure}
-            onChange={handleExposure}
-            className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-          />
+          <label
+            htmlFor="public"
+            className="inline-flex items-center gap-2 cursor-pointer flex-row justify-between w-full"
+          >
+            <input
+              id="public"
+              role="switch"
+              type="checkbox"
+              checked={exposure}
+              onChange={handleExposure}
+              className="peer sr-only"
+            />
+            <span className="block text-sm text-muted-foreground select-none">
+              {exposure ? <p>모두가 볼 수 있어요.</p> : <p>나만 볼 수 있어요. (마이페이지에서)</p>}
+            </span>
+            <span className={`peer h-5 w-9 rounded-full bg-input transition-colors`}>
+              <span
+                className={`block w-5 h-5 rounded-full bg-slate-300 shadow-sm transform transition-transform ${
+                  exposure ? "translate-x-4 bg-blue-400" : "bg-gray-400"
+                }`}
+              />
+            </span>
+          </label>
         </div>
       </div>
     </Modal>

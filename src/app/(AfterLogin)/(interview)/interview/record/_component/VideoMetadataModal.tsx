@@ -16,22 +16,29 @@ interface VideoMetadataModalProps {
   disableBackdropClick?: boolean;
   onSubmit: (metadata: metadata) => void;
   transcript: string;
+  title: string;
 }
 
-const VideoMetadataModal = ({ thumbnails, onSubmit, transcript }: VideoMetadataModalProps) => {
+const VideoMetadataModal = ({
+  thumbnails,
+  onSubmit,
+  transcript,
+  title,
+}: VideoMetadataModalProps) => {
   const [error, setError] = useState<string>("");
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const [metadata, setMetadata] = useState<metadata>({
-    title: "",
+    // title: "",
+    title: title,
     tags: [],
     thumbnail: thumbnails[0],
     exposure: true,
     transcript,
   });
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMetadata({ ...metadata, title: e.target.value });
-  };
+  // const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMetadata({ ...metadata, title: e.target.value });
+  // };
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tags = e.target.value.split(",").map((tag) => tag.trim());
@@ -51,10 +58,10 @@ const VideoMetadataModal = ({ thumbnails, onSubmit, transcript }: VideoMetadataM
   };
 
   const validateMetadata = () => {
-    if (metadata.title === "") {
-      setError("제목을 입력해주세요.");
-      return false;
-    }
+    // if (metadata.title === "") {
+    //   setError("제목을 입력해주세요.");
+    //   return false;
+    // }
 
     if (metadata.thumbnail === null) {
       setError("썸네일을 선택해주세요.");
@@ -101,14 +108,14 @@ const VideoMetadataModal = ({ thumbnails, onSubmit, transcript }: VideoMetadataM
     >
       <div className="flex flex-col gap-2">
         <span className="block text-basic text-muted-foreground">메타데이터 설정</span>
-        <input
+        {/* <input
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
           placeholder="제목을 입력하세요."
           value={metadata.title}
           onChange={handleTitleChange}
         />
-        {error && <span className="block text-sm text-red-500 mt-2">{error}</span>}
+        {error && <span className="block text-sm text-red-500 mt-2">{error}</span>} */}
 
         <input
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -169,14 +176,10 @@ const VideoMetadataModal = ({ thumbnails, onSubmit, transcript }: VideoMetadataM
                 ? "(면접 리스트 페이지에서) 모두가 볼 수 있어요."
                 : "(마이페이지에서) 나만 볼 수 있어요."}
             </span>
-            <span
-              className={`peer h-5 w-9 rounded-full bg-input transition-colors ${
-                metadata.exposure ? "bg-primary" : ""
-              }`}
-            >
+            <span className="peer h-5 w-9 rounded-full bg-input transition-colors">
               <span
                 className={`block w-5 h-5 rounded-full bg-slate-300 shadow-sm transform transition-transform ${
-                  metadata.exposure ? "translate-x-4 bg-slate-400" : ""
+                  metadata.exposure ? "translate-x-4 bg-slate-400" : "bg-primary-400"
                 }`}
               />
             </span>
