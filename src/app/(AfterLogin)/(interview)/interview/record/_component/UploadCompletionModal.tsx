@@ -8,9 +8,16 @@ interface UploadCompletionModalProps {
   encodedBlob: Blob;
   isPublic: boolean;
   disableBackdropClick?: boolean;
+  feedbackLimitCount: number;
+  feedbackCurrentCount: number;
 }
 
-const UploadCompletionModal = ({ encodedBlob, isPublic }: UploadCompletionModalProps) => {
+const UploadCompletionModal = ({
+  encodedBlob,
+  isPublic,
+  feedbackCurrentCount,
+  feedbackLimitCount,
+}: UploadCompletionModalProps) => {
   const router = useRouter();
   const { closeModal } = useModal();
 
@@ -35,6 +42,34 @@ const UploadCompletionModal = ({ encodedBlob, isPublic }: UploadCompletionModalP
     closeModal();
   };
 
+  const renderMessage = () => {
+    if (feedbackCurrentCount + 1 === feedbackLimitCount) {
+      return (
+        <p>
+          면접은 잘 보셨나요? 😚
+          <br />
+          아쉽지만 현재 서비스 사용량이 많아 추가 피드백은 <b>1회</b> 더 받을 수 있어요! <br />
+        </p>
+      );
+    }
+
+    if (feedbackCurrentCount < feedbackLimitCount) {
+      return <p>🤖 AI가 영상 분석을 끝내면 알림을 보내드릴게요!</p>;
+    }
+
+    if (feedbackCurrentCount >= feedbackLimitCount) {
+      return (
+        <p>
+          오늘 AI가 너무 많은 일을 처리하고 휴식 중이에요. <br />
+          아쉽지만 피드백은 내일 다시 도와드릴게요. 영상녹화와, 기기에 저장하기는 언제든지
+          가능해요!🎥
+        </p>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <Modal
       disableBackdropClick={true}
@@ -46,7 +81,7 @@ const UploadCompletionModal = ({ encodedBlob, isPublic }: UploadCompletionModalP
       }
     >
       <p>비디오 인코딩이 완료되었어요.</p>
-      <p>🤖 AI가 영상 분석을 끝내면 알림을 보내드릴게요!</p>
+      {renderMessage()}
       영상을 기기에 <b>다운로드</b> 하시고 싶으시거나, <b>링크를 공유</b>하고 싶으시다면 아래 버튼을
       눌러주세요.
       <div className="flex flex-col gap-2 mt-4">

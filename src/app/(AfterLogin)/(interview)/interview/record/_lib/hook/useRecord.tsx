@@ -21,6 +21,7 @@ import {
   interviewOptionState,
   mediaOptionState,
 } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { getUserDailyLimits } from "../api/getUserDailyLimits";
 
 const useRecord = () => {
   const [interviewOption, setInterviewOption] = useRecoilState(interviewOptionState);
@@ -117,9 +118,12 @@ const useRecord = () => {
         // 값 초기화
         setInterviewOption({ ...interviewOption, questions: [] });
         setMediaOption({ ...mediaOption, media: null });
+        const { maxCount, currentCount } = await getUserDailyLimits();
 
         openModal(
           <UploadCompletionModal
+            feedbackCurrentCount={currentCount}
+            feedbackLimitCount={maxCount}
             disableBackdropClick={true}
             encodedBlob={encodedBlob}
             isPublic={metadata.exposure}
