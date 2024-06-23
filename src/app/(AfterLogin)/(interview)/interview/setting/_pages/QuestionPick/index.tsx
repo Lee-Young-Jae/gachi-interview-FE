@@ -27,7 +27,6 @@ const QuestionPick = () => {
       setSelectedWorkbookId(questionList[questionList.length - 1].listId);
   }, [questionList]);
 
-  // TODO: Loading 컴포넌트 추가
   if (!questionList) return null;
 
   const submitHandler = ({ title, job }: { title: string; job: string }) => {
@@ -36,23 +35,25 @@ const QuestionPick = () => {
   };
 
   if (questionList.length === 0) {
-    return <AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />;
+    return (
+      <div className="flex items-center justify-center w-full h-full overflow-hidden relative">
+        <AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col sm:flex-row">
-      <>
-        <SelectWorkbookSection
-          selectedWorkbookId={selectedWorkbookId}
-          setSelectedWorkbookId={setSelectedWorkbookId}
-        />
-        <SelectQuestionSection
-          workbookId={selectedWorkbookId}
-          questionTitle={
-            questionList.find((question) => question.listId === selectedWorkbookId)?.title || ""
-          }
-        />
-      </>
+      <SelectWorkbookSection
+        selectedWorkbookId={selectedWorkbookId}
+        setSelectedWorkbookId={setSelectedWorkbookId}
+      />
+      <SelectQuestionSection
+        workbookId={selectedWorkbookId}
+        questionTitle={
+          questionList.find((question) => question.listId === selectedWorkbookId)?.title || ""
+        }
+      />
     </div>
   );
 };
