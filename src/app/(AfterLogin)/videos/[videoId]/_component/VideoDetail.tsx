@@ -146,6 +146,8 @@ const VideoDetail = ({ videoId }: VideoDetailProps) => {
             className="w-full object-cover"
             src={videoData.videoLink}
             controls
+            title={`당신을 위한 AI 면접 서비스_같이면접 - ${videoData.videoTitle}`}
+            preload="metadata"
           />
         </div>
       </div>

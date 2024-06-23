@@ -2,18 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { SlCamrecorder } from "react-icons/sl";
-import {
-  BsPersonBadgeFill,
-  BsBoomboxFill,
-  BsPeopleFill,
-  BsPersonFill,
-  BsPersonBoundingBox,
-} from "react-icons/bs";
-import { FaBell } from "react-icons/fa";
-
-import { MdOutlinePlaylistPlay, MdGroups } from "react-icons/md";
-import { CgProfile } from "react-icons/cg";
+import { BsPeopleFill } from "react-icons/bs";
 import { HiTv, HiUserCircle, HiBellAlert, HiSquares2X2 } from "react-icons/hi2";
 import { usePathname, useRouter } from "next/navigation";
 import RQProvider from "./_component/RQProvider";
@@ -93,6 +82,7 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
           {/* 데스크탑 네비게이션 (Side)*/}
           <div className="hidden md:flex min-h-screen fixed top-0 left-0 w-64 bg-white shadow-lg z-10">
             <div className="flex flex-col justify-between w-64">
+              {/* 로고 블러 */}
               <div className="flex items-center justify-center h-20 border-b text-black font-bold text-xl">
                 <Logo />
               </div>
