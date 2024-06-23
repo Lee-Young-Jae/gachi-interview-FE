@@ -3,6 +3,7 @@ import ready from "../../../../../../../../../public/CreateQuestionAIL.json";
 import { Suspense, useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import { useModal } from "@/components/Modal/useModal";
+import { addJosa } from "@/lib/utils/hangul";
 
 const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
