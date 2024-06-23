@@ -1,6 +1,6 @@
 "use client";
 
-import interviewImage from "../../../../public/interview.json";
+import logo from "../../../../public/logo.json";
 import landingL1 from "../../../../public/landingL1.json";
 import landingL2 from "../../../../public/landingL2.json";
 import landingL3 from "../../../../public/landingL3.json";
@@ -43,12 +43,8 @@ export default function Login() {
         id="landing_root"
         className="relative flex flex-col md:flex-row justify-center items-center min-h-screen bg-gradient-to-r from-slate-100 to-white"
       >
-        <div className="absolute inset-0 z-0">
-          {/* <Lottie play animationData={interviewImage} className="sticky top-0 opacity-20" /> */}
-        </div>
-
         <div className="relative z-10 flex flex-col p-4 md:p-16 shadow-lg rounded-lg md:w-1/2 bg-white backdrop-blur-2xl bg-opacity-70">
-          <div className="w-full flex flex-col items-center">
+          <div className="w-full h-dvh flex flex-col items-center">
             <span className="text-sm text-gray-800 w-full text-right">
               <a
                 href="https://gachi-interview.notion.site/b445a6bbfa2142458be54beef487fecd?pvs=4"
@@ -59,15 +55,18 @@ export default function Login() {
                 같이 면접을 소개합니다 (notion)
               </a>
             </span>
-            <h1 className="font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 mt-16">
+            <h1 className="relative font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 mt-10">
               Gachi Interview
             </h1>
+            <Lottie play animationData={logo} className="opacity-50 w-2/4" />
 
-            <p className="font-bold text-4xl text-gray-800 my-6">
-              <span>같이 면접에 오신걸 환영해요!</span>
-            </p>
+            <div className="sticky top-40">
+              <p className="font-bold text-3xl text-gray-800 my-6 text-center">
+                <span>같이 면접에 오신걸 환영해요!</span>
+              </p>
+              <Permission />
+            </div>
           </div>
-          <Permission />
           <SubSection title="면접 준비 시작하기" lottieSrc={landingL1}>
             면접 가기 전 연습이 필요하신가요?
             <br />
