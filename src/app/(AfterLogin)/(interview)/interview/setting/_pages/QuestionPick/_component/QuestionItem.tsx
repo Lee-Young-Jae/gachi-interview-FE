@@ -1,6 +1,6 @@
 import Modal from "@/components/Modal";
 import { useModal } from "@/components/Modal/useModal";
-import { AiOutlineSearch, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { useDeleteQuestionMutation } from "../../../_lib/queries/useQuestions";
 import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
@@ -24,7 +24,7 @@ const QuestionItem = ({
   workbookId,
 }: QuestionItemProps) => {
   const { openModal, closeModal } = useModal();
-  const { mutate, isSuccess } = useDeleteQuestionMutation();
+  const { mutate } = useDeleteQuestionMutation();
   const userId = useRecoilValue(userIdState);
 
   const openDeleteModal = () => {
@@ -57,66 +57,51 @@ const QuestionItem = ({
     );
   };
 
-  const openDetailModal = () => {
-    openModal(
-      <Modal header="질문 상세" footer={null}>
-        <div className="flex flex-col w-full">
-          <label className="text-gray-500">Q.</label>
-          <textarea
-            className="text-gray-700 text-sm bg-gray-100 p-2 rounded-md break-words resize-none"
-            value={content}
-            readOnly
-          />
-          <label className="text-gray-500 mt-4">A.</label>
-          <textarea
-            className="w-full text-gray-700 text-sm bg-gray-100 p-2 rounded-md break-words resize-none h-36"
-            value={answer}
-            readOnly
-          />
-        </div>
-      </Modal>,
-    );
-  };
-
   return (
-    <li
-      onClick={() => onSelect(id)}
-      className="px-4 py-4 flex items-center border-b transition-colors hover:bg-muted/50 group cursor-pointer"
-    >
-      <input
-        id={id.toString()}
-        className="cursor-pointer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-        type="checkbox"
-        checked={checked}
-        readOnly
-        value={id}
-      />
-
-      <label
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        htmlFor={id.toString()}
-        className="ml-12 cursor-pointer text-gray-700 line-clamp-1 select-none"
+    <>
+      <li
+        onClick={() => onSelect(id)}
+        className="px-4 py-4 flex border-b transition-colors hover:bg-muted/50 group relative"
       >
-        {content}
-      </label>
-      <div
-        className="ml-auto flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <AiOutlineDelete
-          onClick={openDeleteModal}
-          className="cursor-pointer opacity-0 group-hover:opacity-100 hover:scale-110 transition-transform duration-200"
+        <input
+          id={id.toString()}
+          className="cursor-pointer absolute top-5 h-4 w-4"
+          type="checkbox"
+          checked={checked}
+          readOnly
+          value={id}
         />
-        <AiOutlineSearch
-          onClick={openDetailModal}
-          className="cursor-pointer opacity-0 group-hover:opacity-100 hover:scale-110 transition-transform duration-200"
-        />
-      </div>
-    </li>
+        <div className="flex flex-col cursor-pointer w-full gap-3">
+          <div className="ml-11 flex justify-between w-full items-center">
+            <label
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              htmlFor={id.toString()}
+              className="cursor-pointer text-gray-700 line-clamp-1 select-none"
+            >
+              {content}
+            </label>
+            <div
+              className="flex items-center absolute right-4 group-hover:opacity-100 opacity-0 transition-opacity duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <AiOutlineDelete
+                onClick={openDeleteModal}
+                className="cursor-pointer opacity-0 group-hover:opacity-100 hover:scale-110 transition-transform duration-200"
+              />
+            </div>
+          </div>
+          {checked && (
+            <div className="flex animate-fadeIn ml-11">
+              <p className="text-sm text-gray-500">{answer}</p>
+            </div>
+          )}
+        </div>
+      </li>
+    </>
   );
 };
 

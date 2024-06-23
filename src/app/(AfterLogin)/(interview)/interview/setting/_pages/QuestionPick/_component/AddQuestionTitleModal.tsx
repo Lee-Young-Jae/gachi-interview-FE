@@ -56,12 +56,12 @@ const AddQuestionTitleModal = ({ onSubmit }: AddQuestionTitleModalProps) => {
 
   const validate = () => {
     if (title.length === 0) {
-      setError("질문 세트의 제목을 입력해주세요.");
+      setError("질문지의 제목을 입력해주세요.");
       return false;
     }
 
     if (title.length > 50) {
-      setError("질문 세트의 제목은 50자 이내로 입력해주세요.");
+      setError("질문지의 제목은 50자 이내로 입력해주세요.");
       return false;
     }
 
@@ -91,6 +91,7 @@ const AddQuestionTitleModal = ({ onSubmit }: AddQuestionTitleModalProps) => {
       title,
       job: newJob,
     });
+    setJob({ MajorCategory: "", name: "" });
     isAIExample && setIsAIExample(false);
   };
 

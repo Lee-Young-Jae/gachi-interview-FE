@@ -3,9 +3,18 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { SlCamrecorder } from "react-icons/sl";
+import {
+  BsPersonBadgeFill,
+  BsBoomboxFill,
+  BsPeopleFill,
+  BsPersonFill,
+  BsPersonBoundingBox,
+} from "react-icons/bs";
+import { FaBell } from "react-icons/fa";
+
 import { MdOutlinePlaylistPlay, MdGroups } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { HiOutlineBellAlert } from "react-icons/hi2";
+import { HiTv, HiUserCircle, HiBellAlert, HiSquares2X2 } from "react-icons/hi2";
 import { usePathname, useRouter } from "next/navigation";
 import RQProvider from "./_component/RQProvider";
 import AlertMessage from "./_component/AlertMessage";
@@ -13,6 +22,18 @@ import { useModal } from "@/components/Modal/useModal";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { getPageConfig } from "./pageConfig";
+import dynamic from "next/dynamic";
+import logo from "../../../public/logo.json";
+
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
+
+const Logo = () => {
+  return (
+    <div className="flex items-center justify-start w-full h-full ml-4 overflow-hidden">
+      <Lottie play animationData={logo} className="h-[70px]" />
+    </div>
+  );
+};
 
 export default function AfterLoginLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -22,11 +43,11 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
   const { openModal, closeModal } = useModal();
 
   const navItems = [
-    { href: "/interview/setting", icon: SlCamrecorder, label: "인터뷰" },
-    { href: "/videos", icon: MdOutlinePlaylistPlay, label: "면접 영상 목록" },
-    { href: "/community?tab=reviews", icon: MdGroups, label: "커뮤니티" },
-    { href: "/my?tab=videos", icon: CgProfile, label: "마이페이지" },
-    { href: "/alerts", icon: HiOutlineBellAlert, label: "알림" },
+    { href: "/interview/setting", icon: HiTv, label: "모의 면접" },
+    { href: "/videos", icon: HiSquares2X2, label: "면접 목록" },
+    { href: "/community?tab=reviews", icon: BsPeopleFill, label: "커뮤니티" },
+    { href: "/my?tab=videos", icon: HiUserCircle, label: "마이페이지" },
+    { href: "/alerts", icon: HiBellAlert, label: "알림" },
   ];
 
   const getCurrentLabel = () => {
@@ -72,8 +93,8 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
           {/* 데스크탑 네비게이션 (Side)*/}
           <div className="hidden md:flex min-h-screen fixed top-0 left-0 w-64 bg-white shadow-lg z-10">
             <div className="flex flex-col justify-between w-64">
-              <div className="flex items-center justify-center h-20 bg-gray-100 text-black font-bold text-xl">
-                <img src="/logo.png" alt="logo" className="w-20" />
+              <div className="flex items-center justify-center h-20 border-b text-black font-bold text-xl">
+                <Logo />
               </div>
               <nav className="flex flex-col flex-1">
                 {navItems.map((item) => {

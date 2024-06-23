@@ -24,6 +24,7 @@ interface SearchProps {
 const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   const [inputValue, setInputValue] = useState<string>(keyword);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
 
   const debouncedSetKeyword = useCallback(
     debounce((value: string) => {
@@ -43,16 +44,24 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   }, [keyword]);
 
   return (
-    <div className="relative flex items-center w-48">
-      <CiSearch className="absolute text-muted-foreground left-2" />
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="무엇을 찾고 계신가요?"
-        className="w-full pl-8 pr-2 py-1 rounded-md bg-background border-none border-input text-basic focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        value={inputValue}
-        onChange={handleChange}
+    <div className="relative flex items-center">
+      <CiSearch
+        className="cursor-pointer mr-2 h-6 w-6 transition-colors"
+        onClick={() => {
+          setOpen((prev) => !prev);
+          inputRef.current?.focus();
+        }}
       />
+      {open && (
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="검색어를 입력하세요"
+          className="border-2 border-gray-200 rounded-md w-60 h-8 pl-2"
+          value={inputValue}
+          onChange={handleChange}
+        />
+      )}
     </div>
   );
 });
@@ -113,7 +122,7 @@ const Videos = () => {
         </div>
       </div>
 
-      <span className="text-sm">전체 {totalElement}</span>
+      <span className="text-base md:text-lg">전체 {totalElement}</span>
 
       {videoList.length === 0 && <NoData />}
       {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> */}

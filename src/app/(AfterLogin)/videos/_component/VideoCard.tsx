@@ -76,12 +76,12 @@ const VideoCard = ({ video }: { video: Video }) => {
     //   </CardFooter>
     // </Card>
     <article
-      className="flex flex-col h-full cursor-pointer"
+      className="flex flex-col h-full cursor-pointer mt-2"
       onClick={handleCardClick}
       key={video.videoId}
     >
-      <div className="relative flex justify-center rounded-md overflow-hidden text-white">
-        <div className="flex items-center gap-1 absolute top-2 left-2 text-sm bg-black bg-opacity-50 px-1 py-0.5 rounded-full flex-wrap">
+      <div className="relative flex justify-center rounded-2xl overflow-hidden text-white">
+        <div className="flex items-center gap-1 absolute top-2 left-2 text-sm md:text-base bg-black bg-opacity-50 px-1 py-0.5 rounded-full flex-wrap">
           <img
             src={video.image}
             alt="프로필이미지"
@@ -104,19 +104,21 @@ const VideoCard = ({ video }: { video: Video }) => {
           alt="thumbnail"
           className="w-full h-40 md:h-48 lg:h-96 object-cover"
         />
-        <div className="flex items-center absolute bottom-2 right-2 text-sm bg-black bg-opacity-50 px-1 py-0.5 rounded-full">
+        <div className="flex items-center absolute bottom-2 right-2 text-sm md:text-base bg-black bg-opacity-50 px-1 py-0.5 rounded-full">
           {video.liked ? <AiFillLike className="mr-1" /> : <AiOutlineLike className="mr-1" />}
           <span className="text-xs">{video.numOfLike}</span>
         </div>
       </div>
-      <h2 className="text-base text-gray-800 truncate">{video.videoTitle}</h2>
+      <h2 className="text-base md:text-2xl text-gray-800 truncate mt-2 font-bold">
+        {video.videoTitle}
+      </h2>
       <div className="flex-wrap flex">
         {(showAllTags ? video.tags : video.tags.slice(0, MAX_TAGS_TO_SHOW)).map(
           (tag, index) =>
             tag && (
               <span
                 key={index}
-                className="py-1 text-sm mt-1 mr-2 max-w-[190px] truncate tracking-tight"
+                className="py-1 text-sm md:text-base mt-1 mr-2 max-w-[190px] truncate tracking-tight"
               >
                 #{tag}
               </span>
@@ -128,7 +130,9 @@ const VideoCard = ({ video }: { video: Video }) => {
           </button>
         )}
       </div>
-      <span className="text-sm text-muted-foreground">{formatRelativeTime(video.time)}</span>
+      <span className="text-sm md:text-base text-muted-foreground">
+        {formatRelativeTime(video.time)}
+      </span>
     </article>
   );
 };

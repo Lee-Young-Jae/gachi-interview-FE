@@ -6,7 +6,20 @@ import {
 import AddQuestionTitleModal from "./AddQuestionTitleModal";
 import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import Modal from "@/components/Modal";
+import dynamic from "next/dynamic";
+import vacation from "../../../../../../../../../public/vacationL.json";
+
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
+
+const Vacation = () => {
+  return (
+    <div className="flex items-center justify-center w-full h-full overflow-hidden">
+      <Lottie play animationData={vacation} className="object-scale-down max-h-96" />
+    </div>
+  );
+};
 
 interface SelectWorkbookSectionProps {
   selectedWorkbookId: number | null;
@@ -18,7 +31,7 @@ const SelectWorkbookSection = ({
   setSelectedWorkbookId,
 }: SelectWorkbookSectionProps) => {
   const { data: questionList } = useGetWorkbookListQuery();
-  const { mutate: createTitleMutate, isSuccess } = usePostWorkbookMutation();
+  const { mutate: createTitleMutate, isSuccess, data } = usePostWorkbookMutation();
   const { openModal, closeModal } = useModal();
   const userId = useRecoilValue(userIdState);
 
@@ -31,10 +44,36 @@ const SelectWorkbookSection = ({
   };
 
   useEffect(() => {
+    if (data?.status === 429) {
+      openModal(
+        <Modal
+          header="질문지 생성 실패 - 휴식 중인 AI"
+          footer={
+            <button className="btn btn-primary" onClick={closeModal}>
+              확인
+            </button>
+          }
+        >
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center w-full h-full overflow-hidden">
+                휴식 중인 AI를 불러오는 중...
+              </div>
+            }
+          >
+            <Vacation />
+          </Suspense>
+          <p>같이면접 질문/답변 AI가 잠시 휴식중이에요... 😅</p> <br />
+          <p>아쉽지만 내일 다시 요청해주시면 더 좋은 결과를 보내드릴게요!</p>
+        </Modal>,
+      );
+      return;
+    }
+
     if (isSuccess) {
       closeModal();
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   //TODO: Popover로 워크북 삭제 기능 추가
   return (

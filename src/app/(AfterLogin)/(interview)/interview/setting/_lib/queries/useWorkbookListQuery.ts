@@ -22,9 +22,17 @@ export const useGetWorkbookListQuery = () => {
   });
 };
 
+type ResponseWorkBookPost = {
+  error: string;
+  message: string;
+  path: null;
+  status: number;
+  timestamp: string;
+} | null;
+
 export const usePostWorkbookMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation<Response, Error, { userId: number; title: string; job: string }>({
+  return useMutation<ResponseWorkBookPost, Error, { userId: number; title: string; job: string }>({
     mutationKey: ["workbookList"],
     mutationFn: (data) => postWorkbook(data),
     onSuccess: () => {
