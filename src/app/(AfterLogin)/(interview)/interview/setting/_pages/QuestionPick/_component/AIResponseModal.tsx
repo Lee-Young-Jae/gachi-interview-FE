@@ -39,8 +39,8 @@ const AIResponseModal = ({ job }: AIResponseModalProps) => {
     { message: `${job.MajorCategory} 관계자로부터 질문을 받아오는 중...`, icon: "🔍" },
     { message: `${job.name} 직무에 대한 질문을 준비하는 중...`, icon: "🔍" },
     { message: `${job.name}에 대한 정보를 찾는 중...`, icon: "🔍" },
-    { message: `${addJosa(job.name)} 구글에 검색해보는 중...`, icon: "🔍" },
-    { message: `AI가 ${addJosa(job.name)} 학습하는 중...`, icon: "🔍" },
+    { message: `${addJosa(job.name, "을/를")} 구글에 검색해보는 중...`, icon: "🔍" },
+    { message: `AI가 ${(addJosa(job.name), "을/를")} 학습하는 중...`, icon: "🔍" },
     { message: `${job.name} 관련 리포트를 읽어보는 중...`, icon: "🔍" },
     { message: `${job.MajorCategory} 책을 읽어보는 중...`, icon: "🔍" },
   ];

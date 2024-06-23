@@ -13,10 +13,10 @@ import vacation from "../../../../../../../../../public/vacationL.json";
 
 const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
-const Vacation = () => {
+export const Vacation = () => {
   return (
-    <div className="flex items-center justify-center w-full h-full overflow-hidden">
-      <Lottie play animationData={vacation} className="object-scale-down max-h-96" />
+    <div className="flex items-center justify-center w-full h-3/4 overflow-hidden">
+      <Lottie play animationData={vacation} className="object-scale-down w-3/4" />
     </div>
   );
 };

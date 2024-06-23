@@ -58,7 +58,7 @@ export default function Login() {
             <h1 className="relative font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 mt-10">
               Gachi Interview
             </h1>
-            <Lottie play animationData={logo} className="opacity-50 w-2/4" />
+            <Lottie play animationData={logo} className="w-5/12" />
 
             <div className="sticky top-40">
               <p className="font-bold text-3xl text-gray-800 my-6 text-center">
