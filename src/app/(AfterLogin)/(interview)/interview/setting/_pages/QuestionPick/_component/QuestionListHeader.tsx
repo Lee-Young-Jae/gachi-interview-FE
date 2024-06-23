@@ -59,16 +59,24 @@ const QuestionListHeader = ({
   console.log(questions);
 
   return (
-    <header className="group px-4 py-3 flex flex-row items-center border-b transition-colors hover:bg-muted/50">
+    <header
+      className="group px-4 py-3 flex flex-row items-center border-b transition-colors hover:bg-muted/50 cursor-pointer"
+      onClick={onSelect}
+    >
       <input
         className="cursor-pointer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         type="checkbox"
-        onChange={onSelect}
+        // onChange={onSelect}
         checked={questions?.every((question) => interviewOption.questions.includes(question))}
+        readOnly
         id="all"
         value="all"
       />
-      <label htmlFor="all" className="ml-7 text-gray-500 cursor-pointer">
+      <label
+        htmlFor="all"
+        className="ml-7 text-gray-500 cursor-pointer"
+        onClick={(e) => e.stopPropagation()}
+      >
         {questionTitle} <sub>(모두 선택)</sub>
       </label>
 

@@ -53,13 +53,13 @@ const QuestionList = ({ workbookId, onSelect, interviewOption }: QuestionListPro
           workbookId={workbookId}
         />
       ))}
-      <li className="px-4 py-4 flex flex-col items-center justify-center border-b transition-colors hover:bg-muted/50 group">
+      <li className="px-4 py-4 flex flex-col items-center justify-center transition-colors">
         {questionList?.length === 0 && (
-          <label className="text-gray-500 text-sm">
+          <label className="text-gray-500 text-sm mb-2">
             등록된 질문이 없네요. 버튼을 눌러 질문을 추가해보세요!
           </label>
         )}
-        <Button className="mt-2" variant="outline" onClick={openAddQuestionModalHandler}>
+        <Button variant="outline" onClick={openAddQuestionModalHandler}>
           면접 질문 추가하기
         </Button>
       </li>

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "같이면접",
   description: "같이 면접 준비하는 서비스.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
   },
 };
 

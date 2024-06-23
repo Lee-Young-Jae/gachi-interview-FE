@@ -59,7 +59,7 @@ const QuestionSelectionSection = ({ workbookId, questionTitle }: QuestionSelecti
 
   return (
     <div className="flex-col w-full ml-2">
-      <div className="rounded-md border w-full h-96 overflow-y-auto">
+      <div className="rounded-md border w-full max-h-96 overflow-y-auto">
         <QuestionListHeader
           questions={questions}
           questionTitle={workbookId ? questionTitle : "질문 세트가 없어요."}

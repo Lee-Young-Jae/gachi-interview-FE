@@ -72,7 +72,7 @@ const QuestionItem = ({
           value={id}
         />
         <div className="flex flex-col cursor-pointer w-full gap-3">
-          <div className="ml-11 flex justify-between w-full items-center">
+          <div className="ml-11 flex justify-between items-center">
             <label
               onClick={(e) => {
                 e.stopPropagation();
