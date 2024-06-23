@@ -75,6 +75,10 @@ const config = {
           "0%": { opacity: "1", transform: "translateY(0)" },
           "100%": { opacity: "0", transform: "translateY(10px)" },
         },
+        slideRightIn: {
+          "0%": { opacity: "0", transform: "translateX(60%)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
@@ -106,6 +110,7 @@ const config = {
         slideUp: "slideUp 0.3s ease",
         slideDown: "slideDown 0.3s ease",
         fadeOutAndSlideDown: "fadeOutAndSlideDown 0.4s ease",
+        slideRightIn: "slideRightIn 0.3s ease-out",
       },
     },
   },

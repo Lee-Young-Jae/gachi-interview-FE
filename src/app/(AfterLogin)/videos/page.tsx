@@ -44,24 +44,36 @@ const Search = memo(({ setKeyword, keyword }: SearchProps) => {
   }, [keyword]);
 
   return (
-    <div className="relative flex items-center">
-      <CiSearch
-        className="cursor-pointer mr-2 h-6 w-6 transition-colors"
-        onClick={() => {
-          setOpen((prev) => !prev);
-          inputRef.current?.focus();
-        }}
-      />
-      {open && (
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="검색어를 입력하세요"
-          className="border-2 border-gray-200 rounded-md w-60 h-8 pl-2"
-          value={inputValue}
-          onChange={handleChange}
-        />
-      )}
+    <div className="overflow-hidden">
+      <div className={`flex items-center ${open ? "animate-slideRightIn" : ""}`}>
+        {open ? (
+          <div className="flex items-center relative">
+            <CiSearch
+              className="cursor-pointer mr-2 h-6 w-6 transition-colors absolute text-gray-400 z-10 left-2 group-hover:text-gray-600"
+              onClick={() => {
+                setOpen((prev) => !prev);
+                inputRef.current?.focus();
+              }}
+            />
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="검색어를 입력하세요"
+              className="border-2 border-gray-200 rounded-md w-60 h-8 transition-transform duration-500 transform pl-10"
+              value={inputValue}
+              onChange={handleChange}
+            />
+          </div>
+        ) : (
+          <CiSearch
+            className="cursor-pointer h-6 w-6 transition-colors"
+            onClick={() => {
+              setOpen((prev) => !prev);
+              inputRef.current?.focus();
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 });
