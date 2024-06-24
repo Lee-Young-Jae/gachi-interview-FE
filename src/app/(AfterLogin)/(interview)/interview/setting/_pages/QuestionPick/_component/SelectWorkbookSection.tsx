@@ -39,7 +39,6 @@ const SelectWorkbookSection = ({
     const submitHandler = ({ title, job }: { title: string; job: string }) => {
       createTitleMutate({ userId, title, job });
     };
-
     openModal(<AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />);
   };
 
@@ -75,7 +74,6 @@ const SelectWorkbookSection = ({
     }
   }, [isSuccess, data]);
 
-  //TODO: Popover로 워크북 삭제 기능 추가
   return (
     <ul>
       {questionList &&

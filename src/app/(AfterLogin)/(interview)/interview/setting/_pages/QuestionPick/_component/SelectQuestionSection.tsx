@@ -12,7 +12,7 @@ interface QuestionSelectionSectionProps {
 
 const QuestionSelectionSection = ({ workbookId, questionTitle }: QuestionSelectionSectionProps) => {
   const [interviewOption, setInterviewOption] = useRecoilState(interviewOptionState);
-  const { data: questions, isLoading } = useGetQuestionsQuery({ workbookId: workbookId || 0 });
+  const { data: questions, isLoading } = useGetQuestionsQuery({ workbookId: workbookId || -1 });
 
   const getPrevQuestionIds = () => interviewOption.questions.map((question) => question.questionId);
 
@@ -20,19 +20,10 @@ const QuestionSelectionSection = ({ workbookId, questionTitle }: QuestionSelecti
     if (!questions) return;
     setInterviewOption((prev) => {
       const prevQuestionIds = getPrevQuestionIds();
-      const notAllSelected = questions.every((question) =>
+      const isAllSelected = questions.every((question) =>
         prevQuestionIds.includes(question.questionId),
       );
-      const updatedQuestions = notAllSelected
-        ? prev.questions.filter(
-            (prevQuestion) =>
-              !questions.some((question) => question.questionId === prevQuestion.questionId),
-          )
-        : [
-            ...prev.questions,
-            ...questions.filter((question) => !prevQuestionIds.includes(question.questionId)),
-          ];
-
+      const updatedQuestions = isAllSelected ? [] : questions;
       return {
         ...prev,
         questions: updatedQuestions as QuestionType[],
@@ -44,10 +35,16 @@ const QuestionSelectionSection = ({ workbookId, questionTitle }: QuestionSelecti
     if (!questions) return;
     setInterviewOption((prev) => {
       const prevQuestionIds = getPrevQuestionIds();
+
       const updatedQuestions = prevQuestionIds.includes(id)
         ? prev.questions.filter((question) => question.questionId !== id)
-        : [...prev.questions, questions.find((question) => question.questionId === id) || []];
-
+        : [
+            // 기존에 선택된 질문들에서 다른 워크북의 질문을 제거하고 새로 선택한 질문을 추가
+            ...prev.questions.filter((question) =>
+              questions.map((item) => item.questionId).includes(question.questionId),
+            ),
+            questions.find((question) => question.questionId === id) || [],
+          ];
       return {
         ...prev,
         questions: updatedQuestions as QuestionType[],

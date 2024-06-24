@@ -7,6 +7,7 @@ import { useDeleteWorkbookMutation } from "../../../_lib/queries/useWorkbookList
 import { useModal } from "@/components/Modal/useModal";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
+import { useRecoilState } from "recoil";
 
 interface SelectQuestionHeaderProps {
   questions: ResponseQuestions | undefined;
@@ -21,7 +22,7 @@ const QuestionListHeader = ({
   onSelect,
   workbookId,
 }: SelectQuestionHeaderProps) => {
-  const interviewOption = useRecoilValue(interviewOptionState);
+  const [interviewOption, setInterviewOption] = useRecoilState(interviewOptionState);
   const { mutate } = useDeleteWorkbookMutation();
   const userId = useRecoilValue(userIdState);
   const { openModal, closeModal } = useModal();
@@ -30,12 +31,18 @@ const QuestionListHeader = ({
     const handleDelete = () => {
       if (!workbookId) return;
       mutate({ workbookId, userId });
+
+      // 질문지 삭제 시, 선택된 질문들도 초기화
+      setInterviewOption((prev) => ({
+        ...prev,
+        questions: [],
+      }));
       closeModal();
     };
 
     openModal(
       <Modal
-        header="워크북 삭제"
+        header="질문지 삭제"
         footer={
           <>
             <Button variant="secondary" onClick={closeModal}>
@@ -48,15 +55,14 @@ const QuestionListHeader = ({
         }
       >
         <>
-          <p>선택한 질문세트(워크북)을 삭제하시겠습니까?</p>
-          <p>포함된 질문도 함께 삭제됩니다.</p>
+          <p>선택한 질문지를 삭제할까요?</p>
+          <p>포함된 질문들도 함께 삭제됩니다.</p>
         </>
       </Modal>,
     );
   };
 
   if (!questions) return null;
-  console.log(questions);
 
   return (
     <header
@@ -66,7 +72,6 @@ const QuestionListHeader = ({
       <input
         className="cursor-pointer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         type="checkbox"
-        // onChange={onSelect}
         checked={questions?.every((question) => interviewOption.questions.includes(question))}
         readOnly
         id="all"

@@ -19,7 +19,6 @@ const QuestionPick = () => {
     questionList?.at(-1)?.listId || null,
   );
   const userId = useRecoilValue(userIdState);
-
   const { mutate: createTitleMutate, isSuccess, data } = usePostWorkbookMutation();
   const { closeModal, openModal } = useModal();
 

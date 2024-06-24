@@ -2,7 +2,8 @@ import Modal from "@/components/Modal";
 import { useModal } from "@/components/Modal/useModal";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDeleteQuestionMutation } from "../../../_lib/queries/useQuestions";
-import { useRecoilValue } from "recoil";
+import { interviewOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { userIdState } from "@/store/auth";
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +27,7 @@ const QuestionItem = ({
   const { openModal, closeModal } = useModal();
   const { mutate } = useDeleteQuestionMutation();
   const userId = useRecoilValue(userIdState);
+  const [_, setInterviewOption] = useRecoilState(interviewOptionState);
 
   const openDeleteModal = () => {
     const handleDelete = () => {
@@ -34,6 +36,12 @@ const QuestionItem = ({
         questionId: id,
         workbookId: workbookId,
       });
+
+      // 질문 삭제 시, 해당 질문이 선택되어 있을 경우 선택된 질문들에서 제거
+      setInterviewOption((prev) => ({
+        ...prev,
+        questions: prev.questions.filter((question) => question.questionId !== id),
+      }));
 
       closeModal();
     };
