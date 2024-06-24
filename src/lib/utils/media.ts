@@ -43,6 +43,7 @@ export const getAudioOnlyMedia = async (audioDeviceId?: string): Promise<MediaSt
 
     return media;
   } catch (error) {
+    console.error(error);
     throw new Error();
   }
 };
