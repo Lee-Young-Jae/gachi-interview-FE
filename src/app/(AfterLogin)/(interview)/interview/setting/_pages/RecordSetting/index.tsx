@@ -36,7 +36,7 @@ const RecordSetting = () => {
         />
       </div>
       {!cameraDevices.length && (
-        <div>
+        <div className="mt-2">
           <span>카메라가 없으신가요? </span>
           <button className="text-blue-500" onClick={handleAudioOnly}>
             오디오만 녹화하기

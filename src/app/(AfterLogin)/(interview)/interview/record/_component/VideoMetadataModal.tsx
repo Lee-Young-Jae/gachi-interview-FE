@@ -145,19 +145,18 @@ const VideoMetadataModal = ({
               />
             ))}
           </div>
-
-          <span className="block text-basic text-muted-foreground mt-2">내 면접 답변</span>
-          <sub className="block text-muted-foreground mb-1">
-            같이면접 AI가 인식한 음성 결과입니다. 수정이 필요하다면 직접 입력해주세요.
-          </sub>
-
+          <p className="flex flex-col">
+            <span className="text-basic text-muted-foreground mt-2">내 면접 답변</span>
+            <sub className="text-muted-foreground text-xs">
+              AI가 인식한 음성 결과입니다. 수정이 필요하다면 직접 입력해주세요.
+            </sub>
+          </p>
           <textarea
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
-            placeholder="음성인식 결과가 제대로 나오지 않았다면 직접 입력해주셔도 됩니다."
+            placeholder="내 면접 답변을 입력하세요."
             value={metadata.transcript}
             onChange={handleTranscriptChange}
           />
-
           <span className="block text-basic text-muted-foreground">공개 여부</span>
           <label
             htmlFor="public"
