@@ -28,7 +28,7 @@ const useRecord = () => {
   const [mediaOption, setMediaOption] = useRecoilState(mediaOptionState);
 
   const { mutateAsync: postInterviewMutate } = usePostInterviewMutation(); // 비디오 업로드 후 videoId를 사용하기 위해 async-mutate 사용
-  const { mutate: postFeedbackMutate } = usePostFeedbackMutation();
+  const { mutateAsync: postFeedbackMutate } = usePostFeedbackMutation();
   const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
   const { openModal } = useModal();
   const [isRecording, setIsRecording] = useState(false);
@@ -110,7 +110,7 @@ const useRecord = () => {
         });
 
         // 피드백 POST
-        postFeedbackMutate({
+        await postFeedbackMutate({
           videoId: data?.videoId,
           content: metadata.transcript,
         });
