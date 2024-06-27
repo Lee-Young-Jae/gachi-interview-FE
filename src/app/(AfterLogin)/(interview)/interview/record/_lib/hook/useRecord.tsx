@@ -28,7 +28,7 @@ const useRecord = () => {
   const [mediaOption, setMediaOption] = useRecoilState(mediaOptionState);
 
   const { mutateAsync: postInterviewMutate } = usePostInterviewMutation(); // 비디오 업로드 후 videoId를 사용하기 위해 async-mutate 사용
-  const { mutateAsync: postFeedbackMutate } = usePostFeedbackMutation();
+  const { mutate: postFeedbackMutate } = usePostFeedbackMutation();
   const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
   const { openModal } = useModal();
   const [isRecording, setIsRecording] = useState(false);
@@ -110,7 +110,7 @@ const useRecord = () => {
         });
 
         // 피드백 POST
-        await postFeedbackMutate({
+        postFeedbackMutate({
           videoId: data?.videoId,
           content: metadata.transcript,
         });
@@ -118,8 +118,11 @@ const useRecord = () => {
         // 값 초기화
         setInterviewOption({ ...interviewOption, questions: [] });
         setMediaOption({ ...mediaOption, media: null });
+
+        // 남은 피드백 횟수 확인
         const { maxCount, currentCount } = await getUserDailyLimits();
 
+        // 모달 열기
         openModal(
           <UploadCompletionModal
             feedbackCurrentCount={currentCount}
