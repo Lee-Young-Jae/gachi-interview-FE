@@ -3,16 +3,15 @@ import getMyReviews from "../_lib/getMyReviews";
 import { Post } from "@/model/Post";
 import PostCard from "../../community/_component/PostCard";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import NoData from "../../_component/NoData";
 
 export default function MyInterviewReviewPosts({ tabParams }: { tabParams: string | undefined }) {
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const { data } = useQuery<Post[], Object, Post[], [_1: string, _2: string, _3: string]>({
     queryKey: ["community", "reviews", "my"],
-    queryFn: ({ queryKey }) => getMyReviews({ queryKey, userId, accessToken }),
+    queryFn: ({ queryKey }) => getMyReviews({ queryKey, userId }),
   });
 
   const posts = Array.isArray(data) ? data : [];

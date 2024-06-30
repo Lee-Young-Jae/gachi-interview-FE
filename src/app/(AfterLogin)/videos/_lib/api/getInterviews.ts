@@ -45,12 +45,6 @@ const getInterviews = async ({
   try {
     const { data } = await customFetcher(
       `/video/list?page=${pageParam}&sortType=${sortType}&keyword=${keyword}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
     );
 
     return data;

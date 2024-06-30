@@ -8,9 +8,6 @@ export interface DeleteWorkbookRequest {
 export const deleteWorkbook = async ({ userId, workbookId }: DeleteWorkbookRequest) => {
   const { response } = await customFetcher(`/workbook/${workbookId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId }),
   });
 

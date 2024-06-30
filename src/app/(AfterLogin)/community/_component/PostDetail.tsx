@@ -8,7 +8,7 @@ import { formatRelativeTime } from "@/lib/utils/days";
 import { Button } from "@/components/ui/button";
 import "./PostDetail.css";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postLike from "../_lib/postLike";
 import { toast } from "react-toastify";
@@ -27,7 +27,6 @@ export default function PostDetail({ post }: { post: Post }) {
   const [convertedContent, setConvertedContent] = useState("");
   const { openModal, closeModal } = useModal();
   const router = useRouter();
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
   const queryClient = useQueryClient();
   const postId = post.postId;
@@ -41,8 +40,7 @@ export default function PostDetail({ post }: { post: Post }) {
 
   // 좋아요 기능을 위한 useMutation 훅을 설정합니다.
   const { mutate: likePost } = useMutation({
-    mutationFn: (params: { userId: number; postId: string; accessToken: string }) =>
-      postLike(params),
+    mutationFn: (params: { userId: number; postId: string }) => postLike(params),
     onMutate: async () => {
       // 좋아요 실행 전에 쿼리를 취소하고 이전 데이터를 백업합니다.
       const queryKey = ["community", postId.toString()];
@@ -95,7 +93,6 @@ export default function PostDetail({ post }: { post: Post }) {
       likePost({
         userId,
         postId,
-        accessToken,
       });
       setIsLiked(true);
       setAnimate(true);
@@ -105,7 +102,6 @@ export default function PostDetail({ post }: { post: Post }) {
       likePost({
         userId,
         postId,
-        accessToken,
       });
       setIsLiked(false);
     }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/Modal/useModal";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import postBoard from "../create/_lib/postBoard";
 import patchPost from "../edit/_lib/patchPost";
 
@@ -37,7 +37,6 @@ export default function PostUpdater({
 
   const queryClient = useQueryClient();
   const { openDialogWithBack } = useModal();
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   useEffect(() => {
@@ -56,7 +55,6 @@ export default function PostUpdater({
       content: string;
       tags: string[];
       category: string;
-      accessToken: string;
       userId: number;
       postId?: string;
     }) => mutationFn(postData),
@@ -91,7 +89,6 @@ export default function PostUpdater({
       content,
       tags: removedDotTags,
       category,
-      accessToken,
       userId,
       postId,
     });

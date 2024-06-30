@@ -1,27 +1,14 @@
 import customFetcher from "@/lib/utils/customFetcher";
 
-export default async function getMyFeedbacks({
-  userId,
-  accessToken,
-}: {
-  userId: number;
-  accessToken: string;
-}) {
+export default async function getMyFeedbacks({ userId }: { userId: number }) {
   try {
-    const { response, data } = await customFetcher(`/user/${userId}/feedbacks`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const { response, data } = await customFetcher(`/user/${userId}/feedbacks`);
 
     if (!response?.ok) {
       throw new Error("Failed to fetch data");
     }
-    console.log("my feedback data", data);
 
-    return await data;
+    return data;
   } catch (error) {
     throw new Error("Failed to fetch data");
   }

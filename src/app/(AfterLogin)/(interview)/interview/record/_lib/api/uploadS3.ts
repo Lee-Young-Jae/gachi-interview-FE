@@ -3,9 +3,6 @@ import customFetcher from "@/lib/utils/customFetcher";
 export const getPresignedUrl = async (videoName: string, thumbnailName: string) => {
   const { data } = await customFetcher(`/interview/presigned`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({
       videoName,
       thumbnailName,

@@ -7,9 +7,6 @@ export interface PostFeedbackRequest {
 const postFeedback = async ({ videoId, content }: PostFeedbackRequest) => {
   const { response, data } = await customFetcher(`/feedback/${videoId}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({
       content: content,
     }),

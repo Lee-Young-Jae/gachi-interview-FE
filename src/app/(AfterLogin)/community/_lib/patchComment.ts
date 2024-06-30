@@ -13,15 +13,12 @@ export default async function patchComment({
 }) {
   const { response, data } = await customFetcher(`/board/${postId}/comments/${commentId}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId, commentId, content }),
   });
 
   if (!response?.ok) {
     throw new Error("Failed to patch comment");
   }
-  // return response.json();
-  return await data;
+
+  return data;
 }

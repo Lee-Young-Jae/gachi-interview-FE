@@ -5,7 +5,6 @@ export default async function patchPost({
   content,
   tags,
   category,
-  accessToken,
   userId,
   postId,
 }: {
@@ -13,17 +12,12 @@ export default async function patchPost({
   content: string;
   tags: string[];
   category: string;
-  accessToken: string;
   userId: number;
   postId?: string;
 }) {
   try {
     const { response, data } = await customFetcher(`/board/${postId}/edit`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
       body: JSON.stringify({
         userId,
         postTitle: title,
@@ -37,7 +31,7 @@ export default async function patchPost({
       throw new Error("Failed to fetch data");
     }
 
-    return await data;
+    return data;
   } catch (error) {
     throw new Error("Failed to fetch data");
   }

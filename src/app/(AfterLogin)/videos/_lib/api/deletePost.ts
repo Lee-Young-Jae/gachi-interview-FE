@@ -8,9 +8,6 @@ export interface DeletePostProps {
 const deletePost = async ({ userId, videoId }: DeletePostProps) => {
   const { data } = await customFetcher(`/video/${videoId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId, videoId }),
   });
 

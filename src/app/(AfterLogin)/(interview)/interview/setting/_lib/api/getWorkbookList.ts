@@ -2,12 +2,7 @@ import customFetcher from "@/lib/utils/customFetcher";
 
 const getWorkbookList = async () => {
   try {
-    const { response, data } = await customFetcher(`/workbook/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const { response, data } = await customFetcher(`/workbook/list`);
 
     return data;
   } catch (error) {

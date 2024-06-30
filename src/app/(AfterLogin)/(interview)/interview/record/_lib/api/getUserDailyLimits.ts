@@ -6,9 +6,7 @@ export type ResponseUserDailyLimits = {
 };
 
 export const getUserDailyLimits = async () => {
-  const { data } = await customFetcher(`/feedback/limits`, {
-    method: "GET",
-  });
+  const { data } = await customFetcher(`/feedback/limits`);
 
   return data;
 };

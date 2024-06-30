@@ -11,9 +11,6 @@ export default async function deleteComment({
 }) {
   const { response, data } = await customFetcher(`/board/${postId}/comments/${commentId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId, commentId }),
   });
 

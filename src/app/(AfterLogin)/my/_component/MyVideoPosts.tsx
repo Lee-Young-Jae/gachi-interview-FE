@@ -3,17 +3,16 @@ import getMyVideos from "../_lib/getMyVideos";
 import VideoCard from "../../videos/_component/VideoCard";
 import { Video } from "@/model/Video";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import NoData from "../../_component/NoData";
 import Loading from "../../_component/Loading";
 
 export default function MyVideoPosts() {
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const { data, error, isLoading } = useQuery<Video[], Object, Video[], [string, string]>({
     queryKey: ["my", "videos"],
-    queryFn: () => getMyVideos({ accessToken, userId }),
+    queryFn: () => getMyVideos({ userId }),
   });
 
   if (isLoading) return <Loading />;

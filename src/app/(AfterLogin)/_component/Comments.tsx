@@ -4,13 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import Comment from "./Comment";
 import getComments from "../community/_lib/getComments";
 import { Comment as IComment } from "@/model/Comment";
-import { useRecoilValue } from "recoil";
-import { accessTokenState } from "@/store/auth";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Comments({ postId }: { postId: string }) {
-  const accessToken = useRecoilValue(accessTokenState);
   const searchParams = useSearchParams();
   const commentId = searchParams.get("commentId");
 
@@ -21,7 +18,7 @@ export default function Comments({ postId }: { postId: string }) {
     [_1: string, _2: string, _3: string]
   >({
     queryKey: ["community", postId, "comments"],
-    queryFn: ({ queryKey }) => getComments({ queryKey, accessToken }),
+    queryFn: ({ queryKey }) => getComments({ queryKey }),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });

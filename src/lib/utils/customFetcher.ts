@@ -84,7 +84,7 @@ const refreshingToken = async (url: string, accessToken: string, config: Request
   }
 };
 
-const customFetcher = async (url: string, config: RequestInit) => {
+const customFetcher = async (url: string, config: RequestInit = {}) => {
   let accessToken = localStorage.getItem("accessToken")
     ? JSON.parse(localStorage.getItem("accessToken") as string)
     : null;
@@ -93,9 +93,17 @@ const customFetcher = async (url: string, config: RequestInit) => {
     return { response: null, data: null };
   }
 
-  config.headers = {
-    ...config.headers,
+  const defaultHeaders: HeadersInit = {
     Authorization: `Bearer ${accessToken}`,
+  };
+
+  if (config.method === "POST" || "PATCH") {
+    defaultHeaders["Content-Type"] = "application/json";
+  }
+
+  config.headers = {
+    ...defaultHeaders,
+    ...config.headers,
   };
 
   console.log("Before Request");

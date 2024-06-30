@@ -11,9 +11,6 @@ const postComment = async ({ userId, videoId, content }: postCommentProps) => {
     console.log("userId: ", userId, content, videoId);
     const { data } = await customFetcher(`/video/${videoId}/submit`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         userId,
         content,

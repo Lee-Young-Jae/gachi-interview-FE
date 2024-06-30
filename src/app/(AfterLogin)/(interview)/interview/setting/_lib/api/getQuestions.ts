@@ -8,9 +8,6 @@ const getQuestions = async ({ workbookId }: getQuestionsProps) => {
   try {
     const { response, data } = await customFetcher(`/workbook/${workbookId}/question/list`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     return data;

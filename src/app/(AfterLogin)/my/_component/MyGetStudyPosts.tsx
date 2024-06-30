@@ -3,16 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import getMyStudies from "../_lib/getMyStudies";
 import PostCard from "../../community/_component/PostCard";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import NoData from "../../_component/NoData";
 
 export default function MyGetStudyPosts({ tabParams }: { tabParams: string | undefined }) {
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const { data } = useQuery<Post[], Object, Post[], [_1: string, _2: string, _3: string]>({
     queryKey: ["community", "studies", "my"],
-    queryFn: ({ queryKey }) => getMyStudies({ queryKey, userId, accessToken }),
+    queryFn: ({ queryKey }) => getMyStudies({ queryKey, userId }),
   });
 
   const posts = Array.isArray(data) ? data : [];

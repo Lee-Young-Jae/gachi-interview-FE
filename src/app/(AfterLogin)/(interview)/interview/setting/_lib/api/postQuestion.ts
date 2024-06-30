@@ -16,9 +16,6 @@ const postQuestion = async ({
   try {
     const { data } = await customFetcher(`/workbook/${workbookId}/question`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         userId,
         questionContent,

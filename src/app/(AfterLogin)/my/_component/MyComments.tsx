@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import getMyComments from "../_lib/getMyComments";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import CommentCard from "./CommentCard";
 import NoData from "../../_component/NoData";
 
@@ -15,12 +15,11 @@ export interface MyComment {
 }
 
 export default function MyComments() {
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const { data } = useQuery<MyComment[]>({
     queryKey: ["my", "comments"],
-    queryFn: () => getMyComments({ userId, accessToken }),
+    queryFn: () => getMyComments({ userId }),
   });
 
   const comments = Array.isArray(data) ? data : [];

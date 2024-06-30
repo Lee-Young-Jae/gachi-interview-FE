@@ -10,9 +10,6 @@ const postWorkbook = async ({ userId, title, job }: postWorkbookProps) => {
   try {
     const { data } = await customFetcher(`/workbook`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         userId,
         title,

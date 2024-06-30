@@ -21,9 +21,6 @@ const postInterview = async ({
   try {
     const { response, data } = await customFetcher(`/interview/complete`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         userId,
         exposure,

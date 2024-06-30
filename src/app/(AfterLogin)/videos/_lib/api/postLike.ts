@@ -10,9 +10,6 @@ const postLike = async ({ userId, id, type }: postLikeProps) => {
   try {
     const { response, data } = await customFetcher(`/${type}/${id}/like`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         userId,
         [type === "video" ? "videoId" : "postId"]: id,

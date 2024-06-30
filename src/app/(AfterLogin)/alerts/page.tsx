@@ -1,7 +1,7 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { userIdState } from "@/store/auth";
 import customFetcher from "@/lib/utils/customFetcher";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -15,18 +15,11 @@ type alertsData = {
 
 export default function Alerts() {
   const [alertsData, setAlertsData] = useState<alertsData[]>([]);
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const fetchData = async () => {
     try {
-      const { response, data } = await customFetcher(`/user/${userId}/notice`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const { response, data } = await customFetcher(`/user/${userId}/notice`);
 
       if (!response?.ok) {
         throw new Error("Failed to fetch data");

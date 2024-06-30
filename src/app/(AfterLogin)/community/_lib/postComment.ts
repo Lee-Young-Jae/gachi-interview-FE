@@ -4,20 +4,14 @@ export default async function postComment({
   userId,
   content,
   postId,
-  accessToken,
 }: {
   userId: number;
   content: string;
   postId: string;
-  accessToken: string;
 }) {
   try {
     const { response, data } = await customFetcher(`/board/${postId}/submit`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
       body: JSON.stringify({ userId, content }),
     });
 
@@ -26,7 +20,7 @@ export default async function postComment({
       throw new Error("Failed to fetch data");
     }
 
-    return await data;
+    return data;
   } catch (error) {
     console.error("Failed to post comment:", error);
     throw new Error("Failed to fetch data");

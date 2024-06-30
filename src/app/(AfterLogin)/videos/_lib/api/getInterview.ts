@@ -3,12 +3,7 @@ import customFetcher from "@/lib/utils/customFetcher";
 export type getInterviewProps = string;
 const getInterview = async (videoId: getInterviewProps) => {
   try {
-    const { data } = await customFetcher(`/video/${videoId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const { data } = await customFetcher(`/video/${videoId}`);
 
     return data;
   } catch (error) {

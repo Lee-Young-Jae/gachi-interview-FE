@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 import getMyFeedbacks from "../_lib/getMyFeedbacks";
 import FeedbackCard from "./FeedbackCard";
 import NoData from "../../_component/NoData";
@@ -13,12 +13,11 @@ export interface MyFeedback {
 }
 
 export default function MyFeedbacks() {
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const { data } = useQuery<MyFeedback[]>({
     queryKey: ["my", "feedbacks"],
-    queryFn: () => getMyFeedbacks({ userId, accessToken }),
+    queryFn: () => getMyFeedbacks({ userId }),
   });
 
   const comments = Array.isArray(data) ? data : [];

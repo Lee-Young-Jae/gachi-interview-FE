@@ -9,9 +9,6 @@ export interface DeleteQuestionRequest {
 const deleteQuestion = async ({ workbookId, questionId, userId }: DeleteQuestionRequest) => {
   const { response, data } = await customFetcher(`/workbook/${workbookId}/question/${questionId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId }),
   });
 

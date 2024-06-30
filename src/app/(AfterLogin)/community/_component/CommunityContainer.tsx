@@ -18,14 +18,11 @@ import { useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { PostContent } from "@/model/Post";
 import getBoards from "../_lib/getBoards";
-import { useRecoilValue } from "recoil";
-import { accessTokenState } from "@/store/auth";
 import Loading from "../../_component/Loading";
 import Search from "../../_component/Search";
 
 export default function CommunityContainer({ category }: { category: string }) {
   const router = useRouter();
-  const accessToken = useRecoilValue(accessTokenState);
   const [sortType, setSortType] = useState<"new" | "like">("new");
   const [page, setPage] = useState<number>(1);
   const [keyword, setKeyword] = useState<string>("");
@@ -37,7 +34,7 @@ export default function CommunityContainer({ category }: { category: string }) {
     refetch,
   } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: string]>({
     queryKey: ["community", category, sortType, keyword],
-    queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, accessToken, keyword }),
+    queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, keyword }),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 60,
     placeholderData: keepPreviousData,

@@ -9,9 +9,6 @@ export interface DeleteCommentProps {
 const deleteComment = async ({ userId, commentId, videoId }: DeleteCommentProps) => {
   const { data } = await customFetcher(`/video/${videoId}/comments/${commentId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ userId, commentId }),
   });
 

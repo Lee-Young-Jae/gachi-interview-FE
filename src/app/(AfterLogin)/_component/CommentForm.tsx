@@ -4,29 +4,22 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, FormEvent, useState } from "react";
 import postComment from "../community/_lib/postComment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Comment } from "@/model/Comment";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, userIdState } from "@/store/auth";
+import { userIdState } from "@/store/auth";
 
 export default function CommentForm({ postId }: { postId: string }) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
-  const accessToken = useRecoilValue(accessTokenState);
   const userId = useRecoilValue(userIdState);
 
   const commentData = useMutation({
     mutationKey: ["community", postId.toString(), "comments"],
-    mutationFn: (newComment: {
-      content: string;
-      postId: string;
-      userId: number;
-      accessToken: string;
-    }) => postComment(newComment),
+    mutationFn: (newComment: { content: string; postId: string; userId: number }) =>
+      postComment(newComment),
     onSuccess: () => {
       // queryClient.setQueryData<Comment[]>(
       //   ["community", postId.toString(), "comments"],
       //   (oldComments = []) => [
-      //     ...oldComments,
       //     {
       //       commentId: data.commentId,
       //       userId: data.userId,
@@ -36,6 +29,7 @@ export default function CommentForm({ postId }: { postId: string }) {
       //       createdAt: data.createdAt,
       //       image: data.image,
       //     } as Comment,
+      //     ...oldComments,
       //   ],
       // );
       queryClient.invalidateQueries({ queryKey: ["community", postId.toString(), "comments"] });
@@ -52,7 +46,6 @@ export default function CommentForm({ postId }: { postId: string }) {
       content,
       postId,
       userId,
-      accessToken,
     });
     setContent("");
   };
