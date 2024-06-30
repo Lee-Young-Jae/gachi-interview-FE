@@ -35,8 +35,8 @@ export default function CommunityContainer({ category }: { category: string }) {
   } = useQuery<PostContent, Object, PostContent, [_1: string, _2: string, _3: string, _4: string]>({
     queryKey: ["community", category, sortType, keyword],
     queryFn: ({ queryKey }) => getBoards({ queryKey, sortType, page, keyword }),
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 1,
+    gcTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
   });
 

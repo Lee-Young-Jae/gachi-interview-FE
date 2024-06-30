@@ -9,6 +9,8 @@ export default function InterviewReviewDetail({ postId }: { postId: string }) {
   const { data: post } = useQuery<Post, Object, Post, [_1: string, _2: string]>({
     queryKey: ["community", postId],
     queryFn: ({ queryKey }) => getPostDetail({ queryKey }),
+    staleTime: 1000 * 60 * 1,
+    gcTime: 1000 * 60 * 5,
   });
 
   if (!post) return null;
