@@ -4,12 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import Comment from "./Comment";
 import getComments from "../community/_lib/getComments";
 import { Comment as IComment } from "@/model/Comment";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Comments({ postId }: { postId: string }) {
   const searchParams = useSearchParams();
   const commentId = searchParams.get("commentId");
+  const commentRef = useRef<Record<string, HTMLDivElement | null>>({});
 
   const { data: comments } = useQuery<
     IComment[],
@@ -24,8 +25,8 @@ export default function Comments({ postId }: { postId: string }) {
   });
 
   useEffect(() => {
-    if (commentId) {
-      const element = document.getElementById(commentId);
+    if (commentId && commentRef.current[commentId]) {
+      const element = commentRef.current[commentId];
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
         element.classList.add("highlight");
@@ -40,5 +41,14 @@ export default function Comments({ postId }: { postId: string }) {
     return null;
   }
 
-  return comments.map((comment, i) => <Comment key={i} postId={postId} comment={comment} />);
+  return comments.map((comment) => (
+    <Comment
+      key={comment.commentId}
+      postId={postId}
+      comment={comment}
+      ref={(el) => {
+        commentRef.current[comment.commentId] = el;
+      }}
+    />
+  ));
 }
