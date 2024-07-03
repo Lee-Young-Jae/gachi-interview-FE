@@ -17,7 +17,7 @@ const patchInterview = async ({
 }: PatchInterviewProps) => {
   const { data } = await customFetcher(`/video/${videoId}`, {
     method: "PATCH",
-    body: JSON.stringify({ userId, exposure, tags, videoTitle }),
+    body: JSON.stringify({ userId, exposure, tags, videoTitle, videoId }),
   });
   return data;
 };
