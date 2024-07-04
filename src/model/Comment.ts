@@ -3,7 +3,7 @@ export interface Comment {
   videoId?: string;
   commentId: number;
   userId: number;
-  username: string;
+  userName: string;
   image: string;
   content: string;
   createdAt: Date;
