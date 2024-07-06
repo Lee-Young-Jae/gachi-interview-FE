@@ -38,15 +38,13 @@ export default function PostDetail({ post }: { post: Post }) {
     setConvertedContent(sanitizedContent);
   }, [content]);
 
-  // 좋아요 기능을 위한 useMutation 훅을 설정합니다.
   const { mutate: likePost } = useMutation({
     mutationFn: (params: { userId: number; postId: string }) => postLike(params),
     onMutate: async () => {
-      // 좋아요 실행 전에 쿼리를 취소하고 이전 데이터를 백업합니다.
       const queryKey = ["community", postId.toString()];
       await queryClient.cancelQueries({ queryKey });
       const previousData = queryClient.getQueryData(queryKey);
-      // 데이터를 업데이트합니다.
+
       queryClient.setQueryData(queryKey, (old: { numOfLike: number; liked: boolean }) => {
         return {
           ...old,
@@ -54,10 +52,10 @@ export default function PostDetail({ post }: { post: Post }) {
           liked: old.liked,
         };
       });
+
       return { previousData };
     },
     onSuccess: (data) => {
-      // 성공 시 새로운 좋아요 데이터로 상태를 업데이트합니다.
       queryClient.setQueryData(
         ["community", postId.toString()],
         (old: { numOfLike: number; liked: boolean }) => ({
@@ -67,18 +65,23 @@ export default function PostDetail({ post }: { post: Post }) {
         }),
       );
     },
+    onError: (err, variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(["community", postId.toString()], context.previousData);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["community", postId.toString()] });
+    },
   });
 
-  // 게시글 삭제 기능을 위한 useMutation 훅을 설정합니다.
   const removePost = useMutation({
     mutationKey: ["community", postId],
     mutationFn: (removedPost: { userId: number; postId: string }) => deletePost(removedPost),
     onMutate: async (removedPost) => {
-      // 삭제 전에 이전 데이터를 백업합니다.
       const previousData = queryClient.getQueryData(["community", postId]);
       if (!previousData) return;
 
-      // 삭제된 게시글을 쿼리 데이터에서 필터링하여 업데이트합니다.
       queryClient.setQueryData(["community", postId], (old: Post[]) => {
         return old.filter((post: { postId: string }) => post.postId !== removedPost.postId);
       });
@@ -120,7 +123,6 @@ export default function PostDetail({ post }: { post: Post }) {
     }
   };
 
-  // 게시글 삭제 처리 함수입니다.
   const handleDeletePost = () => {
     removePost.mutate({
       userId,
@@ -130,7 +132,6 @@ export default function PostDetail({ post }: { post: Post }) {
     router.push(`/community?tab=${post.category}`);
   };
 
-  // 삭제 모달을 열기 위한 함수입니다.
   const handleOpenDeleteModal = () => {
     openModal(
       <Modal
