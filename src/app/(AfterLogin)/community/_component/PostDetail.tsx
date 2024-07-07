@@ -202,15 +202,13 @@ export default function PostDetail({ post }: { post: Post }) {
         className="my-5 pb-8 whitespace-pre-line break-words"
         dangerouslySetInnerHTML={{ __html: convertedContent }}
       />
-      {post.tag.map((tag, index) => (
-        <Badge
-          key={index}
-          className={`px-3 py-1 text-sm ${index === 0 ? "-ml-2" : "mx-1"}`}
-          variant="secondary"
-        >
-          #{tag}
-        </Badge>
-      ))}
+      <div className="-ml-2">
+        {post.tag.map((tag, index) => (
+          <Badge key={index} className={`px-3 py-1 text-sm mt-2 mx-1`} variant="secondary">
+            #{tag}
+          </Badge>
+        ))}
+      </div>
       {post.userId == userId && (
         <div className="flex justify-start mt-4 mb-8 gap-4">
           <button

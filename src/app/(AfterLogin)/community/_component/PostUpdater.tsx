@@ -46,7 +46,9 @@ export default function PostUpdater({
   }, []);
 
   const mutationFn = isEditing ? patchPost : postBoard;
-  const mutationKey = isEditing ? ["community", postId] : ["community", category, "new", 1];
+  const mutationKey = isEditing
+    ? ["community", postId?.toString()]
+    : ["community", category, "new", 1];
 
   const postData = useMutation({
     mutationKey,

@@ -148,4 +148,6 @@ const Comment = forwardRef<HTMLDivElement, { comment: IComment; postId: string }
   },
 );
 
+Comment.displayName = "Comment";
+
 export default Comment;

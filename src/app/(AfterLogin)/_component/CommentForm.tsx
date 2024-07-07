@@ -24,7 +24,7 @@ export default function CommentForm({ postId }: { postId: string }) {
           {
             commentId: data.commentId,
             userId: data.userId,
-            userName: data.userName,
+            username: data.username,
             postId: data.postId,
             content: data.content,
             createdAt: data.createdAt,
