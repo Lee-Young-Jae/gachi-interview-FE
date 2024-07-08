@@ -14,6 +14,9 @@ import { toast } from "react-toastify";
 const Permission = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [isSupported, setIsSupported] = useState(false);
+  const [kakaoStart, setKakaoStart] = useState(false);
+  const [googleStart, setGoogleStart] = useState(false);
+  const [clickedButton, setClickedButton] = useState<string | null>(null);
   const router = useRouter();
 
   const checkSupport = async () => {
@@ -103,10 +106,14 @@ const Permission = () => {
   }, [isSupported, permission]);
 
   const kakaoLogin = () => {
+    setKakaoStart(true);
+    setClickedButton("kakao");
     router.replace(KAKAO_AUTH_URL);
   };
 
   const googleLogin = () => {
+    setGoogleStart(true);
+    setClickedButton("google");
     router.replace(GOOGLE_AUTH_URL);
   };
 
@@ -131,39 +138,43 @@ const Permission = () => {
             disabled={!isSupported || permission !== "granted"}
             className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
               permission !== "granted" ? "cursor-not-allowed" : ""
-            }`}
+            } ${clickedButton === "google" ? "hidden" : ""}`}
             onClick={kakaoLogin}
           >
             <RiKakaoTalkFill className="mr-2" />
-            Kakao로 시작하기
+            {kakaoStart ? "Kakao로 시작하는 중..." : "Kakao로 시작하기"}
           </Button>
           <Button
             disabled={!isSupported || permission !== "granted"}
             className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
               permission !== "granted" ? "cursor-not-allowed" : ""
-            }`}
+            } ${clickedButton === "kakao" ? "hidden" : ""}`}
             onClick={googleLogin}
           >
             <FcGoogle className="mr-2" />
-            Google로 시작하기
+            {googleStart ? "Google로 시작하는 중..." : "Google로 시작하기"}
           </Button>
         </>
       ) : (
         <>
           {/* 알림을 지원하지 않으면 바로 로그인을 지원한다 */}
           <Button
-            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl`}
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FEE500] text-black text-xl ${
+              clickedButton === "google" ? "hidden" : ""
+            }`}
             onClick={kakaoLogin}
           >
             <RiKakaoTalkFill className="mr-2" />
-            Kakao로 시작하기
+            {kakaoStart ? "Kakao로 시작하는 중..." : "Kakao로 시작하기"}
           </Button>
           <Button
-            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4`}
+            className={`w-max-[350px] w-full h-[70px] rounded-full bg-[#FFFFFF] border border-slate-300 text-black text-xl mt-4 ${
+              clickedButton === "kakao" ? "hidden" : ""
+            }`}
             onClick={googleLogin}
           >
             <FcGoogle className="mr-2" />
-            Google로 시작하기
+            {googleStart ? "Google로 시작하는 중..." : "Google로 시작하기"}
           </Button>
         </>
       )}
