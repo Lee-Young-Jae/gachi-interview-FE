@@ -17,8 +17,8 @@ export const useGetWorkbookListQuery = () => {
       const cache = queryClient.getQueryData<ResponseWorkbookList>(["workbookList"]);
       return cache;
     },
-    staleTime: 300 * 1000,
-    gcTime: 300 * 1000,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 

@@ -22,8 +22,8 @@ export const useGetQuestionsQuery = ({ workbookId }: { workbookId: number }) => 
       return cache;
     },
     placeholderData: [],
-    gcTime: 300 * 1000,
-    staleTime: 300 * 1000,
+    gcTime: Infinity,
+    staleTime: Infinity,
   });
 };
 
