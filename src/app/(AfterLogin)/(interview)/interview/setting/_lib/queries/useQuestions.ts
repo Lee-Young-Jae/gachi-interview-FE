@@ -12,12 +12,19 @@ export type ResponseQuestions = {
   answerId: number;
 }[];
 
-export const useGetQuestionsQuery = ({ workbookId }: { workbookId: number }) => {
+export const useGetQuestionsQuery = ({ workbookId }: { workbookId: number | null }) => {
   const queryClient = useQueryClient();
   return useQuery<ResponseQuestions, Error>({
     queryKey: ["questions", workbookId],
-    queryFn: () => getQuestions({ workbookId }),
+    queryFn: () => {
+      if (workbookId == null) {
+        return Promise.reject(new Error("Invalid workbookId"));
+      }
+      return getQuestions({ workbookId });
+    },
+    enabled: workbookId != null,
     initialData: () => {
+      if (workbookId == null) return [];
       const cache = queryClient.getQueryData<ResponseQuestions>(["questions", workbookId]);
       return cache;
     },

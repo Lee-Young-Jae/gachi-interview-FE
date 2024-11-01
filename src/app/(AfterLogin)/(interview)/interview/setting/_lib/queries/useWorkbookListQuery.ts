@@ -36,9 +36,12 @@ export const usePostWorkbookMutation = () => {
     mutationKey: ["workbookList"],
     mutationFn: (data) => postWorkbook(data),
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ["workbookList"],
-      });
+      // AI 추가요청 대기시간, 추가요청 후 캐시 업데이트
+      setTimeout(() => {
+        return queryClient.invalidateQueries({
+          queryKey: ["workbookList"],
+        });
+      }, 800);
     },
     onError: (error) => {
       console.log(error);
