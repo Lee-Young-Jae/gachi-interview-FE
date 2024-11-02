@@ -5,12 +5,14 @@ import deleteQuestion, { DeleteQuestionRequest } from "../api/deleteQuestion";
 
 // TODO: 타입 디렉토리로 분리
 
-export type ResponseQuestions = {
+export type Question = {
   questionId: number;
   questionContent: string;
   answerContent: string;
   answerId: number;
-}[];
+};
+
+export type ResponseQuestions = Question[];
 
 export const useGetQuestionsQuery = ({ workbookId }: { workbookId: number | null }) => {
   const queryClient = useQueryClient();

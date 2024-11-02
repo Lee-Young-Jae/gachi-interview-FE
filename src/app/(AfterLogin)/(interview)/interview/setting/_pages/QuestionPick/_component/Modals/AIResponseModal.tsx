@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import ready from "../../../../../../../../../public/CreateQuestionAIL.json";
+import ready from "../../../../../../../../../../public/CreateQuestionAIL.json";
 import { Suspense, useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import { useModal } from "@/components/Modal/useModal";

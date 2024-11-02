@@ -1,5 +1,6 @@
 // interviewState.ts
 import { atom } from "recoil";
+import { ResponseQuestions } from "../../interview/setting/_lib/queries/useQuestions";
 
 export type QuestionType = {
   questionId: number;
@@ -13,7 +14,7 @@ export interface InterviewOptionType {
   exposure: boolean;
   videoLink: string;
   videoTitle: string;
-  questions: QuestionType[];
+  questions: ResponseQuestions;
   tags: string[];
 }
 

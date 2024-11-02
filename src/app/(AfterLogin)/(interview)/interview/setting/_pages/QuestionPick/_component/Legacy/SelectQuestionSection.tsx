@@ -1,9 +1,9 @@
 import Loading from "@/app/(AfterLogin)/_component/Loading";
-import { useGetQuestionsQuery } from "../../../_lib/queries/useQuestions";
+import { useGetQuestionsQuery } from "../../../../_lib/queries/useQuestions";
 import QuestionList from "./QuestionList";
 import QuestionListHeader from "./QuestionListHeader";
 import { useRecoilState } from "recoil";
-import { interviewOptionState, QuestionType } from "../../../../../_lib/atoms/interviewState";
+import { interviewOptionState, QuestionType } from "../../../../../../_lib/atoms/interviewState";
 
 interface QuestionSelectionSectionProps {
   workbookId: number | null;

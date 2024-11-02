@@ -1,9 +1,9 @@
 import { interviewOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
 import { useRecoilValue } from "recoil";
-import { ResponseQuestions } from "../../../_lib/queries/useQuestions";
+import { ResponseQuestions } from "../../../../_lib/queries/useQuestions";
 import { AiOutlineDelete } from "react-icons/ai";
 import { userIdState } from "@/store/auth";
-import { useDeleteWorkbookMutation } from "../../../_lib/queries/useWorkbookListQuery";
+import { useDeleteWorkbookMutation } from "../../../../_lib/queries/useWorkbookListQuery";
 import { useModal } from "@/components/Modal/useModal";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";

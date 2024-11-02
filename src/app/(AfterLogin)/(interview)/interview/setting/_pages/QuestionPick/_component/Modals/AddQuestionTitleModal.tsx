@@ -8,7 +8,7 @@ interface JobList {
   [key: string]: string[];
 }
 
-const jobList: JobList = require("../_lib/jobList.json") as JobList;
+const jobList: JobList = require("../../_lib/jobList.json") as JobList;
 
 interface Job {
   name: string;

@@ -2,14 +2,14 @@ import { useModal } from "@/components/Modal/useModal";
 import {
   useGetWorkbookListQuery,
   usePostWorkbookMutation,
-} from "../../../_lib/queries/useWorkbookListQuery";
-import AddQuestionTitleModal from "./AddQuestionTitleModal";
+} from "../../../../_lib/queries/useWorkbookListQuery";
+import AddQuestionTitleModal from "../Modals/AddQuestionTitleModal";
 import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
 import { Suspense, useEffect } from "react";
 import Modal from "@/components/Modal";
 import dynamic from "next/dynamic";
-import vacation from "../../../../../../../../../public/vacationL.json";
+import vacation from "../../../../../../../../../../public/vacationL.json";
 
 const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 

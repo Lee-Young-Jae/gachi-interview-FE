@@ -2,12 +2,15 @@ import {
   InterviewOptionType,
   interviewOptionState,
 } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
-import { useGetQuestionsQuery, usePostQuestionsMutation } from "../../../_lib/queries/useQuestions";
+import {
+  useGetQuestionsQuery,
+  usePostQuestionsMutation,
+} from "../../../../_lib/queries/useQuestions";
 import QuestionItem from "./QuestionItem";
 import { Button } from "@/components/ui/button";
-import AddQuestionModal from "./AddQuestionModal";
+import AddQuestionModal from "../Modals/AddQuestionModal";
 import { useModal } from "@/components/Modal/useModal";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userIdState } from "@/store/auth";
 import Loading from "@/app/(AfterLogin)/_component/Loading";
 
@@ -22,7 +25,6 @@ const QuestionList = ({ workbookId, onSelect, interviewOption }: QuestionListPro
   const { openModal, closeModal } = useModal();
   const { mutate } = usePostQuestionsMutation();
   const userId = useRecoilValue(userIdState);
-  const [_, setInterviewOption] = useRecoilState(interviewOptionState);
 
   const openAddQuestionModalHandler = () =>
     openModal(
