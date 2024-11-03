@@ -1,35 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { interviewOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import { userIdState } from "@/store/auth";
+import { Button } from "@/components/ui/button";
+
 import {
   useDeleteWorkbookMutation,
   useGetWorkbookListQuery,
   usePostWorkbookMutation,
 } from "../../_lib/queries/useWorkbookListQuery";
-import AddQuestionTitleModal from "./_component/Modals/AddQuestionTitleModal";
-import { useModal } from "@/components/Modal/useModal";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userIdState } from "@/store/auth";
-import { Button } from "@/components/ui/button";
 import {
   useDeleteQuestionMutation,
   useGetQuestionsQuery,
   usePostQuestionsMutation,
 } from "../../_lib/queries/useQuestions";
+
 import Loading from "@/app/(AfterLogin)/_component/Loading";
-import { interviewOptionState } from "@/app/(AfterLogin)/(interview)/_lib/atoms/interviewState";
+import QuestionItem from "./_component/QuestionItem";
+import { useModal } from "@/components/Modal/useModal";
+import AddQuestionTitleModal from "./_component/Modals/AddQuestionTitleModal";
 import AddQuestionModal from "./_component/Modals/AddQuestionModal";
 import DeleteDialog from "./_component/Modals/DeleteDialog";
 import CreateWorkbookFailModal from "./_component/Modals/CreateWorkbookFailModal";
-import QuestionItem from "./_component/QuestionItem";
 
 const QuestionPick = () => {
-  return <WorkbookList />;
-};
-
-export default QuestionPick;
-
-const WorkbookList = () => {
   const [selectedWorkbookId, setSelectedWorkbookId] = useState<number | null>(null);
 
   const { data: workbookList, isLoading: workbookListLoading } = useGetWorkbookListQuery();
@@ -101,15 +97,6 @@ const WorkbookList = () => {
       />,
     );
   };
-
-  if (!workbookList) return null;
-  if (workbookList.length === 0) {
-    return (
-      <div className="flex items-center justify-center w-full h-full overflow-hidden relative">
-        <AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />
-      </div>
-    );
-  }
 
   const handleCheckAll = () => {
     if (!questionList) return;
@@ -198,12 +185,23 @@ const WorkbookList = () => {
     );
   };
 
-  const isAllChecked =
-    questionList?.every((question) =>
+  const isAllChecked = useMemo(() => {
+    if (!questionList) return false;
+    return questionList?.every((question) =>
       selectedQuestions.some(
         (selectedQuestion) => selectedQuestion.questionId === question.questionId,
       ),
-    ) || false;
+    );
+  }, [questionList, selectedQuestions]);
+
+  if (!workbookList) return null;
+  if (workbookList.length === 0) {
+    return (
+      <div className="flex items-center justify-center w-full h-full overflow-hidden relative">
+        <AddQuestionTitleModal disableBackdropClick onSubmit={submitHandler} />
+      </div>
+    );
+  }
 
   const selectedWorkbook = workbookList.find((workbook) => workbook.listId === selectedWorkbookId);
   const questionTitle = selectedWorkbook?.title || "";
@@ -275,3 +273,5 @@ const WorkbookList = () => {
     </div>
   );
 };
+
+export default QuestionPick;
